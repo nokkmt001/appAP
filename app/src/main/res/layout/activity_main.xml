@@ -24,6 +24,7 @@
         android:background="@color/colorPrimary"
         app:itemIconSize="25dp"
         app:itemTextColor="@drawable/bottom_navigation_selector"
+        app:itemIconTint="@drawable/bottom_navigation_selector"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav" />
 

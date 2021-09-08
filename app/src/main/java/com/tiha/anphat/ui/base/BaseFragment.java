@@ -1,6 +1,5 @@
 package com.tiha.anphat.ui.base;
 
-
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.DialogInterface;

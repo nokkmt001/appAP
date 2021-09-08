@@ -1,9 +1,12 @@
 package com.tiha.anphat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -41,13 +44,13 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onInit() {
         checkSelfPermission(permissionsRequired);
         fmManager = getFragmentManager();
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
 
@@ -77,7 +80,7 @@ public class MainActivity extends BaseActivity {
                             return true;
                         case R.id.navigation_history:
                             if (fmHistory == null) {
-//                                fmHistory = new AdminFragment();
+                                fmHistory = new HomeFragment();
                                 if (fmActive != null)
                                     fmManager.beginTransaction().add(R.id.frame_container, fmHistory, "2").hide(fmActive).commit();
                                 else

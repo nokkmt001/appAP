@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:background="@drawable/bg_edittext">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edittext_search"
+        android:layout_centerVertical="true"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        style="@style/AppTheme.EditText"
+        android:hint="@string/search"
+        android:background="@android:color/transparent"
+        android:layout_toEndOf="@+id/imageSearch"
+        android:layout_toStartOf="@+id/imageDelete"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

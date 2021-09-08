@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#2196f3</color>
-    <color name="colorPrimaryDark">#03a9f4</color>
+    <color name="colorPrimary">#1569af</color>
+    <color name="colorPrimaryDark">#2196f3</color>
     <color name="colorAccent">#ffa800</color>
     <color name="colorPrimaryLight">#ff7675</color>
     <color name="colorSecondary">#f7ee27</color>
@@ -184,4 +184,5 @@
     <color name="text_special">#173566</color>
     <color name="buttonvattuadmin">#1f2e61</color>
     <color name="buttoncvadmin">#084ea6</color>
+    <color name="text_disable">#C4CDD5</color>
 </resources>

@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/Black</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <!--Base application theme no actionbar-->
@@ -65,8 +65,8 @@
 
     <!--Base application button light-->
     <style name="AppTheme.Button.Light">
-        <item name="android:textColor">@drawable/textcolor_button_light</item>
-        <item name="android:background">@drawable/bg_button_light</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:background">@drawable/bg_button_dark_no_radius</item>
     </style>
     <!--Base application button light border-->
     <style name="AppTheme.Button.LightBorder">

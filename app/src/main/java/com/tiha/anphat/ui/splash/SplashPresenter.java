@@ -2,24 +2,26 @@ package com.tiha.anphat.ui.splash;
 
 import android.content.Context;
 
+import com.tiha.anphat.data.preft.SplashModel;
+
 
 public class SplashPresenter implements SplashContract.Presenter {
     SplashContract.View splashView;
     Context context;
-//    SplashModel splashModel;
+    SplashModel splashModel;
 //    NguoiDungModel nguoiDungModel;
 
     public SplashPresenter(Context context, SplashContract.View splashView) {
         this.splashView = splashView;
         this.context = context;
-//        this.splashModel = new SplashModel(context);
+        this.splashModel = new SplashModel(context);
 //        this.nguoiDungModel = new NguoiDungModel();
     }
 
     @Override
     public void CheckStatusLogin() {
-//        boolean isLogin = splashModel.CheckStatusLogin();
-//        splashView.onCheckStatusLoginSuccess(isLogin);
+        boolean isLogin = splashModel.CheckStatusLogin();
+        splashView.onCheckStatusLoginSuccess(isLogin);
     }
 
     @Override
