@@ -1,0 +1,160 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/Black</item>
+    </style>
+
+    <!--Base application theme no actionbar-->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!--Action mode-->
+        <!--  It should be true otherwise action mode will not overlay toolbar -->
+        <item name="windowActionModeOverlay">true</item>
+
+        <!--  For Custom Action Mode Background Color/Drawable -->
+        <item name="actionModeBackground">@color/colorPrimary</item>
+        <!--<item name="actionModeCloseButtonStyle">@style/NoCloseButtonActionModeStyle</item>-->
+    </style>
+
+    <!--Base application toolbar-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/colorToolbarTitle</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.Transparent" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support Library compability -->
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--Base appbar layout-->
+    <style name="AppTheme.AppBarLayout" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorPrimary">@color/colorTabLayout_primary</item>
+        <item name="colorAccent">@color/colorTabLayout_accent</item>
+    </style>
+
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <!--<item name="tabBackground">@drawable/background_tab</item>-->
+        <item name="tabSelectedTextColor">@color/colorTabLayout_text_selected</item>
+        <!--color/colorTabLayout_text_selected-->
+        <!--<item name="tabIndicatorColor">@color/colorTabLayout_text_default</item>-->
+        <item name="tabTextAppearance">@style/AppTheme.TabLayout.TextAppeareance</item>
+    </style>
+
+    <style name="AppTheme.TabLayout.TextAppeareance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/colorTabLayout_text_default</item>
+        <item name="android:textSize">@dimen/title_textsize</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="@android:style/Widget.Button">
+        <item name="android:textSize">@dimen/button_title_textsize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/button_padding</item>
+    </style>
+
+    <!--Base application button light-->
+    <style name="AppTheme.Button.Light">
+        <item name="android:textColor">@drawable/textcolor_button_light</item>
+        <item name="android:background">@drawable/bg_button_light</item>
+    </style>
+    <!--Base application button light border-->
+    <style name="AppTheme.Button.LightBorder">
+        <item name="android:textColor">@drawable/textcolor_button_lightborder</item>
+        <item name="android:background">@drawable/bg_button_lightborder</item>
+    </style>
+    <!--Base application button light border No ChangeTextColor-->
+    <style name="AppTheme.Button.LightBorder.NoChangeTextColor">
+        <item name="android:background">@drawable/bg_button_lightborder_no_change_textcolor</item>
+        <item name="android:textColor">@drawable/textcolor_button_lightborder_no_change_textcolor
+        </item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:padding">5dp</item>
+    </style>
+    <!--Base application button dark-->
+    <style name="AppTheme.Button.Dark">
+        <item name="android:textColor">@drawable/textcolor_button_dark</item>
+        <item name="android:background">@drawable/bg_button_transparent</item>
+    </style>
+
+    <!--Base application button green-->
+    <style name="AppTheme.Button.Green">
+        <item name="android:textColor">@drawable/textcolor_button_green</item>
+        <item name="android:background">@drawable/bg_button_green</item>
+    </style>
+    <!--Base application button transparent-->
+    <style name="AppTheme.Button.Transparent">
+        <item name="android:background">@drawable/bg_button_transparent</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="AppTheme.Button.Image">
+        <item name="android:background">@drawable/bg_image</item>
+    </style>
+
+    <!--Base application textview-->
+    <style name="AppTheme.TextView" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/title_textsize</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textIsSelectable">false</item>
+    </style>
+    <!--Base application edittext-->
+    <style name="AppTheme.EditText" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/bg_edittext</item>
+        <!--<item name="android:height">@dimen/edittext_height</item>-->
+        <item name="android:padding">@dimen/edittext_padding</item>
+        <item name="android:textSize">@dimen/title_textsize</item>
+        <item name="android:textColor">@color/colorEditText_text</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <!--Base application no edit-->
+    <style name="AppTheme.EditText.NoEdit">
+        <item name="android:background">@drawable/bg_edittext_noedit</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor_transparent</item>
+        <item name="android:focusable">false</item>
+        <item name="android:longClickable">false</item>
+    </style>
+
+    <style name="AppTheme.EditText.NoEdit.DropDownList">
+        <item name="android:background">@drawable/bg_edittext_noedit_dropdownlist</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor_transparent</item>
+    </style>
+    <!--Base application Spinner-->
+    <style name="AppTheme.Spinner" parent="@android:style/Widget.Spinner">
+        <item name="android:background">@drawable/bg_spinner</item>
+        <!--        <item name="android:padding">@dimen/spinner_padding</item>-->
+    </style>
+
+    <style name="BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
+    </style>
+
+    <style name="TextAppearance"/>
+    <style name="TextAppearance.BottomNavigationView"/>
+
+    <!-- inactive tab icon style -->
+    <style name="TextAppearance.BottomNavigationView.Inactive">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+
+    <!-- active tab icon style -->
+    <style name="TextAppearance.BottomNavigationView.Active">
+        <item name="android:textSize">12dp</item>
+        <item name="android:textColor">@color/White</item>
+    </style>
+
+</resources>

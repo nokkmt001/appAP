@@ -1,0 +1,149 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <!--button-->
+    <dimen name="button_radius">2dp</dimen>
+    <dimen name="button_small_height">25dp</dimen>
+    <dimen name="button_height">35dp</dimen>
+    <dimen name="button_large_height">45dp</dimen>
+    <dimen name="button_itemlist_height">30dp</dimen>
+    <dimen name="button_padding">5dp</dimen>
+    <dimen name="button_small_title_textsize">@dimen/subtitle_textsize</dimen>
+    <dimen name="button_title_textsize">@dimen/title_textsize</dimen>
+    <dimen name="button_large_title_textsize">@dimen/headline_textsize</dimen>
+    <!--cardview-->
+    <dimen name="cardview_radius">5dp</dimen>
+    <dimen name="cardview_elevation">2dp</dimen>
+    <dimen name="divider_height">2dp</dimen>
+    <!--edittext-->
+    <dimen name="edittext_radius">2dp</dimen>
+    <dimen name="edittext_padding">10dp</dimen>
+    <dimen name="edittext_padding_image">8dp</dimen>
+    <dimen name="edittext_height">35dp</dimen>
+    <dimen name="edittext_border_width">1dp</dimen>
+    <!--text-->
+    <dimen name="headline_textsize">20sp</dimen>
+    <dimen name="title_textsize">14sp</dimen>
+    <dimen name="subtitle_textsize">12sp</dimen>
+    <!--spinner-->
+    <dimen name="spinner_height">40dp</dimen>
+    <dimen name="spinner_radius">5dp</dimen>
+    <dimen name="spinner_padding">8dp</dimen>
+    <!--fab-->
+    <dimen name="fab_margin">16dp</dimen>
+    <!--CircleImageView-->
+    <dimen name="border_width_image">1dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="activity_margin_quarter">4dp</dimen>
+    <dimen name="activity_margin_content">24dp</dimen>
+    <dimen name="activity_margin_half">8dp</dimen>
+
+    <dimen name="paddingItemDecorationDefault">8dp</dimen>
+    <dimen name="paddingItemDecorationEdge">24dp</dimen>
+
+    <dimen name="poster_thumb_width">72dp</dimen>
+    <dimen name="poster_thumb_height">96dp</dimen>
+
+    <dimen name="poster_hero_height">192dp</dimen>
+    <dimen name="cell_height">40dp</dimen>
+    <dimen name="row_header_width">55dp</dimen>
+
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12sp</dimen>
+    <!--<dimen name="design_bottom_navigation_height" tools:override="true">60dp</dimen>-->
+    <dimen name="design_bottom_navigation_item_icon_size">20dp</dimen>
+
+    <!-- The default letter tile text size -->
+    <dimen name="tile_letter_font_size">17sp</dimen>
+    <!-- The deafult tile size -->
+    <dimen name="letter_tile_size">32dp</dimen>
+    <!-- /LetterTileProvider -->
+
+    <dimen name="dp_05">0.5dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_3">3dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_17">17dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_24">24dp</dimen>
+    <dimen name="dp_25">25dp</dimen>
+    <dimen name="dp_26">26dp</dimen>
+    <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_36">36dp</dimen>
+    <dimen name="dp_45">45dp</dimen>
+    <dimen name="dp_50">50dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
+    <dimen name="dp_60">60dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_130">130dp</dimen>
+    <dimen name="dp_140">140dp</dimen>
+    <dimen name="dp_150">150dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_110">110dp</dimen>
+    <dimen name="dp_168">168dp</dimen>
+    <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_170">170dp</dimen>
+    <dimen name="dp_190">190dp</dimen>
+
+    <dimen name="dp_230">230dp</dimen>
+
+
+    <!-- text size -->
+    <dimen name="textSize_8">8sp</dimen>
+    <dimen name="textSize_9">9sp</dimen>
+    <dimen name="textSize_10">10sp</dimen>
+    <dimen name="textSize_11">11sp</dimen>
+    <dimen name="textSize_12">12sp</dimen>
+    <dimen name="textSize_13">13sp</dimen>
+    <dimen name="textSize_14">14sp</dimen>
+    <dimen name="textSize_15">15sp</dimen>
+    <dimen name="textSize_16">16sp</dimen>
+    <dimen name="textSize_18">18sp</dimen>
+    <dimen name="textSize_20">20sp</dimen>
+    <dimen name="textSize_22">22sp</dimen>
+    <dimen name="textSize_30">30sp</dimen>
+    <dimen name="textSize_25">25sp</dimen>
+    <dimen name="textSize_50">50sp</dimen>
+    <dimen name="textSize_70">70sp</dimen>
+
+    <!--Height - With-->
+    <dimen name="size_7">7dp</dimen>
+    <dimen name="size_32">32dp</dimen>
+    <dimen name="size_35">35dp</dimen>
+    <dimen name="size_48">48dp</dimen>
+    <dimen name="size_70">70dp</dimen>
+    <dimen name="size_90">90dp</dimen>
+    <dimen name="size_120">120dp</dimen>
+    <dimen name="size_150">150dp</dimen>
+    <dimen name="size_200">200dp</dimen>
+    <dimen name="size_350">350dp</dimen>
+    <dimen name="dp_70">70dp</dimen>
+    <dimen name="dp_65">65dp</dimen>
+    <dimen name="dp_75">75dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="textSize_45">45sp</dimen>
+    <dimen name="dp_95">95dp</dimen>
+    <dimen name="dp_35">35dp</dimen>
+
+
+
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">AnPhat</string>
+    <string name="error_msg_unknown">Đã xảy ra lỗi không mong muốn</string>
+    <string name="error_msg_no_internet">Vui lòng kiểm tra kết nối và thử lại.</string>
+    <string name="error_msg">Rất tiếc! không thể tải dữ liệu</string>
+    <string name="title_error_msg">LỖI</string>
+    <string name="dialog_btn_ok">ĐỒNG Ý</string>
+
+    <string-array name="letter_tile_colors">
+        <item>#f16364</item>
+        <item>#67bf74</item>
+        <item>#2093cd</item>
+        <item>#696969</item>
+        <item>#f58559</item>
+        <item>#f9a43e</item>
+        <item>#e4c62e</item>
+        <item>#59a2be</item>
+        <item>#ad62a7</item>
+        <item>#8775B9</item>
+        <item>#97E8C6</item>
+        <item>#FFB57B</item>
+        <item>#7ABFE7</item>
+    </string-array>
+</resources>
