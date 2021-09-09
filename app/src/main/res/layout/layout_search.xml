@@ -8,6 +8,7 @@
         android:id="@+id/imageSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_5"
         android:src="@drawable/ic_edittext_search"
         android:layout_centerVertical="true"/>
 
@@ -28,6 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_delete"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
         android:visibility="gone"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"/>

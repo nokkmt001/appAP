@@ -10,6 +10,8 @@
     <string name="pass_word">Mật khẩu</string>
     <string name="login">Đăng nhập</string>
     <string name="search">Tìm kiếm</string>
+    <string name="filter">Bộ lọc</string>
+    <string name="history_title">Lịch sử giao dịch</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

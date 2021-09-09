@@ -34,7 +34,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.MyVie
         onBindViewHold(position, dataList.get(position));
     }
 
-    public void clear(){
+    public void clear() {
         dataList = new ArrayList<>();
         notifyDataSetChanged();
     }
@@ -56,6 +56,18 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.MyVie
             getView(view);
         }
 
+    }
+
+    public interface OnClickListener {
+        void onClick(View view, int position);
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(View view, int position);
+    }
+
+    public interface OnButtonClickListener {
+        void onButtonClick(View view, int position);
     }
 
     public <T extends View> T bind(int id) {

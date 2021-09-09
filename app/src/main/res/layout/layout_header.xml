@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimaryDark">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_arrows_back"/>
+        android:layout_marginStart="@dimen/dp_5"
+        android:src="@drawable/ic_arrows_back"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/textTitle"
+        style="@style/AppTheme.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/imageBack"
+        android:layout_centerInParent="true"
         android:layout_toStartOf="@+id/imageEnd"
-        android:layout_centerInParent="true" />
+        android:layout_toEndOf="@+id/imageBack"
+        android:text=""
+        android:textColor="@color/White" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_buy_cart"/>
+        android:layout_marginEnd="@dimen/dp_5"
+        android:src="@drawable/ic_buy_cart"
+        android:visibility="gone" />
 
 </RelativeLayout>

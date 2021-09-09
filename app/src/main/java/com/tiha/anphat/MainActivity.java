@@ -17,13 +17,17 @@ import androidx.core.app.ActivityCompat;
 import android.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.ui.history.HistoryFragment;
 import com.tiha.anphat.ui.home.HomeFragment;
+import com.tiha.anphat.ui.pay.PayFragment;
+import com.tiha.anphat.ui.sms.SmsFragment;
 
 public class MainActivity extends BaseActivity {
     BottomNavigationView bottomNavigationView;
     FragmentManager fmManager;
-    Fragment fmMain, fmHistory, frPay, frSms, frAccount, fmActive;
+    Fragment fmMain, fmHistory, fmPay, fmSms, fmAccount, fmActive;
     String[] permissionsRequired = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -80,16 +84,53 @@ public class MainActivity extends BaseActivity {
                             return true;
                         case R.id.navigation_history:
                             if (fmHistory == null) {
-                                fmHistory = new HomeFragment();
+                                fmHistory = new HistoryFragment();
                                 if (fmActive != null)
                                     fmManager.beginTransaction().add(R.id.frame_container, fmHistory, "2").hide(fmActive).commit();
                                 else
                                     fmManager.beginTransaction().add(R.id.frame_container, fmHistory, "2").commit();
                             } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
+                                fmManager.beginTransaction().hide(fmActive).show(fmHistory).commit();
                             }
                             fmActive = fmHistory;
                             return true;
+                        case R.id.navigation_sms:
+                            if (fmSms == null) {
+                                fmSms = new SmsFragment();
+                                if (fmActive != null)
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmSms, "4").hide(fmActive).commit();
+                                else
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmSms, "4").commit();
+                            } else {
+                                fmManager.beginTransaction().hide(fmActive).show(fmSms).commit();
+                            }
+                            fmActive = fmSms;
+                            return true;
+                        case R.id.navigation_pay:
+                            if (fmPay == null) {
+                                fmPay = new PayFragment();
+                                if (fmActive != null)
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmPay, "3").hide(fmActive).commit();
+                                else
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmPay, "3").commit();
+                            } else {
+                                fmManager.beginTransaction().hide(fmActive).show(fmPay).commit();
+                            }
+                            fmActive = fmPay;
+                            return true;
+                        case R.id.navigation_account:
+                            if (fmAccount == null) {
+                                fmAccount = new AccountFragment();
+                                if (fmActive != null)
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmAccount, "5").hide(fmActive).commit();
+                                else
+                                    fmManager.beginTransaction().add(R.id.frame_container, fmAccount, "5").commit();
+                            } else {
+                                fmManager.beginTransaction().hide(fmActive).show(fmAccount).commit();
+                            }
+                            fmActive = fmAccount;
+                            return true;
+                            
                         default:
                             break;
                     }
