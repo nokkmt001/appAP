@@ -1,21 +1,38 @@
 package com.tiha.anphat.ui.base;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
 import com.tiha.anphat.R;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public abstract class BaseFragment extends Fragment implements View.OnClickListener{
     Dialog progressDialog;
+    private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
+    String[] permissionsMain = {};
+    private SpeechRecognizer speechRecognizer;
+    int count = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getLayoutId(), null);
@@ -50,6 +67,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    public void checkSelfPermission(String[] permissionsRequired) {
+        permissionsMain = permissionsRequired;
+        for (String tt:permissionsRequired){
+            if (ActivityCompat.checkSelfPermission(getActivity(),tt)!= PackageManager.PERMISSION_GRANTED){
+                {
+                    ActivityCompat.requestPermissions(getActivity(), permissionsRequired, REQUEST_MULTIPLE_PERMISSIONS);
+                    //return;
+                }
+            }
+        }
+    }
+
     public void showMessage(String title, String body) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //CommonUtils.configShowMessage(builder, title, body);
@@ -63,5 +92,119 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void speedText(final EditText text, final ImageView imageView){
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
+        checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
+        final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count == 0) {
+                    imageView.setImageResource(R.drawable.ic_mic_black_24dp);
+                    speechRecognizer.startListening(speechRecognizerIntent);
+                    count = 1;
+                } else {
+                    imageView.setImageResource(R.drawable.ic_baseline_off_mic);
+                    speechRecognizer.stopListening();
+                    count = 0;
+                }
+            }
+        });
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                text.setText("");
+                text.setHint("Listening...");
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+            }
+
+            @Override
+            public void onError(int i) {
+            }
+
+            @Override
+            public void onResults(Bundle bundle) {
+                imageView.setImageResource(R.drawable.ic_baseline_off_mic);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                text.setText(data.get(0));
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_MULTIPLE_PERMISSIONS:
+                //Kiem tra tat ca quyen can cap
+                boolean allgranted = false;
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        allgranted = true;
+                    } else {
+                        allgranted = false;
+                        break;
+                    }
+                }
+
+                for (String ii : permissionsMain){
+                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),ii)){
+                        showMessagePermissions();
+                    } else {
+
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showMessagePermissions() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("QUYỀN ỨNG DỤNG")
+                .setMessage("Ứng dụng cần được cấp nhiều quyền hơn.")
+                .setPositiveButton("CẤP QUYỀN", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        ActivityCompat.requestPermissions(getActivity(), permissionsMain, REQUEST_MULTIPLE_PERMISSIONS);
+                    }
+                })
+                .setNegativeButton("HỦY", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 }

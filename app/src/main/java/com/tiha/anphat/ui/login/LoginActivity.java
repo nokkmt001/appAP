@@ -75,11 +75,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void onConfigToolbar() {
-
-    }
-
-    @Override
     public void onLoadData() {
         appPreference = new AppPreference(this);
         loginPresenter = new LoginPresenter(LoginActivity.this);

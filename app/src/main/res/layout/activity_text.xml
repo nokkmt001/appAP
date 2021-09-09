@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Blue">
+
+    <TextView
+        android:id="@+id/textMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/common_android_wear_update_title"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+
+    <Switch
+        android:id="@+id/buttonEnd"
+        android:layout_width="match_parent"
+        android:text="click here"
+        android:background="@color/Black"
+        android:layout_above="@+id/buttonEndWhite"
+        android:layout_height="wrap_content"/>
+
+    <Switch
+        android:id="@+id/buttonEndWhite"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:text="click here"
+        android:background="@color/White"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>

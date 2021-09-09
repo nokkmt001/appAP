@@ -43,11 +43,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onConfigToolbar() {
-
-    }
-
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onInit() {

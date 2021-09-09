@@ -1,14 +1,20 @@
 package com.tiha.anphat.ui.base;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +28,8 @@ import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.NetworkUtils;
 
 
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,6 +37,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     String error = "";
     private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
     String[] permissionsMain = {};
+    private SpeechRecognizer speechRecognizer;
+    int count = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +48,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
         setContentView(getLayoutResourceId());
         onInit();
-        onConfigToolbar();
         onLoadData();
 
     }
@@ -48,8 +57,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected abstract void onLoadData();
 
     protected abstract void onInit();
-
-    protected abstract void onConfigToolbar();
 
     protected void showToast(String mToastMsg) {
         Toast.makeText(this, mToastMsg, Toast.LENGTH_LONG).show();
@@ -118,8 +125,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             case REQUEST_MULTIPLE_PERMISSIONS:
                 //Kiem tra tat ca quyen can cap
                 boolean allgranted = false;
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                for (int grantResult : grantResults) {
+                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
                         allgranted = true;
                     } else {
                         allgranted = false;
@@ -130,8 +137,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 for (String ii : permissionsMain){
                     if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this,ii)){
                         showMessagePermissions();
-                    } else {
-
                     }
                 }
                 break;
@@ -159,6 +164,71 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                     }
                 })
                 .show();
+    }
+
+    public void speedText(final EditText text, final ImageView imageView){
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
+        final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count == 0) {
+                    imageView.setImageResource(R.drawable.ic_mic_black_24dp);
+                    speechRecognizer.startListening(speechRecognizerIntent);
+                    count = 1;
+                } else {
+                    imageView.setImageResource(R.drawable.ic_baseline_off_mic);
+                    speechRecognizer.stopListening();
+                    count = 0;
+                }
+            }
+        });
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                text.setText("");
+                text.setHint("Listening...");
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+            }
+
+            @Override
+            public void onError(int i) {
+            }
+
+            @Override
+            public void onResults(Bundle bundle) {
+                imageView.setImageResource(R.drawable.ic_baseline_off_mic);
+                ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                assert data != null;
+                text.setText(data.get(0));
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+            }
+        });
     }
 
 }
