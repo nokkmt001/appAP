@@ -3,18 +3,19 @@ package com.tiha.anphat.utils;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 
+import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.NguoiDungInfo;
 
 public class PublicVariables {
 
     public static Bitmap BMPicture;
     public static String NgayLamViec;
-    public static NguoiDungInfo nguoiDungInfo;
+
+    public static NewCustomer UserInfo;
 
     public static CountDownTimer countDownTimer;
 
     public static void ClearData() {
-        BMPicture = null;
     }
 
 //    public static List<MenuInfo> GetListMenuChildByParentID(String parentID) {

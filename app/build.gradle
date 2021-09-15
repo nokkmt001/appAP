@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+//    viewBinding.enable = true
 
     defaultConfig {
         applicationId "com.tiha.anphat"
@@ -19,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+    dataBinding { enabled = true }
 }
 
 dependencies {

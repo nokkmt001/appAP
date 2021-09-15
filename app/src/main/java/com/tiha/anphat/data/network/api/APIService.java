@@ -19,9 +19,8 @@ import java.util.Map;
 public class APIService {
     String URL;
     String tag = "VolleyError";
-    //    String userName = "thienphuctest";
-    String userName = "thienphuc";
-    String passWord = "P@ssw0rd@ThienPhuc.123$@#";
+    String userName = "admin";
+    String passWord = "P@ssw0rd@TiHa.123$@#";
     int MY_SOCKET_TIMEOUT_MS = 10000;
 
     public APIService(String URL) {
@@ -31,6 +30,38 @@ public class APIService {
     public void DownloadJson(final VolleyCallback callback) {
         StringRequest stringRequest = new StringRequest
                 (Request.Method.GET, URL, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError(error);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                // add headers <key,value>
+                String credentials = userName + ":" + passWord;
+                String auth = "Basic "
+                        + Base64.encodeToString(credentials.getBytes(),
+                        Base64.NO_WRAP);
+                headers.put("Authorization", auth);
+                return headers;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    public void DownloadJsonPut(final VolleyCallback callback) {
+        StringRequest stringRequest = new StringRequest
+                (Request.Method.PUT, URL, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         callback.onSuccess(response);

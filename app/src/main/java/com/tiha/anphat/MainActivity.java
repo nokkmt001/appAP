@@ -4,15 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 
 import android.app.Fragment;
 
@@ -51,8 +47,6 @@ public class MainActivity extends BaseActivity {
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
-
-
     }
 
     @Override

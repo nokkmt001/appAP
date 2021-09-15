@@ -21,7 +21,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="m">
-        <activity android:name=".TextActivity">
+        <activity android:name=".ui.login.checkidpass.CheckLoginByIDPassActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,17 +29,20 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.login.LoginActivity"/>
+        <activity android:name=".ui.login.LoginActivity" />
 
-                <activity android:name=".ui.splash.SplashActivity"/>
+        <activity android:name=".ui.splash.SplashActivity" />
 
         <activity android:name=".ui.base.BaseActivity" />
 
         <activity android:name=".MainActivity" />
 
-<!--        <activity android:name=".TextActivity"-->
-<!--            android:windowSoftInputMode="adjustResize" />-->
+        <activity android:name=".ui.login.register.CreateNewCustomerActivity"/>
+
+<!--        <activity android:name=".ui.login.checkidpass.CheckLoginByIDPassActivity"/>-->
+
+        <activity android:name=".ui.login.checkphone.CheckPhoneActivity"/>
+
     </application>
 
 </manifest>

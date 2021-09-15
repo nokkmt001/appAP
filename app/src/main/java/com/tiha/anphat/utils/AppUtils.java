@@ -11,12 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.tiha.anphat.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,8 +70,21 @@ public class AppUtils {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    @SuppressLint("ResourceAsColor")
+    public static void enableButton(final boolean isShow, Button button){
+        if (isShow){
+            button.setEnabled(true);
+            button.setTextColor(R.color.White);
+            button.setBackgroundResource(R.drawable.bg_button_dark);
+        } else {
+            button.setEnabled(false);
+            button.setTextColor(R.color.text_disable);
+            button.setBackgroundResource(R.drawable.bg_button_light);
+        }
+    }
+
     public static boolean isValidateUsername(String userName){
-        return userName.length() >= 5;
+        return userName.length() >= 1;
     }
 
     public static boolean isEmailValid(String email) {
@@ -150,6 +165,15 @@ public class AppUtils {
         } catch (ParseException e) {
             return "";
         }
+    }
+
+    public final static boolean isValidPhoneNumber(CharSequence target) {
+        if (target == null || target.length() < 6 || target.length() > 13) {
+            return false;
+        } else {
+            return android.util.Patterns.PHONE.matcher(target).matches();
+        }
+
     }
 
     public static String fomartDateShortTime(String date, String format) {

@@ -1,47 +1,76 @@
 package com.tiha.anphat.ui.login;
 
-import android.text.TextUtils;
-
-import com.tiha.anphat.data.network.nguoidung.NguoiDungModel;
+import com.tiha.anphat.data.entities.NewCustomer;
+import com.tiha.anphat.data.network.nguoidung.IUserModel;
+import com.tiha.anphat.data.network.nguoidung.UserModel;
 
 public class LoginPresenter implements LoginContract.Presenter {
-    LoginContract.View loginView;
-    NguoiDungModel nguoiDungModel;
+    LoginContract.View view;
+    UserModel Model;
 
     public LoginPresenter(LoginContract.View loginView) {
-        this.loginView = loginView;
-        this.nguoiDungModel = new NguoiDungModel();
+        this.view = loginView;
+        this.Model = new UserModel();
+    }
+
+
+    @Override
+    public void CheckPhoneNumber(String sdt) {
+        Model.CheckPhone(sdt, new IUserModel.ICheckPhoneFinishListener() {
+            @Override
+            public void onSuccess() {
+                view.onCheckPhoneNumberSuccess();
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onCheckPhoneNumberError(error);
+            }
+        });
     }
 
     @Override
-    public void CheckLogin(String userName, String passWord, String serverName) {
-        if (TextUtils.isEmpty(serverName)) {
-            loginView.onLoginError("Bạn chưa nhập server name công ty!");
-            return;
-        }
+    public void CheckLoginByIDPass(String id, String pass) {
+        Model.GetLoginByIDPassWord(id, pass, new IUserModel.IGetLoginByIDPassWord() {
+            @Override
+            public void onSuccess(NewCustomer info) {
+                view.onCheckLoginByIDPassSuccess(info);
+            }
 
-        if (TextUtils.isEmpty(userName)) {
-            loginView.onLoginError("Bạn chưa nhập tên đăng nhập!");
-            return;
-        }
-        if (TextUtils.isEmpty(passWord)) {
-            loginView.onLoginError("Bạn chưa nhập mật khẩu!");
-            return;
-        }
-//        nguoiDungModel.CheckLogin(userName, passWord, new INguoiDungModel.IOnCheckLoginFinishedListener() {
-//            @Override
-//            public void onLoginSuccess(NguoiDungInfo nguoiDungInfo) {
-//                if (nguoiDungInfo == null) {
-//                    loginView.onLoginError("Tên đăng nhập hoặc mật khẩu không đúng!");
-//                    return;
-//                }
-//                loginView.onLoginSuccess(nguoiDungInfo);
-//            }
-//
-//            @Override
-//            public void onLoginError(String error) {
-//                loginView.hideProgressBar();
-//            }
-//        });
+            @Override
+            public void onError(String error) {
+                view.onCheckLoginByIDPassError(error);
+            }
+        });
+    }
+
+    @Override
+    public void InsertNewCustomer(NewCustomer condition) {
+        Model.InsertNewCustomer(condition, new IUserModel.IInsertNewCustomer() {
+            @Override
+            public void onSuccess(NewCustomer info) {
+                view.onInsertNewCustomerSuccess(info);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onInsertNewCustomerError(error);
+            }
+        });
+    }
+
+    @Override
+    public void ResendPinCode(String id) {
+        Model.ReSendPINcode(id, new IUserModel.IReSendPINcode() {
+            @Override
+            public void onSuccess(NewCustomer info) {
+                view.onResendPinCodeSuccess(info);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onResendPinCodeError(error);
+            }
+        });
     }
 }

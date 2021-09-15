@@ -58,8 +58,8 @@
 
     <style name="AppTheme.Button" parent="@android:style/Widget.Button">
         <item name="android:textSize">@dimen/button_title_textsize</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
+        <item name="fontFamily">@font/myriadpro_bold</item>
         <item name="android:padding">@dimen/button_padding</item>
     </style>
 
@@ -107,8 +107,17 @@
     <style name="AppTheme.TextView" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/title_textsize</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="fontFamily">@font/myriadpro_regular</item>
         <item name="android:textIsSelectable">false</item>
     </style>
+
+    <style name="AppTheme.TextViewSize20" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textSize_20</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="fontFamily">@font/myriadpro_semibold</item>
+        <item name="android:textIsSelectable">false</item>
+    </style>
+
     <!--Base application edittext-->
     <style name="AppTheme.EditText" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/bg_edittext</item>

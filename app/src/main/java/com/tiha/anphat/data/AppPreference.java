@@ -7,10 +7,9 @@ import android.preference.PreferenceManager;
 public class AppPreference {
     public static final String PREF_ServerName = "ServerName";
     public static final String PREF_IS_LOGGED_IN = "is_logged_in";
-    public static final String PREF_TenDangNhap = "TenDangNhap";
+    public static final String PREF_SDT = "SDT";
     public static final String PREF_MatKhau = "MatKhau";
     public static final String PREF_NguoiDungID = "NguoiDungID";
-    public static final String PREF_ChiNhanh = "ChiNhanh";
 
     private SharedPreferences sharedPreferences;
 
@@ -33,12 +32,12 @@ public class AppPreference {
         sharedPreferences.edit().putBoolean(PREF_IS_LOGGED_IN, status).apply();
     }
 
-    public String getTenDangNhap() {
-        return sharedPreferences.getString(PREF_TenDangNhap, "");
+    public String getSDT() {
+        return sharedPreferences.getString(PREF_SDT, "");
     }
 
-    public void setTenDangNhap(String tenDangNhap) {
-        sharedPreferences.edit().putString(PREF_TenDangNhap, tenDangNhap).apply();
+    public void setSDT(String tenDangNhap) {
+        sharedPreferences.edit().putString(PREF_SDT, tenDangNhap).apply();
     }
 
     public String getMatKhau() {
@@ -57,11 +56,5 @@ public class AppPreference {
         sharedPreferences.edit().putString(PREF_NguoiDungID, nguoiDungID).apply();
     }
 
-    public String getChiNhanh() {
-        return sharedPreferences.getString(PREF_ChiNhanh, "");
-    }
 
-    public void setChiNhanh(String chiNhanh) {
-        sharedPreferences.edit().putString(PREF_ChiNhanh, chiNhanh).apply();
-    }
 }

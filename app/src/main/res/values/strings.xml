@@ -12,6 +12,16 @@
     <string name="search">Tìm kiếm</string>
     <string name="filter">Bộ lọc</string>
     <string name="history_title">Lịch sử giao dịch</string>
+    <string name="name_login">Họ tên</string>
+    <string name="number_phone">Số điện thoại</string>
+    <string name="code_pin">Mã pin</string>
+    <string name="save_info">Lưu thông tin</string>
+    <string name="forget_pass">Quên mật khẩu</string>
+    <string name="input_id">Nhập ID</string>
+    <string name="input_number_phone_to_check">Nhập số điện thoại để đăng kí hoặc đăng nhập</string>
+    <string name="welcom_">An Phát xin chào</string>
+    <string name="input_number_phone">Số điện thoại</string>
+    <string name="create_new_customer">Tạo tài khoản mới</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

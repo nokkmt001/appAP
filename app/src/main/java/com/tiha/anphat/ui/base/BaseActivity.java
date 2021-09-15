@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.utils.CommonUtils;
@@ -39,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     String[] permissionsMain = {};
     private SpeechRecognizer speechRecognizer;
     int count = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +56,9 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected abstract int getLayoutResourceId();
 
-    protected abstract void onLoadData();
-
     protected abstract void onInit();
+
+    protected abstract void onLoadData();
 
     protected void showToast(String mToastMsg) {
         Toast.makeText(this, mToastMsg, Toast.LENGTH_LONG).show();
@@ -74,8 +76,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     public void checkSelfPermission(String[] permissionsRequired) {
         permissionsMain = permissionsRequired;
-        for (String tt:permissionsRequired){
-            if (ActivityCompat.checkSelfPermission(this,tt)!= PackageManager.PERMISSION_GRANTED){
+        for (String tt : permissionsRequired) {
+            if (ActivityCompat.checkSelfPermission(this, tt) != PackageManager.PERMISSION_GRANTED) {
                 {
                     ActivityCompat.requestPermissions(this, permissionsRequired, REQUEST_MULTIPLE_PERMISSIONS);
                     //return;
@@ -134,8 +136,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                     }
                 }
 
-                for (String ii : permissionsMain){
-                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this,ii)){
+                for (String ii : permissionsMain) {
+                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this, ii)) {
                         showMessagePermissions();
                     }
                 }
@@ -146,9 +148,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     private void showMessagePermissions() {
-        new AlertDialog.Builder(this)
-                .setTitle("QUYỀN ỨNG DỤNG")
-                .setMessage("Ứng dụng cần được cấp nhiều quyền hơn.")
+        new AlertDialog.Builder(this).setTitle("QUYỀN ỨNG DỤNG").setMessage("Ứng dụng cần được cấp nhiều quyền hơn.")
                 .setPositiveButton("CẤP QUYỀN", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -162,11 +162,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                         dialog.cancel();
                         finish();
                     }
-                })
-                .show();
+                }).show();
     }
 
-    public void speedText(final EditText text, final ImageView imageView){
+    public void speedText(final EditText text, final ImageView imageView) {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -230,6 +229,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             }
         });
     }
+
 
 }
 
