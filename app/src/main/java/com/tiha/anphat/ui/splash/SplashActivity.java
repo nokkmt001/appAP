@@ -10,31 +10,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.tiha.anphat.MainActivity;
+import com.google.gson.Gson;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
-import com.tiha.anphat.data.entities.NguoiDungInfo;
+import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.ui.login.LoginActivity;
-import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.NetworkUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.aes.AESUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-
 public class SplashActivity extends AppCompatActivity implements SplashContract.View {
     Thread thread;
-    SplashPresenter presenterManHinhChao;
+    SplashPresenter presenter;
     AppPreference appPreference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        presenterManHinhChao = new SplashPresenter(SplashActivity.this, SplashActivity.this);
-        presenterManHinhChao.CheckStatusLogin();
+        presenter = new SplashPresenter(SplashActivity.this, SplashActivity.this);
+        presenter.CheckStatusLogin();
+
     }
 
     @Override
@@ -50,18 +47,15 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                         String userName = "", passWord = "";
                         AESUtils aesUtils = new AESUtils();
                         try {
-                            userName = aesUtils.decrypt(appPreference.getTenDangNhap());
-                        } catch (Exception e) {
+                            userName = aesUtils.decrypt(appPreference.getNguoiDungID());
+                        } catch (Exception ignored) {
                         }
                         try {
                             passWord = aesUtils.decrypt(appPreference.getMatKhau());
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
-                        AppConstants.SERVER_NAME = appPreference.getServerName();
-                        AppConstants.URL_SERVER = "http://" + AppConstants.SERVER_NAME;
-                        presenterManHinhChao.CheckLogin(userName, passWord);
+                        presenter.CheckLogin(userName, passWord);
                     } catch (Exception ex) {
-                    } finally {
                     }
                 }
             });
@@ -75,7 +69,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                         startActivity(intent);
                         finish();
                     } catch (Exception ex) {
-                    } finally {
                     }
                 }
             });
@@ -85,14 +78,12 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     }
 
     @Override
-    public void onLoginSuccess(NguoiDungInfo nguoiDungInfo) {
-        if (null != nguoiDungInfo) {
-//            PublicVariables.nguoiDungInfo = nguoiDungInfo;
-//            appPreference.setChiNhanh(nguoiDungInfo.getChiNhanh());
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            PublicVariables.NgayLamViec = simpleDateFormat.format(c.getTime());
-
+    public void onLoginSuccess(NewCustomer info) {
+        if (info!=null) {
+            PublicVariables.UserInfo = info;
+            Gson gson = new Gson();
+            String json = gson.toJson(info);
+            appPreference.setUser(json);
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
@@ -116,14 +107,13 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             msg.arg1 = 1;
             handler.sendMessage(msg);
         }
-//        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-//        startActivity(intent);
-//        finish();
+        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     Message msg;
     private Handler handler = new Handler(new Handler.Callback() {
-
         @Override
         public boolean handleMessage(Message msg) {
             try {

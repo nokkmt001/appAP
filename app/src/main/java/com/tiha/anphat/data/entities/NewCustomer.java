@@ -4,9 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 
-public class NewCustomer {
+public class NewCustomer implements Serializable {
     private Integer NguoiDungMobileID;
     private String HoTen;
     private String SoDienThoai;

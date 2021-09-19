@@ -5,7 +5,7 @@ public class AppConstants {
      * API
      */
     public static String SERVER_NAME = "anphatapp.tiha.vn/";
-//    public static String FTP_USERNAME = "demogas";
+    //    public static String FTP_USERNAME = "demogas";
 //    public static String FTP_PASSWORD = "tiha@demo.123$";
     public static String URL_SERVER = "http://" + SERVER_NAME;
     public static String URL_IMAGE = "http://" + SERVER_NAME + "/resources/filereports/";
@@ -18,7 +18,15 @@ public class AppConstants {
     public static final String URL_CHECK_PHONE = "api/NguoiDungMobile/KiemTraNguoiDungBySoDT?soDienThoai={0}";
     public static final String URL_INSERT_NEW_CUSTOMER = "api/NguoiDungMobile/InsertNguoiDungMobile";
     public static final String URL_LOGIN_BY_ID_PASS_WORD = "api/NguoiDungMobile/GetNguoiDungMobileByIDPassword?id={0}&password={1}";
-    public static final String URL_RESEND_PIN= "api/NguoiDungMobile/GuiLaiMaPin?id={0}";
+    public static final String URL_RESEND_PIN = "api/NguoiDungMobile/GuiLaiMaPin?id={0}";
+    //cart
+    public static final String URL_INSERT_CART = "api/GioHangMobile/InsertGioHang";
+    public static final String URL_UPDATE_CART = "api/GioHangMobile/UpdateGioHang";
+    public static final String URL_DELETE_CART = "api/GioHangMobile/DeleteGioHang";
+    public static final String URL_GET_LIST_CART = "api/GioHangMobile/GetListGioHang";
+    //product
+    public static final String URL_GET_LIST_All_PRODUCT = "api/Product/GetListAllProduct";
+    public static final String URL_GET_LIST_PRODUCT = "api/Product/GetListProduct";
 
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";

@@ -22,6 +22,18 @@
     <string name="welcom_">An Phát xin chào</string>
     <string name="input_number_phone">Số điện thoại</string>
     <string name="create_new_customer">Tạo tài khoản mới</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    //Product
+    <string name="promotion">KHUYẾN MÃI</string>
+    <string name="accessory">PHỤ KIỆN</string>
+    <string name="kitchen">BẾP</string>
+    <string name="fire_fighting">CHỮA CHÁY</string>
+    <string name="bark">VỎ</string>
+    <string name="vase_set">BỘ BÌNH</string>
+    <string name="rice">GẠO</string>
+    <string name="gas">GAS</string>
+    <string name="paddy">LÚA</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

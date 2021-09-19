@@ -14,7 +14,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.tiha.anphat.MainActivity;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 
 import java.util.Timer;

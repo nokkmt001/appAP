@@ -1,37 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity"
+    android:id="@+id/drawerLayout"
+    tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/frame_container"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/layoutHeader"
+            layout="@layout/layout_header_main" />
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize"
+            android:layout_marginBottom="?actionBarSize"
+            android:visibility="visible">
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_05"
+            android:layout_above="@+id/bottomNavigationView"
+            android:background="@color/colorLine" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            style="@style/BottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_alignParentBottom="true"
+            android:background="@color/White"
+            app:itemIconSize="25dp"
+            app:itemIconTint="@drawable/bottom_navigation_selector"
+            app:itemTextColor="@drawable/bottom_navigation_selector"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"
+        android:layout_gravity="start"
+        android:id="@+id/navigation_drawer"
+        android:background="@color/White"
+        android:fitsSystemWindows="true"
         android:visibility="visible">
 
-    </FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_above="@+id/bottomNavigationView"
-        android:background="@color/colorLine"
-        android:layout_height="@dimen/dp_05"/>
+            <include
+                android:id="@+id/layout"
+                layout="@layout/nav_header_main" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        style="@style/BottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:layout_alignParentBottom="true"
-        android:background="@color/White"
-        app:itemIconSize="25dp"
-        app:itemTextColor="@drawable/bottom_navigation_selector"
-        app:itemIconTint="@drawable/bottom_navigation_selector"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav" />
+            <View
+                android:layout_below="@+id/layout"
+                android:layout_width="match_parent"
+                android:background="@color/colorPrimary"
+                android:layout_height="@dimen/dp_05"/>
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/layoutLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/imageLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_log_out"/>
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="@dimen/textSize_16"
+                        android:layout_toEndOf="@+id/imageLogout"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:text="Đăng xuất"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -2,20 +2,22 @@ package com.tiha.anphat.ui.splash;
 
 import android.content.Context;
 
+import com.tiha.anphat.data.entities.NewCustomer;
+import com.tiha.anphat.data.network.nguoidung.IUserModel;
+import com.tiha.anphat.data.network.nguoidung.UserModel;
 import com.tiha.anphat.data.preft.SplashModel;
-
 
 public class SplashPresenter implements SplashContract.Presenter {
     SplashContract.View splashView;
     Context context;
     SplashModel splashModel;
-//    NguoiDungModel nguoiDungModel;
+    UserModel model;
 
     public SplashPresenter(Context context, SplashContract.View splashView) {
         this.splashView = splashView;
         this.context = context;
         this.splashModel = new SplashModel(context);
-//        this.nguoiDungModel = new NguoiDungModel();
+        this.model = new UserModel();
     }
 
     @Override
@@ -25,18 +27,17 @@ public class SplashPresenter implements SplashContract.Presenter {
     }
 
     @Override
-    public void CheckLogin(String username, String password) {
-//        nguoiDungModel.CheckLogin(username, password, new INguoiDungModel.IOnCheckLoginFinishedListener() {
-//            @Override
-//            public void onLoginSuccess(NguoiDungInfo nguoiDungInfo) {
-//                splashView.onLoginSuccess(nguoiDungInfo);
-//            }
-//
-//            @Override
-//            public void onLoginError(String error) {
-//                splashView.onLoginError(error);
-//            }
-//        });
-    }
+    public void CheckLogin(String ID, String password) {
+        model.GetLoginByIDPassWord(ID, password, new IUserModel.IGetLoginByIDPassWord() {
+            @Override
+            public void onSuccess(NewCustomer info) {
+                splashView.onLoginSuccess(info);
+            }
 
+            @Override
+            public void onError(String error) {
+                splashView.onLoginError(error);
+            }
+        });
+    }
 }

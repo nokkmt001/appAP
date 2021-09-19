@@ -5,14 +5,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import com.tiha.anphat.MainActivity;
+import com.google.gson.Gson;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.databinding.ActivityCheckLoginIdPassBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
-import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
@@ -94,6 +94,9 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
 
     @Override
     public void onCheckLoginByIDPassSuccess(NewCustomer info) {
+        Gson gson = new Gson();
+        String json = gson.toJson(info);
+        preference.setUser(json);
         preference.setMatKhau( Objects.requireNonNull(binding.inputPassword.getText()).toString());
         preference.setNguoiDungID(Objects.requireNonNull(binding.inputID.getText()).toString());
         PublicVariables.UserInfo = info;

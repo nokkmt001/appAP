@@ -1,12 +1,11 @@
 package com.tiha.anphat.ui.splash;
 
-
-import com.tiha.anphat.data.entities.NguoiDungInfo;
+import com.tiha.anphat.data.entities.NewCustomer;
 
 public interface SplashContract {
     interface View {
         void onCheckStatusLoginSuccess(boolean isLogin);
-        void onLoginSuccess(NguoiDungInfo nguoiDungInfo);
+        void onLoginSuccess(NewCustomer info);
         void onLoginError(String error);
     }
 

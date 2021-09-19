@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:background="@color/colorPrimaryDark">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageDrawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dp_5"
+        android:src="@drawable/ic_menu_24" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        style="@style/AppTheme.TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toStartOf="@+id/imageCart"
+        android:layout_toEndOf="@+id/imageDrawer"
+        android:text=""
+        android:textColor="@color/White" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/imageSms"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:padding="@dimen/dp_5"
+        android:src="@drawable/ic_buy_cart"
+        android:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageSms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/dp_5"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:src="@drawable/ic_sms"/>
+
+</RelativeLayout>
