@@ -51,19 +51,19 @@ public class AppPreference {
         sharedPreferences.edit().putString(PREF_SDT, tenDangNhap).apply();
     }
 
-    public String getMatKhau() {
+    public String getPassWord() {
         return sharedPreferences.getString(PREF_MatKhau, "");
     }
 
-    public void setMatKhau(String matKhau) {
+    public void setPassWord(String matKhau) {
         sharedPreferences.edit().putString(PREF_MatKhau, matKhau).apply();
     }
 
-    public String getNguoiDungID() {
+    public String getUserID() {
         return sharedPreferences.getString(PREF_NguoiDungID, "0");
     }
 
-    public void setNguoiDungID(String nguoiDungID) {
+    public void setUserID(String nguoiDungID) {
         sharedPreferences.edit().putString(PREF_NguoiDungID, nguoiDungID).apply();
     }
 

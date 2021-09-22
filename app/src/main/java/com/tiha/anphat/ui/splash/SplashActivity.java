@@ -15,7 +15,7 @@ import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.ui.login.LoginActivity;
+import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.tiha.anphat.utils.NetworkUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.aes.AESUtils;
@@ -24,11 +24,13 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     Thread thread;
     SplashPresenter presenter;
     AppPreference appPreference;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        appPreference = new AppPreference(this);
         presenter = new SplashPresenter(SplashActivity.this, SplashActivity.this);
         presenter.CheckStatusLogin();
 
@@ -36,26 +38,24 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
 
     @Override
     public void onCheckStatusLoginSuccess(boolean isLogin) {
-        //Trang thai da login thi goi form Trang chu
-        //Nguoc lai goi form dang nhap
         if (isLogin) {
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        String userName = "", passWord = "";
+                        String userID = "", passWord = "";
                         AESUtils aesUtils = new AESUtils();
                         try {
-                            userName = aesUtils.decrypt(appPreference.getNguoiDungID());
+                            userID = aesUtils.decrypt(appPreference.getUserID());
                         } catch (Exception ignored) {
                         }
                         try {
-                            passWord = aesUtils.decrypt(appPreference.getMatKhau());
+                            passWord = aesUtils.decrypt(appPreference.getPassWord());
                         } catch (Exception ignored) {
                         }
-                        presenter.CheckLogin(userName, passWord);
-                    } catch (Exception ex) {
+                        presenter.CheckLogin(userID, passWord);
+                    } catch (Exception ignored) {
                     }
                 }
             });
@@ -65,10 +65,10 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
                         startActivity(intent);
                         finish();
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
                     }
                 }
             });
@@ -87,7 +87,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
             startActivity(intent);
             finish();
         }
@@ -107,7 +107,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             msg.arg1 = 1;
             handler.sendMessage(msg);
         }
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
         startActivity(intent);
         finish();
     }
@@ -140,8 +140,8 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                                 AppPreference appPreference = new AppPreference(SplashActivity.this);
                                 appPreference.setLogin(false);
 //                                appPreference.setTenDangNhap("");
-                                appPreference.setMatKhau("");
-                                appPreference.setNguoiDungID("");
+                                appPreference.setPassWord("");
+                                appPreference.setUserID("");
 
                                 Intent intent = getBaseContext().getPackageManager().
                                         getLaunchIntentForPackage(getBaseContext().getPackageName());
@@ -164,6 +164,5 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             return false;
         }
     });
-    AlertDialog alertDialog;
 
 }

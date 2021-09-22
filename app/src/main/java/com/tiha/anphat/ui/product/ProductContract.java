@@ -10,9 +10,15 @@ public interface ProductContract {
         void onGetListProductSuccess(List<ProductInfo> list,Integer total);
 
         void onGetListProductError(String error);
+
+        void onGetImageByProDuctIDSuccess();
+
+        void onGetImageByProDuctIDError(String error);
     }
 
     interface Presenter{
         void GetListProduct(ProductCondition condition);
+
+        void GetImageByProDuctID(String ID);
     }
 }

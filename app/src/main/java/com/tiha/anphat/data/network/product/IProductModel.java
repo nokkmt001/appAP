@@ -14,12 +14,20 @@ public interface IProductModel {
         void onError(String error);
     }
 
-    void GetListProduct(ProductCondition condition,IGetListProductFinishListener listener);
+    void GetListProduct(ProductCondition condition, IGetListProductFinishListener listener);
 
     interface IGetListProductFinishListener {
         void onSuccess(List<ProductInfo> list, Integer counter);
 
         void onError(String error);
 
+    }
+
+    void GetImageFromProductID(String productID,IGetImageFromProductIDFinishListener listener);
+
+    interface IGetImageFromProductIDFinishListener {
+        void onSuccess();
+
+        void onError(String error);
     }
 }

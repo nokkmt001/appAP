@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <include
         android:id="@+id/layoutSearch"
         layout="@layout/layout_search" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rlvProduct"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutSearch" />
+        android:layout_below="@+id/layoutSearch"
+        tools:listitem="@layout/item_product"/>
+
+    <TextView
+        android:id="@+id/textError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_result"
+        android:gravity="center"
+        android:visibility="gone"
+        style="@style/AppTheme.TextView"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

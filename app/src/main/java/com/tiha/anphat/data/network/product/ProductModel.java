@@ -11,6 +11,7 @@ import com.tiha.anphat.utils.AppUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,5 +66,23 @@ public class ProductModel implements IProductModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         }, params);
+    }
+
+    @Override
+    public void GetImageFromProductID(String productID, final IGetImageFromProductIDFinishListener listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GET_IMAGE_PRODUCT,productID);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess();
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+
+            }
+        });
+
     }
 }

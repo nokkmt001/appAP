@@ -37,10 +37,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getLayoutId(), null);
         onInit(root);
-        onLoadData();
         configToolbar();
+        onLoadData();
         return root;
-
     }
 
     @LayoutRes
@@ -66,6 +65,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 progressDialog.dismiss();
             }
         }
+    }
+
+    public <T extends View> T bind(View view, int id) {
+        return view.findViewById(id);
     }
 
     public void checkSelfPermission(String[] permissionsRequired) {

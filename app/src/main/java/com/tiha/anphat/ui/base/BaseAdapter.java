@@ -11,33 +11,47 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.MyViewHolder> {
-
-    public int layout_id;
-    protected List<?> dataList = new ArrayList<>();
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+    protected List<T> dataList;
     Context BASE_CONTEXT;
     public View view;
+    OnClickListener clickListener;
+    OnLongClickListener longClickListener;
 
     public BaseAdapter(Context context) {
         this.BASE_CONTEXT = context;
     }
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(layout_id, viewGroup, false);
-        return new MyViewHolder(view);
+    public void setOnClickListener(OnClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
+    public void setLongClickListener(OnLongClickListener longClickListener) {
+        this.longClickListener = longClickListener;
+    }
+
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder viewHolder, int position) {
-        onBindViewHold(position, dataList.get(position));
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(getLayout_id(), viewGroup, false);
+        return new BaseViewHolder(view) {
+            @Override
+            public void getView(View view) {
+
+            }
+        };
     }
 
     public void clear() {
         dataList = new ArrayList<>();
         notifyDataSetChanged();
     }
+    public Object getItem(int position){
+        return dataList.get(position);
+    }
+
+    public abstract int getLayout_id() ;
+
 
     public abstract void getView(View view);
 
@@ -48,15 +62,6 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.MyVie
 
 
     public abstract void onBindViewHold(int position, Object itemView);
-
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            view = itemView;
-            getView(view);
-        }
-
-    }
 
     public interface OnClickListener {
         void onClick(View view, int position);

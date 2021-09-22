@@ -90,8 +90,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                                 PublicVariables.ClearData();
                                 AppPreference appPreference = new AppPreference(MainActivity.this);
                                 appPreference.setLogin(false);
-                                appPreference.setMatKhau("");
-                                appPreference.setNguoiDungID("");
+                                appPreference.setPassWord("");
+                                appPreference.setUserID("");
 
                                 Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

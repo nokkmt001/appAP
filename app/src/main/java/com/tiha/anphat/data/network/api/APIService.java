@@ -21,7 +21,7 @@ public class APIService {
     String tag = "VolleyError";
     String userName = "admin";
     String passWord = "P@ssw0rd@TiHa.123$@#";
-    int MY_SOCKET_TIMEOUT_MS = 10000;
+    int MY_SOCKET_TIMEOUT_MS = 100000;
 
     public APIService(String URL) {
         this.URL = AppConstants.URL_SERVER + URL;

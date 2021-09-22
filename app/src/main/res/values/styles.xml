@@ -111,6 +111,13 @@
         <item name="android:textIsSelectable">false</item>
     </style>
 
+    <style name="AppTheme.TextViewSize16" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/textSize_16</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="fontFamily">@font/myriadpro_regular</item>
+        <item name="android:textIsSelectable">false</item>
+    </style>
+
     <style name="AppTheme.TextViewSize20" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/textSize_20</item>
         <item name="android:textColor">@color/colorSecondaryText</item>

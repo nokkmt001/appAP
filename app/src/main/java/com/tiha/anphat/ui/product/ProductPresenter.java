@@ -30,4 +30,19 @@ public class ProductPresenter implements ProductContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void GetImageByProDuctID(String ID) {
+        model.GetImageFromProductID(ID, new IProductModel.IGetImageFromProductIDFinishListener() {
+            @Override
+            public void onSuccess() {
+                view.onGetImageByProDuctIDSuccess();
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onGetImageByProDuctIDError(error);
+            }
+        });
+    }
 }

@@ -19,6 +19,7 @@ public class ProductInfo {
     private Integer SLNhieu ;
     private String ModifiedDate;
     private String ModifiedBy;
+    private Integer GiaBanLe;
 
     public String getTeninHD() {
         return TeninHD;
@@ -54,4 +55,27 @@ public class ProductInfo {
         return gson.fromJson(jsonString, type);
     }
 
+    public Integer getGiaBanLe() {
+        return GiaBanLe;
+    }
+
+    public void setGiaBanLe(Integer giaBanLe) {
+        GiaBanLe = giaBanLe;
+    }
+
+    public String getProduct_Name() {
+        return Product_Name;
+    }
+
+    public void setProduct_Name(String product_Name) {
+        Product_Name = product_Name;
+    }
+
+    public String getProduct_ID() {
+        return Product_ID;
+    }
+
+    public void setProduct_ID(String product_ID) {
+        Product_ID = product_ID;
+    }
 }

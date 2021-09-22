@@ -2,7 +2,7 @@ package com.tiha.anphat.ui.base;
 
 import android.view.View;
 
-public abstract class BaseRecyclerViewEvent {
+public abstract class BaseEventClick {
     public interface OnClickListener {
         void onClick(View view, int position);
     }

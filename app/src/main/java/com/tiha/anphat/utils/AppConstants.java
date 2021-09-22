@@ -27,6 +27,7 @@ public class AppConstants {
     //product
     public static final String URL_GET_LIST_All_PRODUCT = "api/Product/GetListAllProduct";
     public static final String URL_GET_LIST_PRODUCT = "api/Product/GetListProduct";
+    public static final String URL_GET_IMAGE_PRODUCT = "api/Product/GetHinhAnhByProductID?productID={0}";
 
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";

@@ -16,6 +16,7 @@ import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
+import com.tiha.anphat.utils.aes.AESUtils;
 
 import java.util.Objects;
 
@@ -84,6 +85,12 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
 
     @Override
     protected void onLoadData() {
+        AESUtils aesUtils = new AESUtils();
+        try {
+            binding.inputID.setText(aesUtils.decrypt(preference.getUserID()));
+            binding.inputPassword.setText(aesUtils.decrypt(preference.getPassWord()));
+        } catch (Exception ignored) {
+        }
 
     }
 
@@ -97,8 +104,20 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         Gson gson = new Gson();
         String json = gson.toJson(info);
         preference.setUser(json);
-        preference.setMatKhau( Objects.requireNonNull(binding.inputPassword.getText()).toString());
-        preference.setNguoiDungID(Objects.requireNonNull(binding.inputID.getText()).toString());
+        preference.setLogin(true);
+        AESUtils aesUtils = new AESUtils();
+        String userID = "";
+        try {
+            userID = aesUtils.encrypt(Objects.requireNonNull(binding.inputID.getText()).toString());
+        } catch (Exception ignored) {
+        }
+        String passWord = "";
+        try {
+            passWord = aesUtils.encrypt(Objects.requireNonNull(binding.inputPassword.getText()).toString());
+        } catch (Exception ignored) {
+        }
+        preference.setPassWord(passWord);
+        preference.setUserID(userID);
         PublicVariables.UserInfo = info;
         showProgressDialog(false);
         Intent intent = new Intent(this, MainActivity.class);
