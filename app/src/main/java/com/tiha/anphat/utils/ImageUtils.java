@@ -69,7 +69,7 @@ public class ImageUtils {
     public static File getOutputMediaFile(int type) {
 
         // External sdcard location
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "BMTIHAGAS");
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "ANPHAT");
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

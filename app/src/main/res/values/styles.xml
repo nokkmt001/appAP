@@ -65,8 +65,8 @@
 
     <!--Base application button light-->
     <style name="AppTheme.Button.Light">
-        <item name="android:textColor">@color/White</item>
-        <item name="android:background">@drawable/bg_button_dark_no_radius</item>
+        <item name="android:textColor">@color/Black</item>
+        <item name="android:background">@drawable/bg_button_light</item>
     </style>
     <!--Base application button light border-->
     <style name="AppTheme.Button.LightBorder">
@@ -82,9 +82,9 @@
         <item name="android:padding">5dp</item>
     </style>
     <!--Base application button dark-->
-    <style name="AppTheme.Button.Dark">
-        <item name="android:textColor">@drawable/textcolor_button_dark</item>
-        <item name="android:background">@drawable/bg_button_transparent</item>
+    <style name="AppTheme.Button.Red">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:background">@drawable/bg_button_red</item>
     </style>
 
     <!--Base application button green-->

@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,7 +16,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
@@ -67,7 +69,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         checkSelfPermission(permissionsRequired);
         fmManager = getSupportFragmentManager();
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
         binding.layoutHeader.imageDrawer.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +79,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             }
         });
+
+//        binding.layoutHeader.imageCart.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                BadgeDrawable drawable = BadgeDrawable.create(MainActivity.this);
+//                drawable.setNumber(1);
+//                drawable.setBackgroundColor(Color.RED);
+//                binding.layoutHeader.imageCart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//            }
+//        });
 
         binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,72 +140,30 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_main:
-                            if (fmMain == null) {
-                                fmMain = new HomeFragment();
-                                if (fmActive != null)
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, "1").hide(fmActive).commit();
-                                else
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, "1").commit();
-                            } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
-                            }
-                            fmActive = fmMain;
-                            return true;
-                        case R.id.navigation_history:
-                            if (fmHistory == null) {
-                                fmHistory = new ProductFragment();
-                                if (fmActive != null)
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmHistory, "2").hide(fmActive).commit();
-                                else
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmHistory, "2").commit();
-                            } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmHistory).commit();
-                            }
-                            fmActive = fmHistory;
-                            return true;
-                        case R.id.navigation_sms:
-                            if (fmSms == null) {
-                                fmSms = new SmsFragment();
-                                if (fmActive != null)
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmSms, "4").hide(fmActive).commit();
-                                else
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmSms, "4").commit();
-                            } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmSms).commit();
-                            }
-                            fmActive = fmSms;
-                            return true;
-                        case R.id.navigation_pay:
-                            if (fmPay == null) {
-                                fmPay = new PayFragment();
-                                if (fmActive != null)
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmPay, "3").hide(fmActive).commit();
-                                else
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmPay, "3").commit();
-                            } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmPay).commit();
-                            }
-                            fmActive = fmPay;
-                            return true;
-                        case R.id.navigation_account:
-                            if (fmAccount == null) {
-                                fmAccount = new AccountFragment();
-                                if (fmActive != null)
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmAccount, "5").hide(fmActive).commit();
-                                else
-                                    fmManager.beginTransaction().add(R.id.frame_container, fmAccount, "5").commit();
-                            } else {
-                                fmManager.beginTransaction().hide(fmActive).show(fmAccount).commit();
-                            }
-                            fmActive = fmAccount;
+                            setBottomNavigationView(fmMain,new HomeFragment(),"1");
                             return true;
 
+                        case R.id.navigation_history:
+                            setBottomNavigationView(fmHistory,new ProductFragment(),"2");
+                            return true;
+
+                        case R.id.navigation_sms:
+                            setBottomNavigationView(fmSms,new SmsFragment(),"3");
+                            return true;
+
+                        case R.id.navigation_pay:
+                            setBottomNavigationView(fmPay,new PayFragment(),"4");
+                            return true;
+
+                        case R.id.navigation_account:
+                            setBottomNavigationView(fmAccount,new AccountFragment(),"5");
+                            return true;
                         default:
                             break;
                     }
@@ -227,7 +197,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             alert.show();
         }
 
+    }
 
+    public void setBottomNavigationView(Fragment fmMain, Fragment fragment,String tab) {
+        if (fmMain == null) {
+            fmMain = fragment;
+            if (fmActive != null)
+                fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(fmActive).commit();
+            else
+                fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).commit();
+        } else {
+            fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
+        }
+        fmActive = fmMain;
     }
 
     public void SetTitle(String textView) {

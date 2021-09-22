@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/dp_5"
-        android:src="@drawable/ic_arrows_back"
         android:visibility="gone" />
 
     <TextView

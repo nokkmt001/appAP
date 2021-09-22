@@ -42,7 +42,7 @@ public class ProductFragment extends BaseFragment {
     }
 
     public void setupViewPager(){
-        int tabCount = 3;
+        int tabCount = 1;
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new ProductPagerAdapter(getActivity(),getChildFragmentManager(), tabCount);
         adapterPager.addFragment(new DetailProductFragment("PHUKIEN"),getString(R.string.accessory),0);
