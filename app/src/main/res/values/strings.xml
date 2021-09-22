@@ -37,6 +37,7 @@
     //google
     <string name="google_maps_key">AIzaSyBu86Xy64zcwMiKCLbsDbjPHQ9iG_5TBh0</string>
     <string name="no_result">Không tìm thấy kết quả</string>
+    <string name="text_wait">Vui lòng chờ...</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>
