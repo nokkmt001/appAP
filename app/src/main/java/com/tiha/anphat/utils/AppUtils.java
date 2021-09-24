@@ -217,7 +217,7 @@ public class AppUtils {
     }
 
     public static String formatDateToDateRequestSQL(String dateRequest, String format) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         Date formatted = null;
         try {
             formatted = simpleDateFormat.parse(dateRequest);

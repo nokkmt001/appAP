@@ -1,30 +1,30 @@
 package com.tiha.anphat.main;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
+import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.databinding.ActivityMainBinding;
 import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.ui.cart.CartActivity;
 import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     };
     ActivityMainBinding binding;
     MainPresenter presenter;
+    RelativeLayout relativeLayout;
+    public static final int FROM_MAIN = 0;
 
     @Override
     protected int getLayoutResourceId() {
@@ -55,20 +57,24 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onLoadData() {
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
+        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     protected void onInit() {
+        relativeLayout = findViewById(R.id.layoutHeader);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        checkSelfPermission(permissionsRequired);
+
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        checkSelfPermission(permissionsRequired);
+
         fmManager = getSupportFragmentManager();
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
@@ -79,16 +85,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             }
         });
-
-//        binding.layoutHeader.imageCart.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-//                BadgeDrawable drawable = BadgeDrawable.create(MainActivity.this);
-//                drawable.setNumber(1);
-//                drawable.setBackgroundColor(Color.RED);
-//                binding.layoutHeader.imageCart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//            }
-//        });
 
         binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,14 +116,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             }
         });
 
-        binding.layoutHeader.imageCart.setOnClickListener(new View.OnClickListener() {
+        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(MainActivity.this, CartActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, FROM_MAIN);
             }
         });
 
-        binding.layoutHeader.imageSms.setOnClickListener(new View.OnClickListener() {
+        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -146,23 +144,23 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_main:
-                            setBottomNavigationView(fmMain,new HomeFragment(),"1");
+                            setBottomNavigationView(fmMain, new HomeFragment(), "1");
                             return true;
 
                         case R.id.navigation_history:
-                            setBottomNavigationView(fmHistory,new ProductFragment(),"2");
+                            setBottomNavigationView(fmHistory, new ProductFragment(), "2");
                             return true;
 
                         case R.id.navigation_sms:
-                            setBottomNavigationView(fmSms,new SmsFragment(),"3");
+                            setBottomNavigationView(fmSms, new SmsFragment(), "4");
                             return true;
 
                         case R.id.navigation_pay:
-                            setBottomNavigationView(fmPay,new PayFragment(),"4");
+                            setBottomNavigationView(fmPay, new PayFragment(), "3");
                             return true;
 
                         case R.id.navigation_account:
-                            setBottomNavigationView(fmAccount,new AccountFragment(),"5");
+                            setBottomNavigationView(fmAccount, new AccountFragment(), "5");
                             return true;
                         default:
                             break;
@@ -199,7 +197,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     }
 
-    public void setBottomNavigationView(Fragment fmMain, Fragment fragment,String tab) {
+    public void setBottomNavigationView(Fragment fmMain, Fragment fragment, String tab) {
         if (fmMain == null) {
             fmMain = fragment;
             if (fmActive != null)
@@ -257,12 +255,30 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     @Override
-    public void onGetListAllCartSuccess(List<CartCondition> list) {
-
+    public void onGetListAllCartSuccess(List<CartInfo> list) {
+        if (list != null && list.size() > 0) {
+            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
+            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(list.size()));
+        } else binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
     }
 
     @Override
     public void onGetListAllCartError(String error) {
+        showMessage(error);
+    }
 
+    public void onLoadCartListener() {
+        presenter = new MainPresenter(this);
+        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == FROM_MAIN) {
+                onLoadCartListener();
+            }
+        }
     }
 }

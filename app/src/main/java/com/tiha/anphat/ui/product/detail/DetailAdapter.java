@@ -14,6 +14,8 @@ import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.ui.base.BaseEventClick;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -36,6 +38,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     public void clear() {
         listAllData.clear();
         notifyDataSetChanged();
+    }
+
+    public ProductInfo getItem(int position){
+        return listAllData.get(position);
     }
 
     public void addAll(List<ProductInfo> list) {

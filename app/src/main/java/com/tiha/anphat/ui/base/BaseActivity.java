@@ -101,10 +101,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void showMessage(String title, String body) {
+    public void showMessage(String error) {
+        error = error.isEmpty() ? getString(R.string.error_msg_unknown) : error;
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            error = getString(R.string.error_msg_no_internet);
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title)
-                .setMessage(body)
+        builder.setTitle(getString(R.string.title_error_msg))
+                .setMessage(error)
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {

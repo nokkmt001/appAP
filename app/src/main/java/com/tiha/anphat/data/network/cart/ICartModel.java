@@ -1,5 +1,6 @@
 package com.tiha.anphat.data.network.cart;
 
+import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 
@@ -34,10 +35,9 @@ public interface ICartModel {
     void GetListAllCart(Integer UserID,IGetListAllCartFinishListener listener);
 
     interface IGetListAllCartFinishListener {
-        void onSuccess(List<CartCondition> list);
+        void onSuccess(List<CartInfo> list);
 
         void onError(String error);
     }
-
 
 }

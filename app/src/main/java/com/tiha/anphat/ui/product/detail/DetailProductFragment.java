@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.product.ProductContract;
@@ -35,14 +38,17 @@ import com.tiha.anphat.ui.product.ProductPresenter;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
+import com.tiha.anphat.utils.PublicVariables;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@SuppressLint("SetTextI18n")
 public class DetailProductFragment extends BaseFragment implements ProductContract.View {
     String title = "";
     ProductPresenter presenter;
@@ -59,6 +65,8 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     EditText inputSearch;
     ImageView imageDelete;
     private Timer timer;
+    ProductInfo info;
+    MainActivity activity;
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -71,6 +79,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     protected void onInit(View view) {
+        activity = new MainActivity();
         inputSearch = bind(view, R.id.inputSearch);
         imageDelete = bind(view, R.id.imageDelete);
         adapter = new DetailAdapter(getActivity(), new ArrayList<ProductInfo>(), title);
@@ -93,7 +102,8 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         adapter.setClickListener(new BaseEventClick.OnClickListener() {
             @Override
             public void onClick(View view, int position) {
-//                showBottomSheet();
+                info = adapter.getItem(position);
+                presenter.GetImageByProDuctID(info.getProduct_ID());
             }
         });
         Search();
@@ -199,17 +209,30 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    public void onGetImageByProDuctIDSuccess() {
-
+    public void onGetImageByProDuctIDSuccess(String imageBitmap) {
+        showBottomSheet(imageBitmap, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+                AppUtils.formatNumber("N0").format(info.getSLNhieu()));
     }
 
     @Override
     public void onGetImageByProDuctIDError(String error) {
-        CommonUtils.showMessageError(getActivity(), error);
-
+        showBottomSheet(null, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+                AppUtils.formatNumber("N0").format(info.getSLNhieu()));
     }
 
-    private void showBottomSheet(String imageBitMap, String title, String price, int number) {
+    @Override
+    public void onInsertCartSuccess(CartCondition info) {
+        activity.onLoadCartListener();
+    }
+
+    @Override
+    public void onInsertCartError(String error) {
+        showMessage(error);
+    }
+
+    Integer count = 1;
+
+    private void showBottomSheet(String imageBitMap, String title, String price, final String number) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
         final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
@@ -219,17 +242,46 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         dialog.show();
-
-        final ImageView imageMain = view.findViewById(R.id.imageView);
-        TextView tvTitle = view.findViewById(R.id.textTitle);
-        TextView tvPrice = view.findViewById(R.id.textPrice);
-        TextView tvDeception = view.findViewById(R.id.textDeception);
-        Button btAddCart = view.findViewById(R.id.btnAddCart);
-        Button btnBuyNow = view.findViewById(R.id.btnBuy);
-        Button btnEmpty = view.findViewById(R.id.btnEmpty);
+        final RelativeLayout layoutCountBuy = bind(view, R.id.layoutCountBuy);
+        final ImageView imageMain = bind(view, R.id.imageView);
+        TextView tvTitle = bind(view, R.id.textName);
+        TextView tvPrice = bind(view, R.id.textPrice);
+        TextView tvDeception = bind(view, R.id.textDeception);
+        final TextView tvCountBuy = bind(view, R.id.textCountBuy);
+        Button btAddCart = bind(view, R.id.btnAddCart);
+        Button btnBuyNow = bind(view, R.id.btnBuy);
+        Button btnEmpty = bind(view, R.id.btnEmpty);
+        ImageView imgAdd = bind(view, R.id.imageAdd);
+        ImageView imgMinus = bind(view, R.id.imageMinus);
+        count = 1;
+        tvCountBuy.setText(count.toString());
         tvTitle.setText(title);
         tvPrice.setText(price);
-        if (number == 0) {
+        if (!"0".equals(number)) {
+            layoutCountBuy.setVisibility(View.VISIBLE);
+        } else {
+            layoutCountBuy.setVisibility(View.GONE);
+        }
+        final Date date = new Date(System.currentTimeMillis());
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count != Integer.parseInt(number)) {
+                    count = count + 1;
+                }
+                tvCountBuy.setText(count.toString());
+            }
+        });
+        imgMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count != 1) {
+                    count = count - 1;
+                }
+                tvCountBuy.setText(count.toString());
+            }
+        });
+        if (number.equals("0")) {
             btnEmpty.setVisibility(View.VISIBLE);
             btAddCart.setVisibility(View.GONE);
             btnBuyNow.setVisibility(View.GONE);
@@ -241,7 +293,14 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         btAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                CartCondition condition = new CartCondition();
+                condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+                condition.setSoLuong(count);
+                condition.setProductID(info.getProduct_ID());
+                condition.setGhiChu("");
+                condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+                condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+                presenter.InsertCart(condition);
             }
         });
         if (imageBitMap != null) {
@@ -250,7 +309,8 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                     .apply(new RequestOptions().override(10, 10))
                     .into(new CustomTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
+                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
+                                Transition<? super Bitmap> transition) {
                             imageMain.setImageBitmap(resource);
                         }
 

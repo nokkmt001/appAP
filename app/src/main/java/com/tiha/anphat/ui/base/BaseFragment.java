@@ -23,11 +23,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.tiha.anphat.R;
+import com.tiha.anphat.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener{
+public abstract class BaseFragment extends Fragment implements View.OnClickListener {
     Dialog progressDialog;
     private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
     String[] permissionsMain = {};
@@ -73,8 +74,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     public void checkSelfPermission(String[] permissionsRequired) {
         permissionsMain = permissionsRequired;
-        for (String tt:permissionsRequired){
-            if (ActivityCompat.checkSelfPermission(getActivity(),tt)!= PackageManager.PERMISSION_GRANTED){
+        for (String tt : permissionsRequired) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), tt) != PackageManager.PERMISSION_GRANTED) {
                 {
                     ActivityCompat.requestPermissions(getActivity(), permissionsRequired, REQUEST_MULTIPLE_PERMISSIONS);
                     //return;
@@ -83,11 +84,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    public void showMessage(String title, String body) {
+    public void showMessage(String error) {
+        error = error.isEmpty() ? getActivity().getResources().getString(R.string.error_msg_unknown) : error;
+        if (!NetworkUtils.isNetworkConnected(getActivity())) {
+            error = getActivity().getResources().getString(R.string.error_msg_no_internet);
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //CommonUtils.configShowMessage(builder, title, body);
-        builder.setTitle(title)
-                .setMessage(body)
+        builder.setTitle(getActivity().getResources().getString(R.string.title_error_msg))
+                .setMessage(error)
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
@@ -98,7 +102,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         alert.show();
     }
 
-    public void speedText(final EditText text, final ImageView imageView){
+    public void speedText(final EditText text, final ImageView imageView) {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getActivity());
         checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -179,8 +183,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     }
                 }
 
-                for (String ii : permissionsMain){
-                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),ii)){
+                for (String ii : permissionsMain) {
+                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), ii)) {
                         showMessagePermissions();
                     } else {
 

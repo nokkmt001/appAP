@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.product;
 
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 
 import java.util.List;
@@ -11,14 +12,20 @@ public interface ProductContract {
 
         void onGetListProductError(String error);
 
-        void onGetImageByProDuctIDSuccess();
+        void onGetImageByProDuctIDSuccess(String imageBitmap);
 
         void onGetImageByProDuctIDError(String error);
+
+        void onInsertCartSuccess(CartCondition info);
+
+        void onInsertCartError(String error);
     }
 
     interface Presenter{
         void GetListProduct(ProductCondition condition);
 
         void GetImageByProDuctID(String ID);
+
+        void InsertCart(CartCondition condition);
     }
 }

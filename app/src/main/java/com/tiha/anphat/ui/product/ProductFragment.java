@@ -10,10 +10,9 @@ import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.product.detail.DetailProductFragment;
 
 public class ProductFragment extends BaseFragment {
-    ProductPresenter presenter;
     TabLayout tabLayout;
     ViewPager viewPager;
-    ProductPagerAdapter adapterPager;
+    PagerAdapter adapterPager;
 
     @Override
     protected int getLayoutId() {
@@ -44,7 +43,7 @@ public class ProductFragment extends BaseFragment {
     public void setupViewPager(){
         int tabCount = 1;
         viewPager.setOffscreenPageLimit(tabCount);
-        adapterPager = new ProductPagerAdapter(getActivity(),getChildFragmentManager(), tabCount);
+        adapterPager = new PagerAdapter(getActivity(),getChildFragmentManager(), tabCount);
         adapterPager.addFragment(new DetailProductFragment("PHUKIEN"),getString(R.string.accessory),0);
         adapterPager.addFragment(new DetailProductFragment("BRN_2715GN"),getString(R.string.kitchen),1);
         adapterPager.addFragment(new DetailProductFragment("PCCC"),getString(R.string.fire_fighting),2);

@@ -22,13 +22,12 @@ public class AppConstants {
     //cart
     public static final String URL_INSERT_CART = "api/GioHangMobile/InsertGioHang";
     public static final String URL_UPDATE_CART = "api/GioHangMobile/UpdateGioHang";
-    public static final String URL_DELETE_CART = "api/GioHangMobile/DeleteGioHang";
-    public static final String URL_GET_LIST_CART = "api/GioHangMobile/GetListGioHang";
+    public static final String URL_DELETE_CART = "api/GioHangMobile/DeleteGioHang?id={0}";
+    public static final String URL_GET_LIST_CART = "api/GioHangMobile/GetListGioHang?nguoiDungMobileID={0}";
     //product
     public static final String URL_GET_LIST_All_PRODUCT = "api/Product/GetListAllProduct";
     public static final String URL_GET_LIST_PRODUCT = "api/Product/GetListProduct";
     public static final String URL_GET_IMAGE_PRODUCT = "api/Product/GetHinhAnhByProductID?productID={0}";
-
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
     /**

@@ -52,4 +52,15 @@ public class CommonUtils {
         final LocationManager manager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
+
+    static public void alertDlg(Context context, String title, String msg, String btnPos, String btnNeutral, String btnNeg, DialogInterface.OnClickListener ocListener) {
+        AlertDialog.Builder db = new AlertDialog.Builder(context);
+        db.setTitle(title);
+        db.setMessage(msg);
+        if (btnPos != null) db.setPositiveButton(btnPos, ocListener);
+        if (btnNeutral != null) db.setNeutralButton(btnNeutral, ocListener);
+        if (btnNeg != null) db.setNegativeButton(btnNeg, ocListener);
+//        db.setIcon(android.R.drawable.ic_dialog_alert);
+        db.show();
+    }
 }

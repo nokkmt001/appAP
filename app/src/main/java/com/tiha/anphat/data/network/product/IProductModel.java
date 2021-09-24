@@ -2,6 +2,7 @@ package com.tiha.anphat.data.network.product;
 
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
+import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
 
 import java.util.List;
 
@@ -23,9 +24,17 @@ public interface IProductModel {
 
     }
 
-    void GetImageFromProductID(String productID,IGetImageFromProductIDFinishListener listener);
+    void GetImageFromProductID(String productID, IGetImageFromProductIDFinishListener listener);
 
     interface IGetImageFromProductIDFinishListener {
+        void onSuccess(String imageBitmap);
+
+        void onError(String error);
+    }
+
+    void GetProductPriceByUserID(ProductPriceCondition condition,IGetProductPriceByUserIDListener listener);
+
+    interface IGetProductPriceByUserIDListener {
         void onSuccess();
 
         void onError(String error);

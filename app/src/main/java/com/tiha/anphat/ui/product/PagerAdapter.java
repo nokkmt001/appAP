@@ -11,17 +11,17 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductPagerAdapter extends FragmentStatePagerAdapter {
+public class PagerAdapter extends FragmentStatePagerAdapter {
     Context mContext;
     private final List<Fragment> mListFragment = new ArrayList<>();
     private final List<String> mTitleList = new ArrayList<>();
 
-    public ProductPagerAdapter(Context context, @NonNull FragmentManager fm,int tab) {
+    public PagerAdapter(Context context, @NonNull FragmentManager fm, int tab) {
         super(fm);
         this.mContext = context;
     }
 
-    public ProductPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+    public PagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 

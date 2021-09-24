@@ -1,5 +1,6 @@
 package com.tiha.anphat.main;
 
+import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 
@@ -23,7 +24,7 @@ public interface MainContract {
 
         void onDeleteCartError(String error);
 
-        void onGetListAllCartSuccess(List<CartCondition> list);
+        void onGetListAllCartSuccess(List<CartInfo> list);
 
         void onGetListAllCartError(String error);
     }

@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
     <!--Base application theme no actionbar-->
@@ -18,7 +18,7 @@
         <item name="windowActionModeOverlay">true</item>
 
         <!--  For Custom Action Mode Background Color/Drawable -->
-        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/colorPrimaryDark</item>
         <!--<item name="actionModeCloseButtonStyle">@style/NoCloseButtonActionModeStyle</item>-->
     </style>
 
@@ -60,13 +60,17 @@
         <item name="android:textSize">@dimen/button_title_textsize</item>
         <item name="android:gravity">center</item>
         <item name="fontFamily">@font/myriadpro_bold</item>
-        <item name="android:padding">@dimen/button_padding</item>
     </style>
 
     <!--Base application button light-->
     <style name="AppTheme.Button.Light">
         <item name="android:textColor">@color/Black</item>
         <item name="android:background">@drawable/bg_button_light</item>
+    </style>
+
+    <style name="AppTheme.Button.Default">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:background">@drawable/bg_button_default</item>
     </style>
     <!--Base application button light border-->
     <style name="AppTheme.Button.LightBorder">
@@ -111,6 +115,15 @@
         <item name="android:textIsSelectable">false</item>
     </style>
 
+    <style name="AppTheme.TextView.Bold" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/title_textsize</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="fontFamily">@font/myriadpro_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="singleLine">true</item>
+        <item name="android:textIsSelectable">false</item>
+    </style>
+
     <style name="AppTheme.TextViewSize16" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/textSize_16</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
@@ -140,6 +153,7 @@
         <item name="android:background">@drawable/bg_edittext_noedit</item>
         <item name="android:textCursorDrawable">@drawable/color_cursor_transparent</item>
         <item name="android:focusable">false</item>
+        <item name="android:textSize">@dimen/textSize_12</item>
         <item name="android:longClickable">false</item>
     </style>
 

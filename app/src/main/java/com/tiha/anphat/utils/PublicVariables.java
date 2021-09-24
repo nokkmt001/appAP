@@ -25,31 +25,5 @@ public class PublicVariables {
         UserInfo = new NewCustomer();
     }
 
-//    public static List<MenuInfo> GetListMenuChildByParentID(String parentID) {
-//        List<MenuInfo> list = new ArrayList<>();
-//        int tabMenuID = -1;
-//        try {
-//            tabMenuID = Integer.parseInt(parentID);
-//        } catch (NumberFormatException e) {
-//            return list;
-//        }
-//        for (MenuInfo item : listAllMenu) {
-//            if (item.getTabMenuID() == tabMenuID) {
-//                list.add(item);
-//            }
-//        }
-//        return list;
-//    }
-//
-//    public static List<MenuInfo> GetListMenuParent() {
-//        List<MenuInfo> list = new ArrayList<>();
-//        List<String> listExist = new ArrayList<>();
-//        for (MenuInfo item : listAllMenu) {
-//            if (item.getTabMenuID() == -1) {
-//                list.add(item);
-//            }
-//        }
-//        return list;
-//    }
 
 }

@@ -20,6 +20,7 @@ public class ProductInfo {
     private String ModifiedDate;
     private String ModifiedBy;
     private Integer GiaBanLe;
+    private Integer GiaMua;
 
     public String getTeninHD() {
         return TeninHD;
@@ -77,5 +78,21 @@ public class ProductInfo {
 
     public void setProduct_ID(String product_ID) {
         Product_ID = product_ID;
+    }
+
+    public Integer getGiaMua() {
+        return GiaMua;
+    }
+
+    public void setGiaMua(Integer giaMua) {
+        GiaMua = giaMua;
+    }
+
+    public Integer getSLNhieu() {
+        return SLNhieu;
+    }
+
+    public void setSLNhieu(Integer SLNhieu) {
+        this.SLNhieu = SLNhieu;
     }
 }

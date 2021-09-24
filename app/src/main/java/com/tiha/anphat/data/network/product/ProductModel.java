@@ -3,6 +3,7 @@ package com.tiha.anphat.data.network.product;
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
+import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
@@ -71,10 +72,11 @@ public class ProductModel implements IProductModel {
     @Override
     public void GetImageFromProductID(String productID, final IGetImageFromProductIDFinishListener listener) {
         String URL = MessageFormat.format(AppConstants.URL_GET_IMAGE_PRODUCT,productID);
+        service = new APIService(URL);
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess();
+                listener.onSuccess(response);
             }
 
             @Override
@@ -83,6 +85,11 @@ public class ProductModel implements IProductModel {
 
             }
         });
+
+    }
+
+    @Override
+    public void GetProductPriceByUserID(ProductPriceCondition condition, IGetProductPriceByUserIDListener listener) {
 
     }
 }
