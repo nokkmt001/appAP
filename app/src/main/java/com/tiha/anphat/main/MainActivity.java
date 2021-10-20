@@ -21,6 +21,7 @@ import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
+import com.tiha.anphat.data.entities.kho.KhoInfo;
 import com.tiha.anphat.databinding.ActivityMainBinding;
 import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
@@ -42,6 +43,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     String[] permissionsRequired = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
     };
     ActivityMainBinding binding;
     MainPresenter presenter;
@@ -58,6 +61,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
         presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+        presenter.GetListKho();
     }
 
     @Override
@@ -89,30 +93,43 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("ĐĂNG XUẤT")
-                        .setMessage("Bạn có chắc muốn đăng xuất ứng dụng?")
-                        .setCancelable(false)
-                        .setPositiveButton("ĐĂNG XUẤT", new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int id) {
-                                PublicVariables.ClearData();
-                                AppPreference appPreference = new AppPreference(MainActivity.this);
-                                appPreference.setLogin(false);
-                                appPreference.setPassWord("");
-                                appPreference.setUserID("");
-
-                                Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
-                            public void onClick(final DialogInterface dialog, final int id) {
-                                dialog.cancel();
-                            }
-                        });
-                final AlertDialog alert = builder.create();
-                alert.show();
+                alertDialog( "ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        PublicVariables.ClearData();
+                        AppPreference appPreference = new AppPreference(MainActivity.this);
+                        appPreference.setLogin(false);
+                        appPreference.setPassWord("");
+                        appPreference.setUserID("");
+                        Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                });
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                builder.setTitle("ĐĂNG XUẤT")
+//                        .setMessage("Bạn có chắc muốn đăng xuất ứng dụng?")
+//                        .setCancelable(false)
+//                        .setPositiveButton("ĐĂNG XUẤT", new DialogInterface.OnClickListener() {
+//                            public void onClick(final DialogInterface dialog, final int id) {
+//                                PublicVariables.ClearData();
+//                                AppPreference appPreference = new AppPreference(MainActivity.this);
+//                                appPreference.setLogin(false);
+//                                appPreference.setPassWord("");
+//                                appPreference.setUserID("");
+//
+//                                Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                startActivity(intent);
+//                            }
+//                        })
+//                        .setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
+//                            public void onClick(final DialogInterface dialog, final int id) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                final AlertDialog alert = builder.create();
+//                alert.show();
             }
         });
 
@@ -174,25 +191,33 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("THOÁT ỨNG DỤNG")
-                    .setMessage("Bạn có chắc muốn thoát ứng dụng?")
-                    .setCancelable(false)
-                    .setPositiveButton("CÓ", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            moveTaskToBack(true);
-                            finishAffinity();
-                        }
-                    })
-                    .setNegativeButton("KHÔNG", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-            final AlertDialog alert = builder.create();
-            alert.show();
+            alertDialog("THOÁT ỨNG DỤNG", "Bạn có chắc muốn thoát ứng dụng?", "CÓ", null,
+                    new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    moveTaskToBack(true);
+                    finishAffinity();
+                }
+            });
+//            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//            builder.setTitle("THOÁT ỨNG DỤNG")
+//                    .setMessage("Bạn có chắc muốn thoát ứng dụng?")
+//                    .setCancelable(false)
+//                    .setPositiveButton("CÓ", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            moveTaskToBack(true);
+//                            finishAffinity();
+//                        }
+//                    })
+//                    .setNegativeButton("KHÔNG", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            dialogInterface.cancel();
+//                        }
+//                    });
+//            final AlertDialog alert = builder.create();
+//            alert.show();
         }
 
     }
@@ -264,6 +289,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onGetListAllCartError(String error) {
+        showMessage(error);
+    }
+
+    @Override
+    public void onGetListKhoSuccess(List<KhoInfo> list) {
+        PublicVariables.listKho = list;
+    }
+
+    @Override
+    public void onGetListKhoError(String error) {
         showMessage(error);
     }
 

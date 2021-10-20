@@ -1,6 +1,5 @@
-package com.tiha.anphat.ui.history;
+package com.tiha.anphat.ui.pay.history;
 
-import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.TextView;
 

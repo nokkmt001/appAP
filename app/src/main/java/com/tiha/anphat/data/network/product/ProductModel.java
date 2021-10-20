@@ -29,7 +29,6 @@ public class ProductModel implements IProductModel {
             @Override
             public void onSuccess(String response) {
                 listener.onSuccess(new ProductInfo().getListAllProduct(response));
-
             }
 
             @Override
@@ -56,7 +55,7 @@ public class ProductModel implements IProductModel {
                     JSONObject jsonObject = new JSONObject(response);
                     String jsonList = jsonObject.getJSONArray("List").toString();
                     Integer counter = Integer.parseInt(jsonObject.get("Total").toString());
-                    listener.onSuccess(new ProductInfo().getListAllProduct(jsonList),counter);
+                    listener.onSuccess(new ProductInfo().getListAllProduct(jsonList), counter);
                 } catch (JSONException e) {
                     listener.onError(e.getMessage());
                 }
@@ -71,7 +70,7 @@ public class ProductModel implements IProductModel {
 
     @Override
     public void GetImageFromProductID(String productID, final IGetImageFromProductIDFinishListener listener) {
-        String URL = MessageFormat.format(AppConstants.URL_GET_IMAGE_PRODUCT,productID);
+        String URL = MessageFormat.format(AppConstants.URL_GET_IMAGE_PRODUCT, productID);
         service = new APIService(URL);
         service.DownloadJson(new VolleyCallback() {
             @Override
@@ -82,14 +81,47 @@ public class ProductModel implements IProductModel {
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
-
             }
         });
-
     }
 
     @Override
-    public void GetProductPriceByUserID(ProductPriceCondition condition, IGetProductPriceByUserIDListener listener) {
+    public void GetProductPriceByUserID(ProductPriceCondition condition, final IGetProductPriceByUserIDListener listener) {
+        String URL = AppConstants.URL_GET_PRICE_PRODUCT;
+        service = new APIService(URL);
+        Map<String, String> params = new HashMap<>();
+        params.put("NguoiDungMobileID", condition.getNguoiDungMobileID());
+        params.put("ProductID", condition.getProductID());
+        params.put("Ngay", condition.getNgay());
+        params.put("SoLuong", condition.getSoLuong().toString());
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(Double.parseDouble(response));
+            }
 
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+
+            }
+        }, params);
+    }
+
+    @Override
+    public void GetProductInventory(String maKho, String productID, String date,final IGetProductInventoryFinish listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GET_PRODUCT_TON_KHO, maKho, productID, date);
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(Integer.valueOf(response));
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
     }
 }

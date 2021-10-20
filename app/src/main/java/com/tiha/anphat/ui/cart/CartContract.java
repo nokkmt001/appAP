@@ -2,6 +2,7 @@ package com.tiha.anphat.ui.cart;
 
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
+import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
 
 import java.util.List;
 
@@ -18,6 +19,14 @@ public interface CartContract {
         void onDeleteCartSuccess();
 
         void onDeleteCartError(String error);
+
+        void onGetDonGiaProductByUserSuccess(Double price);
+
+        void onGetDonGiaProductByUserError(String error);
+
+        void onGetProductInventorySuccess(Integer result);
+
+        void onGetProductInventoryError(String error);
     }
 
     interface Presenter{
@@ -26,5 +35,9 @@ public interface CartContract {
         void UpdateCart(CartCondition condition);
 
         void DeleteCart(Integer ID);
+
+        void GetProductPriceByUser(ProductPriceCondition condition);
+
+        void GetProductInventory(String maKho,String productID, String date );
     }
 }

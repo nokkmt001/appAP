@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +42,7 @@ import com.tiha.anphat.utils.PublicVariables;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -67,6 +67,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     private Timer timer;
     ProductInfo info;
     MainActivity activity;
+    Integer inventory = 0; // tồn kho
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -86,8 +87,6 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         textError = bind(view, R.id.textError);
         rlv = bind(view, R.id.rlvProduct);
         rlv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rlv.setHasFixedSize(true);
-        rlv.setItemAnimator(new DefaultItemAnimator());
         rlv.setAdapter(adapter);
         rlv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -103,6 +102,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             @Override
             public void onClick(View view, int position) {
                 info = adapter.getItem(position);
+                presenter.GetProductInventory("TIHA", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/mm/yyyy"));
                 presenter.GetImageByProDuctID(info.getProduct_ID());
             }
         });
@@ -140,6 +140,13 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                     }
 
                 }, AppConstants.DELAY_FIND_DATA);
+            }
+        });
+
+        imageDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputSearch.setText("");
             }
         });
     }
@@ -211,13 +218,13 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     @Override
     public void onGetImageByProDuctIDSuccess(String imageBitmap) {
         showBottomSheet(imageBitmap, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                AppUtils.formatNumber("N0").format(info.getSLNhieu()));
+                inventory, info.getDescription());
     }
 
     @Override
     public void onGetImageByProDuctIDError(String error) {
         showBottomSheet(null, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                AppUtils.formatNumber("N0").format(info.getSLNhieu()));
+                inventory, info.getDescription());
     }
 
     @Override
@@ -230,9 +237,19 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         showMessage(error);
     }
 
+    @Override
+    public void onGetProductInventorySuccess(Integer result) {
+        if (result != null) inventory = result;
+    }
+
+    @Override
+    public void onGetProductInventoryError(String error) {
+        showMessage(error);
+    }
+
     Integer count = 1;
 
-    private void showBottomSheet(String imageBitMap, String title, String price, final String number) {
+    private void showBottomSheet(String imageBitMap, String title, String price, final Integer number, String description) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
         final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
@@ -244,6 +261,13 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         dialog.show();
         final RelativeLayout layoutCountBuy = bind(view, R.id.layoutCountBuy);
         final ImageView imageMain = bind(view, R.id.imageView);
+        final ImageView imageClose = bind(view, R.id.imageClose);
+        imageClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
         TextView tvTitle = bind(view, R.id.textName);
         TextView tvPrice = bind(view, R.id.textPrice);
         TextView tvDeception = bind(view, R.id.textDeception);
@@ -254,10 +278,11 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         ImageView imgAdd = bind(view, R.id.imageAdd);
         ImageView imgMinus = bind(view, R.id.imageMinus);
         count = 1;
-        tvCountBuy.setText(count.toString());
+        tvCountBuy.setText(count + "/" + inventory);
         tvTitle.setText(title);
         tvPrice.setText(price);
-        if (!"0".equals(number)) {
+        tvDeception.setText(description);
+        if (number!=0) {
             layoutCountBuy.setVisibility(View.VISIBLE);
         } else {
             layoutCountBuy.setVisibility(View.GONE);
@@ -266,7 +291,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (count != Integer.parseInt(number)) {
+                if (!count.equals(number)) {
                     count = count + 1;
                 }
                 tvCountBuy.setText(count.toString());
@@ -281,7 +306,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                 tvCountBuy.setText(count.toString());
             }
         });
-        if (number.equals("0")) {
+        if (number==0) {
             btnEmpty.setVisibility(View.VISIBLE);
             btAddCart.setVisibility(View.GONE);
             btnBuyNow.setVisibility(View.GONE);

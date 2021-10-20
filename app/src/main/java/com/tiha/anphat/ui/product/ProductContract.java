@@ -19,6 +19,10 @@ public interface ProductContract {
         void onInsertCartSuccess(CartCondition info);
 
         void onInsertCartError(String error);
+
+        void onGetProductInventorySuccess(Integer result);
+
+        void onGetProductInventoryError(String error);
     }
 
     interface Presenter{
@@ -27,5 +31,8 @@ public interface ProductContract {
         void GetImageByProDuctID(String ID);
 
         void InsertCart(CartCondition condition);
+
+        void GetProductInventory(String maKho,String productID, String date );
+
     }
 }

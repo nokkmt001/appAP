@@ -33,7 +33,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         appPreference = new AppPreference(this);
         presenter = new SplashPresenter(SplashActivity.this, SplashActivity.this);
         presenter.CheckStatusLogin();
-
     }
 
     @Override
@@ -139,7 +138,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                                 PublicVariables.ClearData();
                                 AppPreference appPreference = new AppPreference(SplashActivity.this);
                                 appPreference.setLogin(false);
-//                                appPreference.setTenDangNhap("");
                                 appPreference.setPassWord("");
                                 appPreference.setUserID("");
 
@@ -147,7 +145,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                                         getLaunchIntentForPackage(getBaseContext().getPackageName());
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 
                                 startActivity(intent);
                                 SplashActivity.this.finish();

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.ui.base.BaseEventClick;
+import com.tiha.anphat.utils.AppUtils;
 
 import java.util.List;
 
@@ -66,9 +67,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         CartInfo info = listAllData.get(position);
-//        holder.tvPrice.setText(info.get());
+        holder.tvPrice.setText(info.getDonGia() == null ? "" : AppUtils.formatNumber("NO").format(info.getDonGia()));
         holder.tvTitle.setText(info.getProductName() == null ? "" : info.getProductName());
-        holder.textCount.setText(info.getSoLuong().toString());
+        holder.textCount.setText(info.getSoLuong() == null ? "" : info.getSoLuong().toString());
 
     }
 

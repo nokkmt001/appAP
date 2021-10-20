@@ -3,10 +3,12 @@ package com.tiha.anphat.data.network.nguoidung;
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.ResponseInfo;
+import com.tiha.anphat.data.entities.kho.KhoInfo;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,10 +93,10 @@ public class UserModel implements IUserModel {
         Map<String, String> params = new HashMap<>();
         params.put("HoTen", condition.getHoTen());
         params.put("SoDienThoai", condition.getSoDienThoai());
-        params.put("DiaChi","");
-        params.put("NgayGio",condition.getNgayGio().toString());
+        params.put("DiaChi", "");
+        params.put("NgayGio", condition.getNgayGio().toString());
         params.put("MaPIN", condition.getMaPIN().toString());
-        params.put("Password",condition.getPassword());
+        params.put("Password", condition.getPassword());
         service = new APIService(URL);
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
@@ -148,6 +150,27 @@ public class UserModel implements IUserModel {
 
                 } else {
                     listener.onError(AppConstants.Error_Unknown);
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
+    }
+
+    @Override
+    public void GetListKhoByUser(final IGetListKhoByUserFinish listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GetListKhoByUser, "TIHA");
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(new KhoInfo().getListKhoInfo(response));
+                } catch (Exception e) {
+                    listener.onError(e.getMessage());
                 }
             }
 

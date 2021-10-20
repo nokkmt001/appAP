@@ -9,6 +9,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.tiha.anphat.R;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.product.PagerAdapter;
+import com.tiha.anphat.ui.sms.friends.FriendFragment;
+import com.tiha.anphat.ui.sms.newsfeed.NewsFeedFragment;
 
 public class SmsFragment extends BaseFragment {
     RelativeLayout layoutHeader;
@@ -47,9 +49,10 @@ public class SmsFragment extends BaseFragment {
         int tabCount = 1;
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(), getChildFragmentManager(), tabCount);
+        adapterPager.addFragment(new FriendFragment(),getString(R.string.chat_title),0);
+        adapterPager.addFragment(new NewsFeedFragment(),getString(R.string.chat_title),1);
         viewPager.setAdapter(adapterPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
     }
 }

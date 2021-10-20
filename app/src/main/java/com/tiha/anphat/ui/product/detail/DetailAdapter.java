@@ -25,13 +25,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     BaseEventClick.OnClickListener clickListener;
     String category = "";
 
-    public DetailAdapter(Context context, List<ProductInfo> list,String category) {
+    public DetailAdapter(Context context, List<ProductInfo> list, String category) {
         this.listAllData = list;
         this.mContext = context;
         this.category = category;
     }
 
-    public void setClickListener(BaseEventClick.OnClickListener listener){
+    public void setClickListener(BaseEventClick.OnClickListener listener) {
         this.clickListener = listener;
     }
 
@@ -40,7 +40,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         notifyDataSetChanged();
     }
 
-    public ProductInfo getItem(int position){
+    public ProductInfo getItem(int position) {
         return listAllData.get(position);
     }
 
@@ -64,9 +64,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ProductInfo info = listAllData.get(position);
-        holder.tvPrice.setText(info.getGiaBanLe().toString());
-        holder.tvTitle.setText(info.getProduct_Name()== null?"":info.getProduct_Name());
-        switch (category){
+        holder.tvPrice.setText(String.valueOf(info.getGiaBanLe()));
+        holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
+        switch (category) {
             case "PHUKIEN":
                 holder.imageView.setImageResource(R.drawable.phu_kien);
                 break;
@@ -116,6 +116,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvPrice;
         ImageView imageView;
+
         public MyViewHolder(@NonNull View view) {
             super(view);
             tvTitle = bind(view, R.id.tvTitle);
@@ -124,8 +125,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (clickListener!=null){
-                        clickListener.onClick(view,getAdapterPosition());
+                    if (clickListener != null) {
+                        clickListener.onClick(view, getAdapterPosition());
                     }
                 }
             });

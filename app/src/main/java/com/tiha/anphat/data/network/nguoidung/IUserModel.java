@@ -1,6 +1,9 @@
 package com.tiha.anphat.data.network.nguoidung;
 
 import com.tiha.anphat.data.entities.NewCustomer;
+import com.tiha.anphat.data.entities.kho.KhoInfo;
+
+import java.util.List;
 
 public interface IUserModel {
     void CheckPhone(String sdt, ICheckPhoneFinishListener listener);
@@ -19,16 +22,26 @@ public interface IUserModel {
         void onError(String error);
     }
 
-    void InsertNewCustomer(NewCustomer condition,IInsertNewCustomer listener);
-    interface IInsertNewCustomer{
+    void InsertNewCustomer(NewCustomer condition, IInsertNewCustomer listener);
+
+    interface IInsertNewCustomer {
         void onSuccess(NewCustomer info);
 
         void onError(String error);
     }
 
-    void ReSendPINcode(String id,IReSendPINcode listener);
-    interface IReSendPINcode{
+    void ReSendPINcode(String id, IReSendPINcode listener);
+
+    interface IReSendPINcode {
         void onSuccess(NewCustomer info);
+
+        void onError(String error);
+    }
+
+    void GetListKhoByUser( IGetListKhoByUserFinish listener);
+
+    interface IGetListKhoByUserFinish {
+        void onSuccess(List<KhoInfo> list);
 
         void onError(String error);
     }

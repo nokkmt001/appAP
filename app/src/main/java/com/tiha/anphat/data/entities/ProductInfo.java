@@ -21,6 +21,7 @@ public class ProductInfo {
     private String ModifiedBy;
     private Integer GiaBanLe;
     private Integer GiaMua;
+    private String Description;
 
     public String getTeninHD() {
         return TeninHD;
@@ -94,5 +95,13 @@ public class ProductInfo {
 
     public void setSLNhieu(Integer SLNhieu) {
         this.SLNhieu = SLNhieu;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 }

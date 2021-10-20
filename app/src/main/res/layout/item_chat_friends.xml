@@ -10,8 +10,7 @@
         android:id="@+id/imageUser"
         android:layout_width="@dimen/dp_60"
         android:layout_height="@dimen/dp_60"
-        android:src="@drawable/ic_user_default"
-        app:type="1" />
+        android:src="@drawable/ic_user_default" />
 
     <TextView
         android:id="@+id/textUserName"
@@ -20,7 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_6"
         android:layout_marginTop="@dimen/dp_5"
+        android:layout_toStartOf="@+id/textTime"
         android:layout_toEndOf="@+id/imageUser"
+        android:text=""
         android:singleLine="true" />
 
     <TextView
@@ -32,6 +33,16 @@
         android:layout_below="@+id/textUserName"
         android:layout_marginTop="@dimen/dp_5"
         android:layout_marginStart="@dimen/dp_6"
+        android:text=""
         android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text=""
+        android:layout_marginTop="@dimen/dp_5"
+        style="@style/AppTheme.TextView"/>
 
 </RelativeLayout>

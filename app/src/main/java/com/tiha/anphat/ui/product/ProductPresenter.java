@@ -65,4 +65,19 @@ public class ProductPresenter implements ProductContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void GetProductInventory(String maKho, String productID, String date) {
+        model.GetProductInventory(maKho, productID, date, new IProductModel.IGetProductInventoryFinish() {
+            @Override
+            public void onSuccess(Integer result) {
+                view.onGetProductInventorySuccess(result);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onGetProductInventoryError(error);
+            }
+        });
+    }
 }

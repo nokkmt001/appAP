@@ -18,6 +18,7 @@ public class CartInfo {
     private String GhiChu;
     private String CreateDate;
     private String ModifiedDate;
+    private Integer DonGia;
 
     public Integer getNguoiDungMobileID() {
         return NguoiDungMobileID;
@@ -99,5 +100,13 @@ public class CartInfo {
 
     public void setProductName(String productName) {
         ProductName = productName;
+    }
+
+    public Integer getDonGia() {
+        return DonGia;
+    }
+
+    public void setDonGia(Integer donGia) {
+        DonGia = donGia;
     }
 }

@@ -23,6 +23,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     ActivityCartBinding binding;
     CartAdapter adapter;
     CartPresenter presenter;
+    Double priceTotal = 0.0;
 
     @Override
     protected int getLayoutResourceId() {
@@ -51,6 +52,12 @@ public class CartActivity extends BaseActivity implements CartContract.View {
         binding.rylCart.setLayoutManager(new LinearLayoutManager(this));
         binding.rylCart.setAdapter(adapter);
         onAdapterClick();
+        showNoResult(false);
+    }
+
+    public void showNoResult(final boolean isShow) {
+        binding.layoutMain.setVisibility(isShow ? View.GONE : View.VISIBLE);
+        binding.textNoItemCart.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -66,8 +73,23 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onGetListAllCartSuccess(List<CartInfo> list) {
+        priceTotal = 0.0;
         adapter.clear();
         adapter.addAll(list);
+        if (list != null) {
+            for (CartInfo item : list) {
+                priceTotal = priceTotal + Double.parseDouble(String.valueOf(item.getDonGia() * item.getSoLuong()));
+            }
+            setPrice(priceTotal);
+        } else {
+            setPrice(0.0);
+        }
+
+        assert list != null;
+        if (list.size()==0){
+            showNoResult(true);
+        }
+
     }
 
     @Override
@@ -93,6 +115,25 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     @Override
     public void onDeleteCartError(String error) {
         showMessage(error);
+    }
+
+    @Override
+    public void onGetDonGiaProductByUserSuccess(Double price) {
+    }
+
+    @Override
+    public void onGetDonGiaProductByUserError(String error) {
+        showMessage(error);
+    }
+
+    @Override
+    public void onGetProductInventorySuccess(Integer result) { // ton kho
+
+    }
+
+    @Override
+    public void onGetProductInventoryError(String error) {
+
     }
 
     public void onAdapterClick() {
@@ -144,5 +185,10 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     public void DeleteCart(Integer ID) {
         presenter = new CartPresenter(this);
         presenter.DeleteCart(ID);
+    }
+
+    public void setPrice(Double price) {
+        binding.textCountTem.setText(String.format("%s%s", AppUtils.formatNumber("NO").format(price), getString(R.string.vnd)));
+        binding.textPriceFinal.setText(binding.textCountTem.getText().toString());
     }
 }

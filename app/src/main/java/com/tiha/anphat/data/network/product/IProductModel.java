@@ -32,10 +32,18 @@ public interface IProductModel {
         void onError(String error);
     }
 
-    void GetProductPriceByUserID(ProductPriceCondition condition,IGetProductPriceByUserIDListener listener);
+    void GetProductPriceByUserID(ProductPriceCondition condition, IGetProductPriceByUserIDListener listener);
 
     interface IGetProductPriceByUserIDListener {
-        void onSuccess();
+        void onSuccess(Double price);
+
+        void onError(String error);
+    }
+
+    void GetProductInventory(String makho, String productID, String Ngay,IGetProductInventoryFinish listener); // tồn kho
+
+    interface IGetProductInventoryFinish {
+        void onSuccess(Integer result);
 
         void onError(String error);
     }

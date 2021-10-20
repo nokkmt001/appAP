@@ -2,6 +2,7 @@ package com.tiha.anphat.ui.base;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,12 +47,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getResources().getString(R.string.error_msg_no_internet);
-            CommonUtils.showMessageError(this, error);
+            showMessage(error);
         }
         setContentView(getLayoutResourceId());
         onInit();
         onLoadData();
-
     }
 
     protected abstract int getLayoutResourceId();
@@ -62,6 +62,22 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     protected void showToast(String mToastMsg) {
         Toast.makeText(this, mToastMsg, Toast.LENGTH_LONG).show();
+    }
+
+    protected void alertDialog(String title, String message, String btnPos, String btnNeutral, DialogInterface.OnClickListener ocListener) {
+        AlertDialog.Builder db = new AlertDialog.Builder(this);
+        db.setTitle(title);
+        db.setMessage(message);
+        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        if (btnPos != null) db.setPositiveButton(btnPos, ocListener);
+        if (btnNeutral != null) db.setNeutralButton(btnNeutral, ocListener);
+//        db.setIcon(android.R.drawable.ic_dialog_alert);
+        db.show();
     }
 
     protected void hideKeyboard() {
@@ -122,7 +138,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        onResult(requestCode,resultCode,data);
     }
+
+    public void onResult(int requestCode, int resultCode, Intent data){}
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -233,7 +252,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             }
         });
     }
-
 
 }
 

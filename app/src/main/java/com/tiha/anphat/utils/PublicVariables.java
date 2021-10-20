@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.NguoiDungInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.kho.KhoInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ public class PublicVariables {
     public static NewCustomer UserInfo;
 
     public static List<ProductInfo> listAllProDuct = new ArrayList<>();
+
+    public static List<KhoInfo> listKho = new ArrayList<>();
 
     public static CountDownTimer countDownTimer;
 
