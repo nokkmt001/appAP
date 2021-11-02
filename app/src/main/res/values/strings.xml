@@ -55,6 +55,8 @@
     <string name="chat_title">Trò chuyện</string>
     <string name="vnd">đ</string>
     <string name="title_empty_cart">Giỏ hàng trống</string>
+    <string name="noresult_msg">Không tìm thấy kết quả</string>
+    <string name="information">Thông tin</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

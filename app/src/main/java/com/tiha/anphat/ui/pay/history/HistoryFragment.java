@@ -14,7 +14,7 @@ public class HistoryFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         textTitle = view.findViewById(R.id.textTitle);
         textTitle.setText(R.string.history_title);
     }

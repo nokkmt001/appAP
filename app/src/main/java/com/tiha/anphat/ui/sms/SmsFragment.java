@@ -13,7 +13,6 @@ import com.tiha.anphat.ui.sms.friends.FriendFragment;
 import com.tiha.anphat.ui.sms.newsfeed.NewsFeedFragment;
 
 public class SmsFragment extends BaseFragment {
-    RelativeLayout layoutHeader;
     TabLayout tabLayout;
     ViewPager viewPager;
     PagerAdapter adapterPager;
@@ -24,9 +23,9 @@ public class SmsFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
-        viewPager = view.findViewById(R.id.viewPager);
-        tabLayout = view.findViewById(R.id.tabLayout);
+    protected void initView(View view) {
+        viewPager = bind(view,R.id.viewPager);
+        tabLayout = bind(view,R.id.tabLayout);
         setupViewPager();
     }
 
@@ -50,7 +49,7 @@ public class SmsFragment extends BaseFragment {
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(), getChildFragmentManager(), tabCount);
         adapterPager.addFragment(new FriendFragment(),getString(R.string.chat_title),0);
-        adapterPager.addFragment(new NewsFeedFragment(),getString(R.string.chat_title),1);
+        adapterPager.addFragment(new NewsFeedFragment(),getString(R.string.information),1);
         viewPager.setAdapter(adapterPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

@@ -20,7 +20,7 @@ public class ProductFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tabLayout);
         setupViewPager();

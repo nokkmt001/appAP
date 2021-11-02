@@ -2,6 +2,7 @@ package com.tiha.anphat.ui.product;
 
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
+import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public interface ProductContract {
         void onGetProductInventorySuccess(Integer result);
 
         void onGetProductInventoryError(String error);
+
+        void onGetListProductInventorySuccess(List<ProductInfo> list);
+
+        void onGetListProductInventoryError(String error);
     }
 
     interface Presenter{
@@ -33,6 +38,8 @@ public interface ProductContract {
         void InsertCart(CartCondition condition);
 
         void GetProductInventory(String maKho,String productID, String date );
+
+        void GetListProductInventory(InventoryCondition condition) ;
 
     }
 }

@@ -13,6 +13,7 @@ public class AppPreference {
     public static final String PREF_MatKhau = "MatKhau";
     public static final String PREF_NguoiDungID = "NguoiDungID";
     public static final String PREF_USER = "user";
+    public static final String PREF_BOOKING = "booking";
 
     private SharedPreferences sharedPreferences;
 
@@ -65,6 +66,14 @@ public class AppPreference {
 
     public void setUserID(String nguoiDungID) {
         sharedPreferences.edit().putString(PREF_NguoiDungID, nguoiDungID).apply();
+    }
+
+    public String getBooking() {
+        return sharedPreferences.getString(PREF_BOOKING, "");
+    }
+
+    public void setBooking(String matKhau) {
+        sharedPreferences.edit().putString(PREF_BOOKING, matKhau).apply();
     }
 
 }

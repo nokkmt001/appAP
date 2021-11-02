@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void onInit() {
+    public void initView() {
         showProgressDialog(true);
         checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
         inputUserName = findViewById(R.id.inputUserName);

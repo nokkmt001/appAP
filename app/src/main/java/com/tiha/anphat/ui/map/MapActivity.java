@@ -71,7 +71,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
     MapPresenter mapPresenter;
 
     @Override
-    public void onInit() {
+    public void initView() {
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
 //        btnFindPath = findViewById(R.id.btnFindPath);

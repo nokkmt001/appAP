@@ -18,7 +18,7 @@ public class NewsFeedFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         binding = FragmentNewsFeedBinding.inflate(getLayoutInflater());
         binding.getRoot();
         binding.textMainMain.setText("");

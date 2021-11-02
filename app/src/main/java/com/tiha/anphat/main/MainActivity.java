@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
         relativeLayout = findViewById(R.id.layoutHeader);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -106,30 +106,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         startActivity(intent);
                     }
                 });
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle("ĐĂNG XUẤT")
-//                        .setMessage("Bạn có chắc muốn đăng xuất ứng dụng?")
-//                        .setCancelable(false)
-//                        .setPositiveButton("ĐĂNG XUẤT", new DialogInterface.OnClickListener() {
-//                            public void onClick(final DialogInterface dialog, final int id) {
-//                                PublicVariables.ClearData();
-//                                AppPreference appPreference = new AppPreference(MainActivity.this);
-//                                appPreference.setLogin(false);
-//                                appPreference.setPassWord("");
-//                                appPreference.setUserID("");
-//
-//                                Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                startActivity(intent);
-//                            }
-//                        })
-//                        .setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
-//                            public void onClick(final DialogInterface dialog, final int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//                final AlertDialog alert = builder.create();
-//                alert.show();
             }
         });
 
@@ -199,25 +175,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                     finishAffinity();
                 }
             });
-//            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//            builder.setTitle("THOÁT ỨNG DỤNG")
-//                    .setMessage("Bạn có chắc muốn thoát ứng dụng?")
-//                    .setCancelable(false)
-//                    .setPositiveButton("CÓ", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            moveTaskToBack(true);
-//                            finishAffinity();
-//                        }
-//                    })
-//                    .setNegativeButton("KHÔNG", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            dialogInterface.cancel();
-//                        }
-//                    });
-//            final AlertDialog alert = builder.create();
-//            alert.show();
+
         }
 
     }

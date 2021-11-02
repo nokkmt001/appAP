@@ -25,7 +25,7 @@ public class TextActivity extends BaseActivity {
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
         binding = ActivityTextBinding.inflate(getLayoutInflater());
         binding.buttonEnd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

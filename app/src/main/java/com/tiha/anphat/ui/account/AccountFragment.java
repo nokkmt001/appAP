@@ -14,7 +14,7 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
 
     }
 

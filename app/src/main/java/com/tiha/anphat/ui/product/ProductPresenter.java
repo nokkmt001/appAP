@@ -2,6 +2,7 @@ package com.tiha.anphat.ui.product;
 
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
+import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.network.cart.CartModel;
 import com.tiha.anphat.data.network.cart.ICartModel;
@@ -77,6 +78,21 @@ public class ProductPresenter implements ProductContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onGetProductInventoryError(error);
+            }
+        });
+    }
+
+    @Override
+    public void GetListProductInventory(InventoryCondition condition) {
+        model.GetListProductInventory(condition, new IProductModel.IGetAllProductInventoryFinish() {
+            @Override
+            public void onSuccess(List<ProductInfo> list) {
+                view.onGetListProductInventorySuccess(list);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onGetListProductInventoryError(error);
             }
         });
     }

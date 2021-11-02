@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.product;
 
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
 
@@ -44,6 +45,13 @@ public interface IProductModel {
 
     interface IGetProductInventoryFinish {
         void onSuccess(Integer result);
+
+        void onError(String error);
+    }
+
+    void GetListProductInventory(InventoryCondition condition,IGetAllProductInventoryFinish listener);
+    interface IGetAllProductInventoryFinish {
+        void onSuccess(List<ProductInfo> list);
 
         void onError(String error);
     }

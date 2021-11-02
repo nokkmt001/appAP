@@ -16,12 +16,13 @@ public class ProductInfo {
     private String Product_Name;
     private String Product_ID;
     private String MaThuongHieu;
-    private Integer SLNhieu ;
+    private Double SLNhieu ;
     private String ModifiedDate;
     private String ModifiedBy;
-    private Integer GiaBanLe;
-    private Integer GiaMua;
+    private Double GiaBanLe;
+    private Double GiaMua;
     private String Description;
+    private Double Ton, Ton2;
 
     public String getTeninHD() {
         return TeninHD;
@@ -57,11 +58,11 @@ public class ProductInfo {
         return gson.fromJson(jsonString, type);
     }
 
-    public Integer getGiaBanLe() {
+    public Double getGiaBanLe() {
         return GiaBanLe;
     }
 
-    public void setGiaBanLe(Integer giaBanLe) {
+    public void setGiaBanLe(Double giaBanLe) {
         GiaBanLe = giaBanLe;
     }
 
@@ -81,19 +82,19 @@ public class ProductInfo {
         Product_ID = product_ID;
     }
 
-    public Integer getGiaMua() {
+    public Double getGiaMua() {
         return GiaMua;
     }
 
-    public void setGiaMua(Integer giaMua) {
+    public void setGiaMua(Double giaMua) {
         GiaMua = giaMua;
     }
 
-    public Integer getSLNhieu() {
+    public Double getSLNhieu() {
         return SLNhieu;
     }
 
-    public void setSLNhieu(Integer SLNhieu) {
+    public void setSLNhieu(Double SLNhieu) {
         this.SLNhieu = SLNhieu;
     }
 
@@ -103,5 +104,29 @@ public class ProductInfo {
 
     public void setDescription(String description) {
         Description = description;
+    }
+
+    public String getDonVitinh() {
+        return DonVitinh;
+    }
+
+    public void setDonVitinh(String donVitinh) {
+        DonVitinh = donVitinh;
+    }
+
+    public Double getTon() {
+        return Ton;
+    }
+
+    public void setTon(Double ton) {
+        Ton = ton;
+    }
+
+    public Double getTon2() {
+        return Ton2;
+    }
+
+    public void setTon2(Double ton2) {
+        Ton2 = ton2;
     }
 }

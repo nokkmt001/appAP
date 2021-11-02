@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -34,10 +35,20 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     String[] permissionsMain = {};
     private SpeechRecognizer speechRecognizer;
     int count = 0;
+    String error = "";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!NetworkUtils.isNetworkConnected(requireContext())) {
+            error = getResources().getString(R.string.error_msg_no_internet);
+            showMessage(error);
+        }
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getLayoutId(), null);
-        onInit(root);
+        initView(root);
         configToolbar();
         onLoadData();
         return root;
@@ -46,7 +57,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract void onInit(View view);
+    protected abstract void initView(View view);
 
     protected abstract void onLoadData();
 
@@ -82,6 +93,20 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
         }
+    }
+
+    public void showNoResult(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông tin")
+                .setMessage(getActivity().getResources().getString(R.string.noresult_msg))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void showMessage(String error) {
@@ -165,7 +190,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             }
         });
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

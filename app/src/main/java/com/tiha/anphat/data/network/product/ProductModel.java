@@ -2,6 +2,7 @@ package com.tiha.anphat.data.network.product;
 
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
 import com.tiha.anphat.data.network.api.APIService;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.MessageFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +111,7 @@ public class ProductModel implements IProductModel {
     }
 
     @Override
-    public void GetProductInventory(String maKho, String productID, String date,final IGetProductInventoryFinish listener) {
+    public void GetProductInventory(String maKho, String productID, String date, final IGetProductInventoryFinish listener) {
         String URL = MessageFormat.format(AppConstants.URL_GET_PRODUCT_TON_KHO, maKho, productID, date);
         service = new APIService(URL);
         service.DownloadJson(new VolleyCallback() {
@@ -123,5 +125,29 @@ public class ProductModel implements IProductModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
+    }
+
+    @Override
+    public void GetListProductInventory(InventoryCondition condition, final IGetAllProductInventoryFinish listener) {
+        String URL = AppConstants.URL_GetListTonKho;
+        Map<String, String> params = new HashMap<>();
+        params.put("loaiXem", "NO");
+        params.put("listKho", "");
+        params.put("denNgay", AppUtils.formatDateToString(Calendar.getInstance().getTime(),"yyyy-MM-dd'T'HH:mm:ss"));
+        params.put("userName", "TIHA");
+        params.put("listNhomHang", condition.getListNhomHang());
+        params.put("tenHangSearch", condition.getTenHangSearch());
+        service = new APIService(URL);
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(new ProductInfo().getListAllProduct(response));
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        }, params);
     }
 }

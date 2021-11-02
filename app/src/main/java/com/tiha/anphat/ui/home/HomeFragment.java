@@ -19,7 +19,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         imageDelete =view.findViewById(R.id.imageDelete);
         inputSearch = view.findViewById(R.id.inputSearch);
         inputSearch.addTextChangedListener(new TextWatcher() {

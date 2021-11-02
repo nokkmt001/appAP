@@ -2,7 +2,6 @@ package com.tiha.anphat.ui.base;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,10 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
-import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.NetworkUtils;
 
 
@@ -50,13 +47,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             showMessage(error);
         }
         setContentView(getLayoutResourceId());
-        onInit();
+        initView();
         onLoadData();
     }
 
     protected abstract int getLayoutResourceId();
 
-    protected abstract void onInit();
+    protected abstract void initView();
 
     protected abstract void onLoadData();
 
@@ -117,7 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void showMessage(String error) {
+    protected void showMessage(String error) {
         error = error.isEmpty() ? getString(R.string.error_msg_unknown) : error;
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getString(R.string.error_msg_no_internet);
@@ -141,32 +138,27 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         onResult(requestCode,resultCode,data);
     }
 
-    public void onResult(int requestCode, int resultCode, Intent data){}
+    protected void onResult(int requestCode, int resultCode, Intent data) {}
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_MULTIPLE_PERMISSIONS:
-                //Kiem tra tat ca quyen can cap
-                boolean allgranted = false;
-                for (int grantResult : grantResults) {
-                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        allgranted = true;
-                    } else {
-                        allgranted = false;
-                        break;
-                    }
+        if (requestCode == REQUEST_MULTIPLE_PERMISSIONS) {//Kiem tra tat ca quyen can cap
+            boolean allgranted = false;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    allgranted = true;
+                } else {
+                    allgranted = false;
+                    break;
                 }
+            }
 
-                for (String ii : permissionsMain) {
-                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this, ii)) {
-                        showMessagePermissions();
-                    }
+            for (String ii : permissionsMain) {
+                if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this, ii)) {
+                    showMessagePermissions();
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -188,7 +180,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 }).show();
     }
 
-    public void speedText(final EditText text, final ImageView imageView) {
+    protected void speedText(final EditText text, final ImageView imageView) {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

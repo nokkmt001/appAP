@@ -3,6 +3,9 @@ package com.tiha.anphat.ui.cart;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
+import com.tiha.anphat.data.entities.location.InsertLocationInfo;
+import com.tiha.anphat.data.entities.order.CallInfo;
+import com.tiha.anphat.data.entities.order.OrderInfo;
 
 import java.util.List;
 
@@ -27,6 +30,14 @@ public interface CartContract {
         void onGetProductInventorySuccess(Integer result);
 
         void onGetProductInventoryError(String error);
+
+        void onInsertOrderSuccess(OrderInfo item, CallInfo info);
+
+        void onInsertOrderError(String error);
+
+//        void onInsertUserLocationSuccess(InsertLocationInfo);
+//
+//        void onInsertUserLocationError();
     }
 
     interface Presenter{
@@ -39,5 +50,9 @@ public interface CartContract {
         void GetProductPriceByUser(ProductPriceCondition condition);
 
         void GetProductInventory(String maKho,String productID, String date );
+
+        void InsertOrder(List<CartInfo> list);
+
+//        void InsertUserLocation(InsertLocationInfo info);
     }
 }

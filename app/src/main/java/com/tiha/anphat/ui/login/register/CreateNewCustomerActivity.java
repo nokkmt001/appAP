@@ -26,7 +26,7 @@ public class CreateNewCustomerActivity extends BaseActivity implements CreateNew
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
         binding = ActivityCreateNewCustomerBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);

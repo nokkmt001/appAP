@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.ui.base.BaseEventClick;
+import com.tiha.anphat.utils.AppUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -64,7 +65,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ProductInfo info = listAllData.get(position);
-        holder.tvPrice.setText(String.valueOf(info.getGiaBanLe()));
+        holder.tvPrice.setText(AppUtils.formatNumber("NO").format(info.getGiaBanLe()));
         holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
         switch (category) {
             case "PHUKIEN":
@@ -77,19 +78,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
                 holder.imageView.setImageResource(R.drawable.pccc);
                 break;
             case "VO":
-                holder.imageView.setImageResource(R.drawable.rice);
-                break;
-            case "BBINH":
-                holder.imageView.setImageResource(R.drawable.rice);
-                break;
+            case "LUA":
             case "GAO":
                 holder.imageView.setImageResource(R.drawable.rice);
                 break;
+            case "BBINH":
             case "GAS":
                 holder.imageView.setImageResource(R.drawable.gas_cylen);
-                break;
-            case "LUA":
-                holder.imageView.setImageResource(R.drawable.rice);
                 break;
             case "NEP":
                 holder.imageView.setImageResource(R.drawable.gao_nep_bac);

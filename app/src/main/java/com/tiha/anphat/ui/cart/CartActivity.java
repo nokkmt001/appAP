@@ -1,17 +1,23 @@
 package com.tiha.anphat.ui.cart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
+import com.tiha.anphat.data.entities.order.CallInfo;
+import com.tiha.anphat.data.entities.order.OrderInfo;
 import com.tiha.anphat.databinding.ActivityCartBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
+import com.tiha.anphat.ui.booking.BookingActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.PublicVariables;
 
@@ -24,6 +30,8 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     CartAdapter adapter;
     CartPresenter presenter;
     Double priceTotal = 0.0;
+    List<CartInfo> listAllData = new ArrayList<>();
+    AppPreference preference;
 
     @Override
     protected int getLayoutResourceId() {
@@ -31,13 +39,35 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
+        preference = new AppPreference(this);
         binding = ActivityCartBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        onLoadDataHeader();
+        adapter = new CartAdapter(CartActivity.this, new ArrayList<CartInfo>());
+        binding.rylCart.setLayoutManager(new LinearLayoutManager(this));
+        binding.rylCart.setAdapter(adapter);
+        onAdapterClick();
+        showNoResult(false);
+        binding.buttonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (listAllData.size() != 0) {
+                            presenter.InsertOrder(listAllData);
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-        binding.layoutHeader.textTitle.setText(getString(R.string.cart));
-        binding.layoutHeader.imageBack.setOnClickListener(new View.OnClickListener() {
+    private void onLoadDataHeader(){
+        binding.textTitle.setText(getString(R.string.cart));
+        binding.imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -48,11 +78,17 @@ public class CartActivity extends BaseActivity implements CartContract.View {
             }
         });
 
-        adapter = new CartAdapter(CartActivity.this, new ArrayList<CartInfo>());
-        binding.rylCart.setLayoutManager(new LinearLayoutManager(this));
-        binding.rylCart.setAdapter(adapter);
-        onAdapterClick();
-        showNoResult(false);
+        binding.imageOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if (!TextUtils.isEmpty(preference.getBooking())) {
+                    Intent intent = new Intent(CartActivity.this, BookingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("SOCT","CTY211101001");
+                    startActivity(intent);
+//                }
+            }
+        });
     }
 
     public void showNoResult(final boolean isShow) {
@@ -62,6 +98,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     protected void onLoadData() {
+
         presenter = new CartPresenter(this);
         presenter.GetListCart(PublicVariables.UserInfo.getNguoiDungMobileID());
     }
@@ -74,6 +111,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     @Override
     public void onGetListAllCartSuccess(List<CartInfo> list) {
         priceTotal = 0.0;
+        listAllData = list;
         adapter.clear();
         adapter.addAll(list);
         if (list != null) {
@@ -84,12 +122,10 @@ public class CartActivity extends BaseActivity implements CartContract.View {
         } else {
             setPrice(0.0);
         }
-
         assert list != null;
-        if (list.size()==0){
+        if (list.size() == 0) {
             showNoResult(true);
         }
-
     }
 
     @Override
@@ -133,7 +169,17 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onGetProductInventoryError(String error) {
+        showMessage(error);
+    }
 
+    @Override
+    public void onInsertOrderSuccess(OrderInfo item, CallInfo info) {
+        preference.setBooking(item.getSoCt());
+    }
+
+    @Override
+    public void onInsertOrderError(String error) {
+        showMessage(error);
     }
 
     public void onAdapterClick() {

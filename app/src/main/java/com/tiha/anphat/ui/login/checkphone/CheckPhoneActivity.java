@@ -24,7 +24,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
         binding = ActivityCheckPhoneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);

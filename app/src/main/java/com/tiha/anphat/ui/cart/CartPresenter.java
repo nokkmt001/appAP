@@ -3,6 +3,10 @@ package com.tiha.anphat.ui.cart;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
+import com.tiha.anphat.data.entities.order.CallInfo;
+import com.tiha.anphat.data.entities.order.OrderInfo;
+import com.tiha.anphat.data.network.booking.BookingModel;
+import com.tiha.anphat.data.network.booking.IBookingModel;
 import com.tiha.anphat.data.network.cart.CartModel;
 import com.tiha.anphat.data.network.cart.ICartModel;
 import com.tiha.anphat.data.network.product.IProductModel;
@@ -14,11 +18,13 @@ public class CartPresenter implements CartContract.Presenter {
     CartModel model;
     ProductModel modelProduct;
     CartContract.View view;
+    BookingModel modelOrder;
 
     public CartPresenter(CartContract.View view) {
-        this.model = new CartModel();
-        this.modelProduct = new ProductModel();
+        model = new CartModel();
+        modelProduct = new ProductModel();
         this.view = view;
+        modelOrder = new BookingModel();
     }
 
     @Override
@@ -92,6 +98,21 @@ public class CartPresenter implements CartContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onGetProductInventoryError(error);
+            }
+        });
+    }
+
+    @Override
+    public void InsertOrder(List<CartInfo> list) {
+        modelOrder.InsertOrder(list, new IBookingModel.IInsertOrderFinish() {
+            @Override
+            public void onSuccess(OrderInfo item, CallInfo info) {
+                view.onInsertOrderSuccess(item, info);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onInsertOrderError(error);
             }
         });
     }

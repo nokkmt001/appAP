@@ -26,7 +26,7 @@ public class FriendFragment extends BaseFragment implements BaseAdapter.Callback
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         RecyclerView rcl = bind(view,R.id.recyclerViewChat);
         SwipeRefreshLayout refresh_layout = bind(view,R.id.refresh_layout);
          adapter = new FriendAdapter(R.layout.item_chat_friends,this,refresh_layout);

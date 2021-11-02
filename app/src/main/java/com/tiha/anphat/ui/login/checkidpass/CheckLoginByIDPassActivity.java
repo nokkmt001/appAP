@@ -31,7 +31,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     }
 
     @Override
-    protected void onInit() {
+    protected void initView() {
         preference = new AppPreference(this);
         binding = ActivityCheckLoginIdPassBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

@@ -29,11 +29,16 @@ public class AppConstants {
     public static final String URL_GET_IMAGE_PRODUCT = "api/Product/GetHinhAnhByProductID?productID={0}";
     public static final String URL_GET_PRICE_PRODUCT = "api/Product/GetProductDonGiaByNguoiDungMobileID";
     public static final String URL_GET_PRODUCT_TON_KHO = "api/Product/GetProductTonKho?makho={0}&productID={1}&ngay={2}";
+    public static final String URL_GetListTonKho = "api/PhanHeKho/GetListTonKho";
     //booking
+    public static final String URL_GetDonHang = "api/DonHangMobile/GetDonHang?soDonHang={0}"; // chi tiết đơn hàng + price
+
+    // user location
+    public static final String URL_InsertUserLocation = "api/UserLocation/InsertUserLocation";
+    public static final String URL_GetListUserLocation = "api/UserLocation/GetListUserLocation";
 
     //kho
     public static final String URL_GetListKhoByUser = "api/Kho/GetListKhoByUser?userName={0}";
-
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
     /**
