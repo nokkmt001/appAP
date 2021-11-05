@@ -21,7 +21,7 @@ public interface ProductContract {
 
         void onInsertCartError(String error);
 
-        void onGetProductInventorySuccess(Integer result);
+        void onGetProductInventorySuccess(Double result);
 
         void onGetProductInventoryError(String error);
 

@@ -19,14 +19,30 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginStart="@dimen/dp_14"
+        android:layout_above="@+id/main"
         android:layout_marginEnd="@dimen/dp_14"
-        android:gravity="center_horizontal"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextViewSize20"
+            android:fontFamily="@font/myriadpro_bold" />
+
+        <TextView
+            android:id="@+id/textPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/myriadpro_bold"
+            android:layout_marginBottom="@dimen/dp_40"
+            style="@style/AppTheme.TextViewSize16"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutInputEmail"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -38,6 +54,16 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="@dimen/dp_14"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutInputPassword"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -64,15 +90,16 @@
             android:layout_marginStart="@dimen/dp_5"
             android:text="@string/forget_pass"
             android:textColor="@color/colorPrimary" />
-
-        <Button
-            android:id="@+id/buttonLogin"
-            style="@style/AppTheme.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_30"
-            android:text="@string/login" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonLogin"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_margin="@dimen/dp_5"
+        android:text="@string/login" />
 
 </RelativeLayout>

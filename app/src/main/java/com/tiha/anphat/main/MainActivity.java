@@ -1,11 +1,16 @@
 package com.tiha.anphat.main;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
@@ -33,6 +39,7 @@ import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
+import com.tiha.anphat.utils.TestConstants;
 
 import java.util.List;
 
@@ -50,18 +57,26 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     MainPresenter presenter;
     RelativeLayout relativeLayout;
     public static final int FROM_MAIN = 0;
+    TestReceiver testReceiver;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return R.layout.activity_main;
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
+        testReceiver = new TestReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(TestConstants.ACTION_MAIN_ACTIVITY);
+        registerReceiver(testReceiver, intentFilter);
+
+
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
         presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
         presenter.GetListKho();
+        presenter.GetCategory();
     }
 
     @Override
@@ -79,8 +94,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         fmManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+
 
         binding.layoutHeader.imageDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +107,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertDialog( "ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
+                alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         PublicVariables.ClearData();
@@ -169,12 +183,12 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         } else {
             alertDialog("THOÁT ỨNG DỤNG", "Bạn có chắc muốn thoát ứng dụng?", "CÓ", null,
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    moveTaskToBack(true);
-                    finishAffinity();
-                }
-            });
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            moveTaskToBack(true);
+                            finishAffinity();
+                        }
+                    });
 
         }
 
@@ -260,9 +274,21 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         showMessage(error);
     }
 
+    @Override
+    public void onGetCategorySuccess(List<CategoryInfo> list) {
+        PublicVariables.listCategory = list;
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+    }
+
+    @Override
+    public void onGetCategoryError(String error) {
+        showMessage(error);
+    }
+
     public void onLoadCartListener() {
         presenter = new MainPresenter(this);
-        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+//        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
     }
 
     @Override
@@ -273,5 +299,35 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 onLoadCartListener();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (testReceiver != null)
+                unregisterReceiver(testReceiver);
+        } catch (Exception e) {
+        }
+    }
+
+    private class TestReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle == null) return;
+            String eventName = bundle.getString("eventName");
+            switch (eventName) {
+                case TestConstants.RECEIVE_ThayDoiGioHang:
+                    Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
+                    presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
     }
 }

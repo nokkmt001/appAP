@@ -2,9 +2,11 @@ package com.tiha.anphat.ui.product.detail;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
-import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
@@ -40,6 +40,7 @@ import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
+import com.tiha.anphat.utils.TestConstants;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +61,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     private static final int PAGE_START = 1;
     private static int PAGE_RECORD = 20;
     private int currentPage = PAGE_START;
-    //    ProductCondition condition = new ProductCondition();
-    InventoryCondition condition = new InventoryCondition();
+    ProductCondition condition = new ProductCondition();
     TextView textError;
     DetailAdapter adapter;
     RecyclerView rlv;
@@ -70,7 +70,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     private Timer timer;
     ProductInfo info;
     MainActivity activity;
-    Integer inventory = 0; // tồn kho
+    Double inventory = 0.0; // tồn kho
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -97,6 +97,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                 super.onScrolled(recyclerView, dx, dy);
                 isLoading = true;
                 currentPage += 1;
+                loadNextPage();
             }
         });
 
@@ -105,7 +106,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             public void onClick(View view, int position) {
                 info = adapter.getItem(position);
                 presenter.GetProductInventory("TIHA", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/mm/yyyy"));
-                presenter.GetImageByProDuctID(info.getProduct_ID());
+//                presenter.GetImageByProDuctID(info.getProduct_ID());
             }
         });
         Search();
@@ -136,7 +137,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                onLoadData();
+                                initData();
 //                                onLoadSearch(editable.toString());
                             }
                         });
@@ -155,13 +156,25 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
         presenter = new ProductPresenter(this);
+        condition.setBegin(PAGE_START);
         condition.setUserName("TIHA");
-        condition.setListNhomHang(title);
-        condition.setTenHangSearch(inputSearch.getText().toString());
-        presenter.GetListProductInventory(condition);
+        condition.setNhomLoaiHang(title);
+        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
+            condition.setEnd(100000);
+        } else {
+            condition.setEnd(PAGE_RECORD);
+        }
+        condition.setTextSearch(inputSearch.getText().toString());
+        presenter.GetListProduct(condition);
 //        showProgressDialog(true);
+    }
+
+    public void loadNextPage() {
+        condition.setBegin(condition.getEnd() + 1);
+        condition.setEnd(condition.getEnd() + PAGE_RECORD);
+        presenter.GetListProduct(condition);
     }
 
     @Override
@@ -181,8 +194,12 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onGetListProductSuccess(List<ProductInfo> list, Integer total) {
+        if (condition.getBegin() == 1) {
+            adapter.clear();
+        }
 
-
+        adapter.addAll(list);
+        showProgressDialog(false);
     }
 
     @Override
@@ -193,19 +210,23 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onGetImageByProDuctIDSuccess(String imageBitmap) {
-        showBottomSheet(imageBitmap, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                inventory, info.getDescription());
+
     }
 
     @Override
     public void onGetImageByProDuctIDError(String error) {
-        showBottomSheet(null, info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                inventory, info.getDescription());
+
     }
 
     @Override
     public void onInsertCartSuccess(CartCondition info) {
-        activity.onLoadCartListener();
+//        activity.onLoadCartListener();
+
+        Intent intent = new Intent();
+        intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+        intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
+        intent.putExtra("ItemGioHang", info);
+        getActivity().sendBroadcast(intent);
     }
 
     @Override
@@ -214,20 +235,22 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    public void onGetProductInventorySuccess(Integer result) {
+    public void onGetProductInventorySuccess(Double result) {
         if (result != null) inventory = result;
+        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+                inventory, info.getDescription());
     }
 
     @Override
     public void onGetProductInventoryError(String error) {
-        showMessage(error);
+//        showMessage(error);
+        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+                0.0, info.getDescription());
     }
 
     @Override
     public void onGetListProductInventorySuccess(List<ProductInfo> list) {
-        showProgressDialog(false);
-        adapter.clear();
-        adapter.addAll(list);
+
     }
 
     @Override
@@ -238,7 +261,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     Integer count = 1;
 
-    private void showBottomSheet(String imageBitMap, String title, String price, final Integer number, String description) {
+    private void showBottomSheet(String imageBitMap, String title, String price, final Double number, String description) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
         final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
@@ -267,7 +290,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         ImageView imgAdd = bind(view, R.id.imageAdd);
         ImageView imgMinus = bind(view, R.id.imageMinus);
         count = 1;
-        tvCountBuy.setText(count + "/" + inventory);
+        tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
         tvTitle.setText(title);
         tvPrice.setText(price);
         tvDeception.setText(description);
@@ -277,33 +300,33 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             layoutCountBuy.setVisibility(View.GONE);
         }
         final Date date = new Date(System.currentTimeMillis());
-        imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!count.equals(number)) {
-                    count = count + 1;
-                }
-                tvCountBuy.setText(count.toString());
-            }
-        });
-        imgMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (count != 1) {
-                    count = count - 1;
-                }
-                tvCountBuy.setText(count.toString());
-            }
-        });
-        if (number == 0) {
-            btnEmpty.setVisibility(View.VISIBLE);
-            btAddCart.setVisibility(View.GONE);
-            btnBuyNow.setVisibility(View.GONE);
-        } else {
-            btnEmpty.setVisibility(View.GONE);
-            btAddCart.setVisibility(View.VISIBLE);
-            btnBuyNow.setVisibility(View.VISIBLE);
-        }
+//        imgAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!count.toString().equals(AppUtils.formatNumber("NO").format(number))) {
+//                    count = count + 1;
+//                }
+//                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+//            }
+//        });
+//        imgMinus.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (count != 1) {
+//                    count = count - 1;
+//                }
+//                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+//            }
+//        });
+//        if (number == 0.0) {
+//            btnEmpty.setVisibility(View.VISIBLE);
+//            btAddCart.setVisibility(View.GONE);
+//            btnBuyNow.setVisibility(View.GONE);
+//        } else {
+        btnEmpty.setVisibility(View.GONE);
+        btAddCart.setVisibility(View.VISIBLE);
+        btnBuyNow.setVisibility(View.VISIBLE);
+//        }
         btAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -335,6 +358,5 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         } else {
             imageMain.setImageResource(R.drawable.img_no_image);
         }
-
     }
 }

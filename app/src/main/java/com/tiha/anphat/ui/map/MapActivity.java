@@ -140,12 +140,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
 //    }
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return 0;
     }
 
     @Override
-    public void onLoadData() {
+    public void initData() {
         mapPresenter = new MapPresenter(this);
         Bundle bundle = this.getIntent().getExtras();
         try {

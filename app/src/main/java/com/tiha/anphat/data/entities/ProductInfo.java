@@ -15,6 +15,7 @@ public class ProductInfo {
     private String DonVitinh;
     private String Product_Name;
     private String Product_ID;
+    private String Product_id; // Inventory
     private String MaThuongHieu;
     private Double SLNhieu ;
     private String ModifiedDate;
@@ -23,6 +24,7 @@ public class ProductInfo {
     private Double GiaMua;
     private String Description;
     private Double Ton, Ton2;
+    private String ImageBitMap;
 
     public String getTeninHD() {
         return TeninHD;
@@ -128,5 +130,21 @@ public class ProductInfo {
 
     public void setTon2(Double ton2) {
         Ton2 = ton2;
+    }
+
+    public String getProduct_id() {
+        return Product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        Product_id = product_id;
+    }
+
+    public String getImageBitMap() {
+        return ImageBitMap;
+    }
+
+    public void setImageBitMap(String imageBitMap) {
+        ImageBitMap = imageBitMap;
     }
 }

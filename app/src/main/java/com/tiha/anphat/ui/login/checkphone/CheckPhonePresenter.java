@@ -1,5 +1,6 @@
 package com.tiha.anphat.ui.login.checkphone;
 
+import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.network.nguoidung.IUserModel;
 import com.tiha.anphat.data.network.nguoidung.UserModel;
 
@@ -16,8 +17,8 @@ public class CheckPhonePresenter implements CheckPhoneContract.Presenter {
     public void CheckPhoneNumber(String sdt) {
         Model.CheckPhone(sdt, new IUserModel.ICheckPhoneFinishListener() {
             @Override
-            public void onSuccess() {
-                view.onCheckPhoneNumberSuccess();
+            public void onSuccess(NewCustomer info) {
+                view.onCheckPhoneNumberSuccess(info);
             }
 
             @Override

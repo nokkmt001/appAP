@@ -143,7 +143,7 @@
     <dimen name="textSize_45">45sp</dimen>
     <dimen name="dp_95">95dp</dimen>
     <dimen name="dp_35">35dp</dimen>
-
+    <dimen name="dp_40">40dp</dimen>
 
 
 </resources>

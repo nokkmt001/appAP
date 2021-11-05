@@ -16,6 +16,7 @@ import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
+import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.utils.NetworkUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.aes.AESUtils;
@@ -64,7 +65,8 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 public void run() {
                     try {
                         Thread.sleep(2000);
-                        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
                     } catch (Exception ignored) {
@@ -86,7 +88,8 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+            Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }

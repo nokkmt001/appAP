@@ -36,7 +36,7 @@ public class FriendFragment extends BaseFragment implements BaseAdapter.Callback
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 //        listAllData = AppUtils.getContacts(getActivity());
     }
 

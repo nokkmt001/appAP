@@ -27,7 +27,7 @@ public class LoginActivity extends BaseActivity {
     DateDialogAdapter adapterDateDialog;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return R.layout.activity_login;
     }
 
@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void onLoadData() {
+    public void initData() {
         appPreference = new AppPreference(this);
         AESUtils aesUtils = new AESUtils();
         try {

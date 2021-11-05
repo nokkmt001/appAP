@@ -30,7 +30,7 @@ public class SmsFragment extends BaseFragment {
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
     }
 

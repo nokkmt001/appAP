@@ -46,16 +46,16 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);
         }
-        setContentView(getLayoutResourceId());
+        setContentView(getLayoutId());
         initView();
-        onLoadData();
+        initData();
     }
 
-    protected abstract int getLayoutResourceId();
+    protected abstract int getLayoutId();
 
     protected abstract void initView();
 
-    protected abstract void onLoadData();
+    protected abstract void initData();
 
     protected void showToast(String mToastMsg) {
         Toast.makeText(this, mToastMsg, Toast.LENGTH_LONG).show();

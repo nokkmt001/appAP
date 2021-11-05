@@ -15,12 +15,12 @@ public class TextActivity extends BaseActivity {
     ActivityTextBinding binding;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return R.layout.activity_text;
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
     }
 

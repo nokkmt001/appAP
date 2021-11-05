@@ -126,6 +126,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         listData.addAll(data);
         notifyDataSetChanged();
     }
+    public void addNull(){}
 
     /**
      * Callback

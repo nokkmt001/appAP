@@ -1,6 +1,7 @@
 package com.tiha.anphat.main;
 
 import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
@@ -82,6 +83,21 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onGetListKhoError(error);
+            }
+        });
+    }
+
+    @Override
+    public void GetCategory() {
+        modelProduct.GetListCategory(new IProductModel.IGetListCategoryFinish() {
+            @Override
+            public void onSuccess(List<CategoryInfo> list) {
+                view.onGetCategorySuccess(list);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.onGetCategoryError(error);
             }
         });
     }

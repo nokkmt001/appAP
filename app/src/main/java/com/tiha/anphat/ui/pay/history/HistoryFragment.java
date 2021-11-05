@@ -20,7 +20,7 @@ public class HistoryFragment extends BaseFragment {
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
     }
 

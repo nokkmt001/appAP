@@ -18,8 +18,8 @@ public class LoginPresenter implements LoginContract.Presenter {
     public void CheckPhoneNumber(String sdt) {
         Model.CheckPhone(sdt, new IUserModel.ICheckPhoneFinishListener() {
             @Override
-            public void onSuccess() {
-                view.onCheckPhoneNumberSuccess();
+            public void onSuccess(NewCustomer info) {
+                view.onCheckPhoneNumberSuccess(info);
             }
 
             @Override

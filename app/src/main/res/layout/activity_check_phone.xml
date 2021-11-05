@@ -58,11 +58,11 @@
         android:text="@string/create_new_customer"
         android:layout_below="@+id/layoutInputEmail"
         android:layout_marginStart="@dimen/dp_14"
+        android:visibility="gone"
         android:layout_marginTop="@dimen/dp_10"
         android:textColor="@color/colorPrimary"
         android:layout_marginEnd="@dimen/dp_14"
         android:gravity="end"/>
-
 
     <Button
         android:id="@+id/buttonLogin"

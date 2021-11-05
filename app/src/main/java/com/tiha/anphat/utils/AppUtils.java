@@ -117,14 +117,14 @@ public class AppUtils {
     }
 
     @SuppressLint("ResourceAsColor")
-    public static void enableButton(final boolean isShow, Button button){
+    public static void enableButton(final boolean isShow, Button button,Context context){
         if (isShow){
             button.setEnabled(true);
-            button.setTextColor(R.color.White);
+            button.setTextColor(context.getResources().getColor(R.color.White));
             button.setBackgroundResource(R.drawable.bg_button_dark);
         } else {
             button.setEnabled(false);
-            button.setTextColor(R.color.text_disable);
+            button.setTextColor(context.getResources().getColor(R.color.text_disable));
             button.setBackgroundResource(R.drawable.bg_button_light);
         }
     }

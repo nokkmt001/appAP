@@ -9,7 +9,7 @@ public interface IUserModel {
     void CheckPhone(String sdt, ICheckPhoneFinishListener listener);
 
     interface ICheckPhoneFinishListener {
-        void onSuccess();
+        void onSuccess(NewCustomer info);
 
         void onError(String error);
     }

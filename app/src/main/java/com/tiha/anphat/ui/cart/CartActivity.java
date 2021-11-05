@@ -3,7 +3,6 @@ package com.tiha.anphat.ui.cart;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +33,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     AppPreference preference;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return R.layout.activity_cart;
     }
 
@@ -97,7 +96,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
         presenter = new CartPresenter(this);
         presenter.GetListCart(PublicVariables.UserInfo.getNguoiDungMobileID());
@@ -135,7 +134,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onUpdateCartSuccess(CartCondition info) {
-        onLoadData();
+        initData();
     }
 
     @Override
@@ -145,7 +144,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onDeleteCartSuccess() {
-        onLoadData();
+        initData();
     }
 
     @Override
@@ -163,7 +162,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     }
 
     @Override
-    public void onGetProductInventorySuccess(Integer result) { // ton kho
+    public void onGetProductInventorySuccess(Double result) { // ton kho
 
     }
 

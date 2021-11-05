@@ -17,7 +17,7 @@ public class PayFragment extends BaseFragment {
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
     }
 

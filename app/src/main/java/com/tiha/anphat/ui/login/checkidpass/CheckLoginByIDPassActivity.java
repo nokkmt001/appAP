@@ -1,6 +1,8 @@
 package com.tiha.anphat.ui.login.checkidpass;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -24,9 +26,10 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     private ActivityCheckLoginIdPassBinding binding;
     LoginIDPassPresenter presenter;
     AppPreference preference;
+    NewCustomer info;
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return R.layout.activity_check_login_id_pass;
     }
 
@@ -36,7 +39,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         binding = ActivityCheckLoginIdPassBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        AppUtils.enableButton(false, binding.buttonLogin);
+        AppUtils.enableButton(false, binding.buttonLogin,this);
         TextWatcher imm = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -57,7 +60,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
             @Override
             public void onClick(View view) {
                 presenter = new LoginIDPassPresenter(CheckLoginByIDPassActivity.this);
-                presenter.CheckLoginByIDPass(Objects.requireNonNull(binding.inputID.getText()).toString(), Objects.requireNonNull(binding.inputPassword.getText()).toString());
+                presenter.CheckLoginByIDPass(info.getNguoiDungMobileID().toString(), Objects.requireNonNull(binding.inputPassword.getText()).toString());
                 showProgressDialog(true);
             }
         });
@@ -72,7 +75,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     }
 
     public void checkValidate() {
-        if (AppUtils.isValidateUsername(Objects.requireNonNull(binding.inputID.getText()).toString()) && AppUtils.isValidateUsername(Objects.requireNonNull(binding.inputPassword.getText()).toString())) {
+        if (AppUtils.isValidateUsername(Objects.requireNonNull(binding.inputPassword.getText()).toString())) {
             binding.buttonLogin.setEnabled(true);
             binding.buttonLogin.setTextColor(getResources().getColor(R.color.White));
             binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_dark_no_radius);
@@ -84,14 +87,25 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     }
 
     @Override
-    protected void onLoadData() {
-        AESUtils aesUtils = new AESUtils();
-        try {
-            binding.inputID.setText(aesUtils.decrypt(preference.getUserID()));
-            binding.inputPassword.setText(aesUtils.decrypt(preference.getPassWord()));
-        } catch (Exception ignored) {
+    protected void initData() {
+        Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
+        info = (NewCustomer) bundle.getSerializable("Object") ;
+//        AESUtils aesUtils = new AESUtils();
+//        try {
+//            binding.inputID.setText(aesUtils.decrypt(preference.getUserID()));
+//            binding.inputPassword.setText(aesUtils.decrypt(preference.getPassWord()));
+//        } catch (Exception ignored) {
+//        }
+        if (info!=null){
+            onLoadTitle(info);
         }
+    }
 
+    @SuppressLint("SetTextI18n")
+    private void onLoadTitle(NewCustomer info){
+        binding.textUserName.setText(getString(R.string.hello)+info.getHoTen());
+        binding.textPhone.setText(info.getSoDienThoai());
     }
 
     @Override
@@ -108,7 +122,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         AESUtils aesUtils = new AESUtils();
         String userID = "";
         try {
-            userID = aesUtils.encrypt(Objects.requireNonNull(binding.inputID.getText()).toString());
+            userID = aesUtils.encrypt(Objects.requireNonNull(info.getNguoiDungMobileID().toString()));
         } catch (Exception ignored) {
         }
         String passWord = "";

@@ -66,7 +66,7 @@ public class CartModel implements ICartModel {
         params.put("NguoiDungMobileID", condition.getNguoiDungMobileID().toString());
         params.put("ProductID", condition.getProductID());
         params.put("SoLuong", condition.getSoLuong().toString());
-        params.put("GhiChu", condition.getGhiChu());
+        params.put("GhiChu", condition.getGhiChu()==null?"":condition.getGhiChu());
         params.put("CreateDate", condition.getCreateDate());
         params.put("ModifiedDate", condition.getModifiedDate());
         service = new APIService(URL);

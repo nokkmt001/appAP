@@ -62,6 +62,15 @@
         <item name="fontFamily">@font/myriadpro_bold</item>
     </style>
 
+    <style name="AppTheme.Button.Login" parent="@android:style/Widget.Button">
+        <item name="android:textSize">@dimen/button_title_textsize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/dp_14</item>
+        <item name="android:layout_marginEnd">@dimen/dp_14</item>
+        <item name="android:layout_marginStart">@dimen/dp_14</item>
+        <item name="fontFamily">@font/myriadpro_bold</item>
+    </style>
+
     <!--Base application button light-->
     <style name="AppTheme.Button.Light">
         <item name="android:textColor">@color/Black</item>

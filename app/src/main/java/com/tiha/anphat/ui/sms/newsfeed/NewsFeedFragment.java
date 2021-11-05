@@ -25,7 +25,7 @@ public class NewsFeedFragment extends BaseFragment {
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
 
     }
 

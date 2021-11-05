@@ -11,8 +11,8 @@ public class BookingActivity extends BaseActivity implements BookingContract.Vie
     BookingPresenter presenter;
 
     @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_cart;
+    protected int getLayoutId() {
+        return R.layout.activity_booking;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class BookingActivity extends BaseActivity implements BookingContract.Vie
     }
 
     @Override
-    protected void onLoadData() {
+    protected void initData() {
         Bundle bundle = getIntent().getExtras();
 
         assert bundle != null;

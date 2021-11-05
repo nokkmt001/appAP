@@ -50,7 +50,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         View root = inflater.inflate(getLayoutId(), null);
         initView(root);
         configToolbar();
-        onLoadData();
+        initData();
         return root;
     }
 
@@ -59,7 +59,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected abstract void initView(View view);
 
-    protected abstract void onLoadData();
+    protected abstract void initData();
 
     protected abstract void configToolbar();
 

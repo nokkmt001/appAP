@@ -91,7 +91,7 @@ public class CartPresenter implements CartContract.Presenter {
     public void GetProductInventory(String maKho, String productID, String date) {
         modelProduct.GetProductInventory(maKho, productID, date, new IProductModel.IGetProductInventoryFinish() {
             @Override
-            public void onSuccess(Integer result) {
+            public void onSuccess(Double result) {
                 view.onGetProductInventorySuccess(result);
             }
 

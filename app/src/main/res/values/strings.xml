@@ -57,6 +57,13 @@
     <string name="title_empty_cart">Giỏ hàng trống</string>
     <string name="noresult_msg">Không tìm thấy kết quả</string>
     <string name="information">Thông tin</string>
+    <string name="title_otp">Nhập mã xác thực OTP</string>
+    <string name="text_change_phone">Đổi số điện thoại</string>
+    <string name="except">XÁC NHẬN</string>
+    <string name="create_user_title">Tạo tài khoản</string>
+    <string name="resend_otp">Gửi lại mã</string>
+    <string name="hello">Xin Chào! </string>
+    <string name="add_cart_success">Thêm vào giỏ hàng thành công!</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

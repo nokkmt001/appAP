@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.product;
 
 import com.android.volley.VolleyError;
+import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
@@ -117,7 +118,7 @@ public class ProductModel implements IProductModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(Integer.valueOf(response));
+                listener.onSuccess(Double.valueOf(response));
             }
 
             @Override
@@ -149,5 +150,22 @@ public class ProductModel implements IProductModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         }, params);
+    }
+
+    @Override
+    public void GetListCategory(final IGetListCategoryFinish listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GET_CATEGORY, "TIHA");
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(new CategoryInfo().getListCategory(response) );
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
     }
 }

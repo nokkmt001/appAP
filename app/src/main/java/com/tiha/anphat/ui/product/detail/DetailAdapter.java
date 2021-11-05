@@ -1,6 +1,8 @@
 package com.tiha.anphat.ui.product.detail;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,28 +10,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.utils.AppUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
-public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> {
+public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> implements LoadImageContract.View {
     List<ProductInfo> listAllData;
     Context mContext;
     BaseEventClick.OnClickListener clickListener;
     String category = "";
+    LoadImagePresenter presenter;
+    String biMap = null;
 
     public DetailAdapter(Context context, List<ProductInfo> list, String category) {
         this.listAllData = list;
         this.mContext = context;
         this.category = category;
+        this.presenter = new LoadImagePresenter(this);
     }
 
     public void setClickListener(BaseEventClick.OnClickListener listener) {
@@ -63,49 +74,47 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         ProductInfo info = listAllData.get(position);
-        holder.tvPrice.setText(AppUtils.formatNumber("NO").format(info.getGiaBanLe()));
-        holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
-        switch (category) {
-            case "PHUKIEN":
-                holder.imageView.setImageResource(R.drawable.phu_kien);
-                break;
-            case "BRN_2715GN":
-                holder.imageView.setImageResource(R.drawable.gas_stoves);
-                break;
-            case "PCCC":
-                holder.imageView.setImageResource(R.drawable.pccc);
-                break;
-            case "VO":
-            case "LUA":
-            case "GAO":
-                holder.imageView.setImageResource(R.drawable.rice);
-                break;
-            case "BBINH":
-            case "GAS":
-                holder.imageView.setImageResource(R.drawable.gas_cylen);
-                break;
-            case "NEP":
-                holder.imageView.setImageResource(R.drawable.gao_nep_bac);
-                break;
-            case "TAM":
-                holder.imageView.setImageResource(R.drawable.gao_tam_tai_nguyen);
-                break;
-            case "TA":
-                holder.imageView.setImageResource(R.drawable.unnamed);
-                break;
-            case "KHUYENMAI":
-                holder.imageView.setImageResource(R.drawable.khuyen_mai);
-                break;
-            default:
-                break;
+        synchronized (mContext) {
+            presenter.LoadImage(info.getProduct_ID());
+            holder.tvPrice.setText(AppUtils.formatNumber("NO").format(info.getGiaBanLe()));
+            holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
+            if (biMap != null) {
+                info.setImageBitMap(biMap);
+                Glide.with(mContext).asBitmap()
+                        .load(AppUtils.formatStringToBitMap(biMap))
+                        .apply(new RequestOptions().override(10, 10))
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
+                                    Transition<? super Bitmap> transition) {
+                                holder.imageView.setImageBitmap(resource);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+            } else {
+                holder.imageView.setImageResource(R.drawable.img_no_image);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
         return listAllData.size();
+    }
+
+    @Override
+    public void onLoadImageSuccess(String bitMap) {
+        this.biMap = bitMap;
+    }
+
+    @Override
+    public void onLoadImageError(String error) {
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
