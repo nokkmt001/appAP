@@ -1,4 +1,4 @@
-package com.tiha.anphat.data.network.nguoidung;
+package com.tiha.anphat.data.network.user;
 
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.NewCustomer;
@@ -8,7 +8,6 @@ import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
-import com.tiha.anphat.utils.PublicVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;

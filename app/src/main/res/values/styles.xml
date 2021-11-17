@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -105,6 +105,11 @@
         <item name="android:textColor">@drawable/textcolor_button_green</item>
         <item name="android:background">@drawable/bg_button_green</item>
     </style>
+
+    <style name="AppTheme.Button.Primary" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@drawable/textcolor_button_green</item>
+        <item name="android:background">@drawable/bg_button_default</item>
+    </style>
     <!--Base application button transparent-->
     <style name="AppTheme.Button.Transparent">
         <item name="android:background">@drawable/bg_button_transparent</item>
@@ -114,6 +119,11 @@
 
     <style name="AppTheme.Button.Image">
         <item name="android:background">@drawable/bg_image</item>
+    </style>
+
+    <style name="AppTheme.Button.History" parent="@android:style/Widget.TextView">
+        <item name="android:background">@drawable/table_content_cell_radius_5_primary</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!--Base application textview-->
@@ -177,12 +187,16 @@
     </style>
 
     <style name="BottomNavigationView">
-        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
-        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active
+        </item>
+        <item name="itemTextAppearanceInactive">
+            @style/TextAppearance.BottomNavigationView.Inactive
+        </item>
     </style>
 
-    <style name="TextAppearance"/>
-    <style name="TextAppearance.BottomNavigationView"/>
+    <style name="TextAppearance" />
+
+    <style name="TextAppearance.BottomNavigationView" />
 
     <!-- inactive tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Inactive">

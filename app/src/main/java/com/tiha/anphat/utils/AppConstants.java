@@ -23,8 +23,10 @@ public class AppConstants {
     public static final String URL_UPDATE_CART = "api/GioHangMobile/UpdateGioHang";
     public static final String URL_DELETE_CART = "api/GioHangMobile/DeleteGioHang?id={0}";
     public static final String URL_GET_LIST_CART = "api/GioHangMobile/GetListGioHang?nguoiDungMobileID={0}";
-
     public static final String URL_GET_CATEGORY = "api/LoaiHang/GetListLoaiHangByUser?userName={0}";
+    // evaluate
+    public static final String URL_GET_LIST_EVALUATE = "api/DanhGiaNhanVien/GetListLyDoDanhGiaSao?soSao={0}";
+    public static final String URL_INSERT_EVALUATE = "api/DanhGiaNhanVien/InsertDanhGiaNhanVien";
 
     //product
     public static final String URL_GET_LIST_All_PRODUCT = "api/Product/GetListAllProduct";
@@ -35,7 +37,9 @@ public class AppConstants {
     public static final String URL_GetListTonKho = "api/PhanHeKho/GetListTonKho";
     //booking
     public static final String URL_GetDonHang = "api/DonHangMobile/GetDonHang?soDonHang={0}"; // chi tiết đơn hàng + price
-
+    // history
+    public static final String URL_GetListHISTORYBOOKING = "api/DonHangMobile/GetListLichSuMuaHang?nguoiDungMobileID={0}";
+    public static final String URL_HuyDonHang = "api/DonHangMobile/HuyDonHang";
     // user location
     public static final String URL_InsertUserLocation = "api/UserLocation/InsertUserLocation";
     public static final String URL_GetListUserLocation = "api/UserLocation/GetListUserLocation";

@@ -1,8 +1,8 @@
 package com.tiha.anphat.ui.login.inputotp;
 
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.data.network.nguoidung.IUserModel;
-import com.tiha.anphat.data.network.nguoidung.UserModel;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 
 public class ResendOtpPresenter implements ResendOtpContract.Presenter {
     UserModel model;

@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.base;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import com.tiha.anphat.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+public abstract class BaseTestAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     private final int VIEW_TYPE_ITEM = 1;
     private final int VIEW_TYPE_LOAD_MORE = 2;
 
@@ -24,11 +25,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @LayoutRes
     public abstract int getLayoutId();
 
-    public abstract void bind(View view);
-
     public abstract void setupViews(View itemView, T item, int position);
-
-    public abstract void setupActions(View itemView, T item, int position);
 
     @NonNull
     @Override
@@ -44,9 +41,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
-            bind(holder.itemView);
             setupViews(holder.itemView, listData.get(position), position);
-            setupActions(holder.itemView, listData.get(position), position);
         }
     }
 

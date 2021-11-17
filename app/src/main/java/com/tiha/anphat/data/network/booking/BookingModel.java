@@ -3,6 +3,8 @@ package com.tiha.anphat.data.network.booking;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.HistoryBooking;
+import com.tiha.anphat.data.entities.condition.CancelOrderCondition;
 import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.data.entities.order.CallInfo;
 import com.tiha.anphat.data.entities.order.OrderInfo;
@@ -66,5 +68,47 @@ public class BookingModel implements IBookingModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
+    }
+
+    @Override
+    public void GetHistoryBooking(final IGetHistoryBookingSuccess listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GetListHISTORYBOOKING, PublicVariables.UserInfo.getNguoiDungMobileID().toString());
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(new HistoryBooking().getListHistoryBooking(response));
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
+    }
+
+    @Override
+    public void CancelOrder(CancelOrderCondition condition,final ICancelOrderFinish listener) {
+        String URL = AppConstants.URL_HuyDonHang;
+        Map<String, String> params = new HashMap<>();
+        params.put("SoDonHang", condition.getSoDonHang());
+        params.put("NguoiDungMobileID", PublicVariables.UserInfo.getNguoiDungMobileID().toString());
+        params.put("LyDoHuy", condition.getLyDoHuy());
+        service = new APIService(URL);
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(Boolean.valueOf(response));
+                } catch (Exception e) {
+                    listener.onError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        }, params);
     }
 }

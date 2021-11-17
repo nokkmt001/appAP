@@ -1,6 +1,8 @@
 package com.tiha.anphat.data.network.booking;
 
 import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.HistoryBooking;
+import com.tiha.anphat.data.entities.condition.CancelOrderCondition;
 import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.data.entities.order.CallInfo;
 import com.tiha.anphat.data.entities.order.OrderInfo;
@@ -19,6 +21,20 @@ public interface IBookingModel {
 
     interface IGetBookingFinish{
         void onSuccess(BookingInfo info);
+
+        void onError(String error);
+    }
+
+    void GetHistoryBooking(IGetHistoryBookingSuccess listener);
+    interface IGetHistoryBookingSuccess{
+        void onSuccess(List<HistoryBooking> list);
+
+        void onError(String error);
+    }
+
+    void CancelOrder(CancelOrderCondition condition, ICancelOrderFinish listener);
+    interface ICancelOrderFinish{
+        void onSuccess(Boolean isOk);
 
         void onError(String error);
     }

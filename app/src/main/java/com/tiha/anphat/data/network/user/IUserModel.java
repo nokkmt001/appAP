@@ -1,4 +1,4 @@
-package com.tiha.anphat.data.network.nguoidung;
+package com.tiha.anphat.data.network.user;
 
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.kho.KhoInfo;

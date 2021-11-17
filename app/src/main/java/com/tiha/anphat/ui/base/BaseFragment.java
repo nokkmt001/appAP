@@ -47,7 +47,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(getLayoutId(), null);
+        View root = inflater.inflate(getLayoutID(), null);
         initView(root);
         configToolbar();
         initData();
@@ -55,7 +55,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     @LayoutRes
-    protected abstract int getLayoutId();
+    protected abstract int getLayoutID();
 
     protected abstract void initView(View view);
 

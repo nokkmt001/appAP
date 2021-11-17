@@ -9,7 +9,7 @@ import java.util.BitSet;
 
 public class AccountFragment extends BaseFragment {
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_account;
     }
 

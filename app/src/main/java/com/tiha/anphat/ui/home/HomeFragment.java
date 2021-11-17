@@ -14,7 +14,7 @@ public class HomeFragment extends BaseFragment {
     ImageView imageDelete;
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_home;
     }
 

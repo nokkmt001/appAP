@@ -3,8 +3,8 @@ package com.tiha.anphat.ui.splash;
 import android.content.Context;
 
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.data.network.nguoidung.IUserModel;
-import com.tiha.anphat.data.network.nguoidung.UserModel;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 import com.tiha.anphat.data.preft.SplashModel;
 
 public class SplashPresenter implements SplashContract.Presenter {

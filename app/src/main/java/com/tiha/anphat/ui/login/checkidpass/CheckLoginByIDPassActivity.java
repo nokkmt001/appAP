@@ -2,6 +2,7 @@ package com.tiha.anphat.ui.login.checkidpass;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -72,6 +73,19 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
                 startActivity(intent);
             }
         });
+        binding.imageLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linkWed();
+            }
+        });
+    }
+
+    private void linkWed(){
+        String url =  getResources().getString(R.string.url_ap);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     public void checkValidate() {

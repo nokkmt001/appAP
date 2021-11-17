@@ -6,7 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.databinding.ActivityOtpBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
@@ -22,6 +24,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     NewCustomer info;
     ResendOtpPresenter presenter;
     String textID;
+    AppPreference preference;
 
     @Override
     protected int getLayoutId() {
@@ -31,7 +34,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     @Override
     protected void initView() {
         presenter = new ResendOtpPresenter(this);
-
+        preference = new AppPreference(this);
         binding = ActivityOtpBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -78,6 +81,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         binding.layoutHeader.imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                preference.setOtp(false);
                 finish();
             }
         });
@@ -86,6 +90,10 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     private void onCheckCode(String gg) {
         textID = gg;
         if (gg.equals(info.getMaPIN().toString())) {
+            preference.setOtp(true);
+            Gson gson = new Gson();
+            String json = gson.toJson(info);
+            preference.setUser(json);
             Intent intent = new Intent(this, CheckLoginByIDPassActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Object", info);
@@ -98,12 +106,11 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     protected void initData() {
         Bundle bundle = getIntent().getExtras();
         info = (NewCustomer) bundle.getSerializable("Object");
+        showInfo(info.getMaPIN().toString());
     }
 
     @Override
-    public void onClick(View view) {
-
-    }
+    public void onClick(View view) {}
 
     @Override
     public void onResendOtpSuccess(NewCustomer info) {

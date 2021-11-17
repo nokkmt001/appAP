@@ -14,6 +14,7 @@ public class AppPreference {
     public static final String PREF_NguoiDungID = "NguoiDungID";
     public static final String PREF_USER = "user";
     public static final String PREF_BOOKING = "booking";
+    public static final String PREF_IS_INPUT_OTP="otp";
 
     private SharedPreferences sharedPreferences;
 
@@ -42,6 +43,13 @@ public class AppPreference {
     }
     public void setLogin(boolean status) {
         sharedPreferences.edit().putBoolean(PREF_IS_LOGGED_IN, status).apply();
+    }
+
+    public boolean isOtp() {
+        return sharedPreferences.getBoolean(PREF_IS_INPUT_OTP, false);
+    }
+    public void setOtp(boolean status) {
+        sharedPreferences.edit().putBoolean(PREF_IS_INPUT_OTP, status).apply();
     }
 
     public String getSDT() {

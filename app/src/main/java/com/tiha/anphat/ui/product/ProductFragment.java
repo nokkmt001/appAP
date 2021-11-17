@@ -25,7 +25,7 @@ public class ProductFragment extends BaseFragment {
     List<CategoryInfo> list;
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_product;
     }
 

@@ -1,49 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <include
-        android:id="@+id/layoutHeader"
-        layout="@layout/layout_header" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutHeader"
-        android:layout_marginTop="@dimen/dp_5" />
-
-    <RelativeLayout
-        android:id="@+id/layoutSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recyclerView"
-        android:layout_marginTop="@dimen/dp_5">
-
-        <include
-            layout="@layout/layout_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/textFilter" />
-
-        <TextView
-            android:id="@+id/textFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp_5"
-            android:background="@android:color/transparent"
-            android:drawableEnd="@drawable/ic_filter"
-            android:text="@string/filter" />
-
-    </RelativeLayout>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:id="@+id/recyclerViewBottom"
-        android:layout_below="@+id/layoutSearch"
+        android:id="@+id/rcl"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="wrap_content" />
 
 

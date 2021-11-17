@@ -1,8 +1,8 @@
 package com.tiha.anphat.ui.login.register;
 
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.data.network.nguoidung.IUserModel;
-import com.tiha.anphat.data.network.nguoidung.UserModel;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 
 public class CreateNewPresenter implements CreateNewContract.Presenter {
     CreateNewContract.View view;

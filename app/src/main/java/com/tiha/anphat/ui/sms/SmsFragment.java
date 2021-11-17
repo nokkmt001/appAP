@@ -18,7 +18,7 @@ public class SmsFragment extends BaseFragment {
     PagerAdapter adapterPager;
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_sms;
     }
 

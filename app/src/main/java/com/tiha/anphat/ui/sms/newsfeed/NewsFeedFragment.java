@@ -13,7 +13,7 @@ public class NewsFeedFragment extends BaseFragment {
     }
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_news_feed;
     }
 

@@ -77,7 +77,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_detail_product;
     }
 

@@ -43,7 +43,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         String userID = "", passWord = "";
                         AESUtils aesUtils = new AESUtils();
                         try {
@@ -64,11 +64,27 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(2000);
-                        Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
+                        if (appPreference.isOtp()){
+                            Thread.sleep(1000);
+                            if (appPreference.getUser()!=null){
+                                NewCustomer info = new NewCustomer().getNewCustomer(appPreference.getUser());
+                                Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Object", info);
+                                intent.putExtras(bundle);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        } else {
+                            Thread.sleep(1000);
+                            Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+
                     } catch (Exception ignored) {
                     }
                 }

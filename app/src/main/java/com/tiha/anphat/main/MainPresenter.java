@@ -7,8 +7,8 @@ import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
 import com.tiha.anphat.data.network.cart.CartModel;
 import com.tiha.anphat.data.network.cart.ICartModel;
-import com.tiha.anphat.data.network.nguoidung.IUserModel;
-import com.tiha.anphat.data.network.nguoidung.UserModel;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 import com.tiha.anphat.data.network.product.IProductModel;
 import com.tiha.anphat.data.network.product.ProductModel;
 

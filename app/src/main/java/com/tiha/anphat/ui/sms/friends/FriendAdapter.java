@@ -2,9 +2,6 @@ package com.tiha.anphat.ui.sms.friends;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.FriendInfo;
@@ -14,18 +11,18 @@ public class FriendAdapter extends BaseAdapter<FriendInfo> {
     //TextView ;
     ImageView imageView;
 
-    public FriendAdapter(int layoutId, final Callback callback,
-                         SwipeRefreshLayout refreshLayout) {
-        super(layoutId, callback, refreshLayout);
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_chat_friends;
     }
 
     @Override
-    public void bindView(View itemView) {
-//        imageView = bind(itemView, R.id.)
+    public void bind(View view) {
+
     }
 
     @Override
-    public void setupViews(View itemView, FriendInfo item) {
+    public void setupViews(View itemView, FriendInfo item, int position) {
 
     }
 

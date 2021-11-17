@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -52,6 +55,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.CALL_PHONE
     };
     ActivityMainBinding binding;
     MainPresenter presenter;
@@ -138,6 +142,37 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
             }
         });
+        binding.layout.main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linkWed();
+            }
+        });
+        binding.layoutHeader.textTitle.setText(getResources().getString(R.string.hotline));
+        binding.layoutHeader.textTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCallHotline();
+            }
+        });
+    }
+
+    private void onCallHotline(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+            return;
+        }
+        Intent myIntent = new Intent(Intent.ACTION_CALL);
+        String phNum = "tel:0819000203";
+        myIntent.setData(Uri.parse(phNum));
+        startActivity(myIntent);
+    }
+
+    private void linkWed(){
+        String url =  getResources().getString(R.string.url_ap);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
     }
 
     @Override

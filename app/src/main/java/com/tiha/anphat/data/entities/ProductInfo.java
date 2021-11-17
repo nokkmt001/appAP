@@ -147,4 +147,12 @@ public class ProductInfo {
     public void setImageBitMap(String imageBitMap) {
         ImageBitMap = imageBitMap;
     }
+
+    public String getCategory_ID() {
+        return Category_ID;
+    }
+
+    public void setCategory_ID(String category_ID) {
+        Category_ID = category_ID;
+    }
 }
