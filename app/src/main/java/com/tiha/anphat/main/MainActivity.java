@@ -1,6 +1,7 @@
 package com.tiha.anphat.main;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -57,6 +58,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.CALL_PHONE
     };
+
     ActivityMainBinding binding;
     MainPresenter presenter;
     RelativeLayout relativeLayout;
@@ -74,7 +76,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TestConstants.ACTION_MAIN_ACTIVITY);
         registerReceiver(testReceiver, intentFilter);
-
 
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
@@ -182,6 +183,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
+                @SuppressLint("NonConstantResourceId")
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
@@ -240,10 +242,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
         }
         fmActive = fmMain;
-    }
-
-    public void SetTitle(String textView) {
-        binding.layoutHeader.textTitle.setText(textView);
     }
 
     @Override
@@ -361,8 +359,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 default:
                     break;
             }
-
         }
-
     }
 }

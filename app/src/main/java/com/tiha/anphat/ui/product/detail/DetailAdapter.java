@@ -32,6 +32,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -51,6 +53,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     LoadImagePresenter presenter;
     String biMap = null;
     ProductModel model;
+    Boolean isLive = false;
+    List<ProductInfo> listChooseData = new ArrayList<>();
 
     public DetailAdapter(Context context, List<ProductInfo> list, String category) {
         this.listAllData = list;
@@ -91,7 +95,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         final ProductInfo info = listAllData.get(position);
         holder.tvPrice.setText("Giá: "+AppUtils.formatNumber("NO").format(info.getGiaBanLe()));
         holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
@@ -102,6 +106,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             public void onSuccess(String imageBitmap) {
                 if (imageBitmap != null) {
                     info.setImageBitMap(imageBitmap);
+//                    ProductInfo ininfo = info;
+//                    listAllData.remove(position);
+//                    listAllData.add(position,ininfo);
                     Glide.with(mContext).asBitmap()
                             .load(AppUtils.formatStringToBitMap(imageBitmap))
                             .apply(new RequestOptions().override(10, 10))
@@ -126,8 +133,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
                 holder.imageView.setImageResource(R.drawable.img_no_image);
             }
         });
-
-
     }
 
     @Override

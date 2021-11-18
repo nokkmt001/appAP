@@ -387,13 +387,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     }
 
-
     public void InsertPictureFromGallery(Uri uriPicture) {
         String filePath = ImageFilePath.getPath(this, uriPicture);
         File file = new File(filePath);
         Bitmap bitmap = ImageUtils.optimizeBitmap(8, filePath, this);
         ResultImageBitMap(bitmap);
     }
-
 }
 

@@ -11,7 +11,6 @@ public class ChiTietDonInfo {
     private Integer GiatriDiscount;
     private Integer Thue;
     private Integer Thanh_Tien;
-
     // Getter Methods 
 
     public String getProduct_ID() {

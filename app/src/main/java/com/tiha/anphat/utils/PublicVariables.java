@@ -21,7 +21,7 @@ public class PublicVariables {
 
     public static List<ProductInfo> listAllProDuct = new ArrayList<>();
 
-    public static List<KhoInfo> listKho = new ArrayList<>();
+    public static List<KhoInfo> listKho = new ArrayList<>();  // CTY
 
     public static CountDownTimer countDownTimer;
 

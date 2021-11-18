@@ -14,13 +14,14 @@
 
     <TextView
         android:id="@+id/textTitle"
-        style="@style/AppTheme.TextView"
+        style="@style/AppTheme.TextViewSize20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_toStartOf="@+id/layoutCart"
         android:layout_toEndOf="@+id/imageDrawer"
         android:layout_marginStart="@dimen/dp_5"
+        android:gravity="center"
         android:layout_marginEnd="@dimen/dp_5"
         android:textColor="@color/White" />
 

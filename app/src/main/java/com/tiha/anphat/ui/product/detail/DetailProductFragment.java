@@ -105,8 +105,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             @Override
             public void onClick(View view, int position) {
                 info = adapter.getItem(position);
-                presenter.GetProductInventory("TIHA", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/mm/yyyy"));
-//                presenter.GetImageByProDuctID(info.getProduct_ID());
+                presenter.GetProductInventory("CTY", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/MM/yyyy"));
             }
         });
         Search();
@@ -300,33 +299,33 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             layoutCountBuy.setVisibility(View.GONE);
         }
         final Date date = new Date(System.currentTimeMillis());
-//        imgAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!count.toString().equals(AppUtils.formatNumber("NO").format(number))) {
-//                    count = count + 1;
-//                }
-//                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-//            }
-//        });
-//        imgMinus.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (count != 1) {
-//                    count = count - 1;
-//                }
-//                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-//            }
-//        });
-//        if (number == 0.0) {
-//            btnEmpty.setVisibility(View.VISIBLE);
-//            btAddCart.setVisibility(View.GONE);
-//            btnBuyNow.setVisibility(View.GONE);
-//        } else {
+        imgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!count.toString().equals(AppUtils.formatNumber("NO").format(number))) {
+                    count = count + 1;
+                }
+                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+            }
+        });
+        imgMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (count != 1) {
+                    count = count - 1;
+                }
+                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+            }
+        });
+        if (number <= 0.0) {
+            btnEmpty.setVisibility(View.VISIBLE);
+            btAddCart.setVisibility(View.GONE);
+            btnBuyNow.setVisibility(View.GONE);
+        } else {
         btnEmpty.setVisibility(View.GONE);
         btAddCart.setVisibility(View.VISIBLE);
         btnBuyNow.setVisibility(View.VISIBLE);
-//        }
+        }
         btAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

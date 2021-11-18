@@ -46,6 +46,10 @@ public class AppConstants {
 
     //kho
     public static final String URL_GetListKhoByUser = "api/Kho/GetListKhoByUser?userName={0}";
+    // nguoi gioi thieu
+    public static final String URL_InsertPresenter = "api/NguoiGioiThieuMobile/InsertNguoiGioiThieuMobile?nguoiDungMobileID={0}&soDienThoaiGioiThieu={1}";
+    public static final String URL_GetListPresenter= "api/NguoiGioiThieuMobile/GetListNguoiDaGioiThieu?nguoiDungMobileID={0}";
+
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
     /**
