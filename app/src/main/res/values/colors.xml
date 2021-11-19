@@ -185,4 +185,6 @@
     <color name="buttoncvadmin">#084ea6</color>
     <color name="text_disable">#C4CDD5</color>
 
+    <color name="back_ground_main">#f6f6f6</color>
+
 </resources>

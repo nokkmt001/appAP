@@ -8,9 +8,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.tiha.anphat.R;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.pay.history.HistoryFragment;
+import com.tiha.anphat.ui.pay.pending.PendingFragment;
 import com.tiha.anphat.ui.product.PagerAdapter;
-import com.tiha.anphat.ui.sms.friends.FriendFragment;
-import com.tiha.anphat.ui.sms.newsfeed.NewsFeedFragment;
 
 public class PayFragment extends BaseFragment {
     TabLayout tabLayout;
@@ -35,11 +34,6 @@ public class PayFragment extends BaseFragment {
     }
 
     @Override
-    protected void configToolbar() {
-
-    }
-
-    @Override
     public void onClick(View view) {
 
     }
@@ -48,7 +42,7 @@ public class PayFragment extends BaseFragment {
         int tabCount = 1;
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(), getChildFragmentManager(), tabCount);
-        adapterPager.addFragment(new FriendFragment(), getString(R.string.delivering), 0);
+        adapterPager.addFragment(new PendingFragment(), getString(R.string.delivering), 0);
         adapterPager.addFragment(new HistoryFragment(), getString(R.string.history), 1);
         viewPager.setAdapter(adapterPager);
         tabLayout.setupWithViewPager(viewPager);

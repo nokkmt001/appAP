@@ -30,11 +30,6 @@ public class NewsFeedFragment extends BaseFragment {
     }
 
     @Override
-    protected void configToolbar() {
-
-    }
-
-    @Override
     public void onClick(View view) {
 
     }

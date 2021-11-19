@@ -2,16 +2,20 @@ package com.tiha.anphat.ui.pay.history.vote;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ReasonEvaluate;
 import com.tiha.anphat.data.entities.condition.EvaluateCondition;
 import com.tiha.anphat.databinding.ActivityVoteBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
     VoteAdapter adapter;
     VotePresenter presenter;
     Boolean isCheck = true;
+    AddImageAdapter addImageAdapter;
     List<ReasonEvaluate> listChoose = new ArrayList<>();
     String[] permissionsRequired = {Manifest.permission.CAMERA};
     String bitmapImage = "";
@@ -32,6 +37,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
 
     @Override
     protected void initView() {
+        CheckCamera();
         checkSelfPermission(permissionsRequired);
         binding = ActivityVoteBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -41,6 +47,9 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
 
         adapter = new VoteAdapter();
         binding.rcl.setAdapter(adapter);
+        addImageAdapter = new AddImageAdapter(this,new ArrayList<String>());
+        binding.rclImage.setLayoutManager( new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        binding.rclImage.setAdapter(addImageAdapter);
 
         checkValidate();
 
@@ -51,14 +60,30 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
                     showMessage("Bạn chưa chọn đề xuất đánh giá");
                 } else {
                     EvaluateCondition condition = new EvaluateCondition();
-//                    condition.setBinhLuan();
+                    condition.setBinhLuan(binding.inputComment.getText().toString());
+                    condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
+//                    condition.setHinhAnh();
 //                    presenter.InsertVote();
                 }
             }
         });
-
         setRating();
+
+        binding.textChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChooseFile();
+            }
+        });
     }
+
+    public void ResultImageBitMap(Bitmap bitmap) {
+        if (bitmap==null) return;
+        addImageAdapter.add(AppUtils.formatBitMapToString(bitmap));
+        Toast.makeText(this,"GG",Toast.LENGTH_SHORT).show();
+    }
+
+
 
     private void CheckCamera() {
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -121,6 +146,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         } else {
             adapter.clear();
             adapter.addAll(list);
+            adapter.addAll(list);
         }
 
     }
@@ -137,6 +163,6 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
 
     @Override
     public void onInsertVoteError(String error) {
-
+        showMessage(error);
     }
 }

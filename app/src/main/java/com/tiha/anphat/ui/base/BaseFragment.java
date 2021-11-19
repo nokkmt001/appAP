@@ -49,7 +49,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(getLayoutID(), null);
         initView(root);
-        configToolbar();
         initData();
         return root;
     }
@@ -60,8 +59,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected abstract void initView(View view);
 
     protected abstract void initData();
-
-    protected abstract void configToolbar();
 
     public void showProgressDialog(boolean isShow) {
         if (isShow) {

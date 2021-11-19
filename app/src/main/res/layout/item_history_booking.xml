@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_8"
+    android:layout_marginBottom="@dimen/dp_10"
     android:background="@color/White">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,39 +18,52 @@
             android:id="@+id/imageMain"
             android:layout_width="@dimen/dp_120"
             android:layout_height="@dimen/dp_120"
+            android:layout_marginTop="@dimen/dp_10"
             android:src="@drawable/img_no_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textTitle"
-            style="@style/AppTheme.TextView"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_2"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_5"
             app:layout_constraintStart_toEndOf="@+id/imageMain"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textAddress"
-            style="@style/AppTheme.TextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageMain"
-            app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+            <TextView
+                android:id="@+id/textTitle"
+                style="@style/AppTheme.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageMain"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textPrice"
-            style="@style/AppTheme.TextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageMain"
-            app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+            <TextView
+                android:id="@+id/textAddress"
+                style="@style/AppTheme.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageMain"
+                app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+            <TextView
+                android:id="@+id/textPrice"
+                style="@style/AppTheme.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_2"
+                android:textColor="@color/Red"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageMain"
+                app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,6 +84,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="4"
+        android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewLine">
@@ -80,7 +94,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="@dimen/dp_10"
             style="@style/AppTheme.TextView"
+            android:textStyle="bold"
             android:layout_weight="2" />
 
         <androidx.appcompat.widget.AppCompatButton

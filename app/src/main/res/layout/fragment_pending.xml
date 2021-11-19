@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/White"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:id="@+id/layoutOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/dp_20">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:id="@+id/layoutStatus"
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:id="@+id/status_start"
+                            android:layout_width="@dimen/dp_20"
+                            android:layout_height="@dimen/dp_20"
+                            android:layout_marginStart="@dimen/dp_20"
+                            android:background="@drawable/shape_status_remaining"/>
+
+                        <View
+                            android:id="@+id/viewPending"
+                            android:layout_width="wrap_content"
+                            android:layout_height="4dp"
+                            android:background="@color/Blue"
+                            android:layout_toEndOf="@+id/status_start"
+                            android:layout_toStartOf="@+id/status_progress"
+                            android:layout_centerVertical="true"/>
+
+                        <View
+                            android:id="@+id/status_progress"
+                            android:layout_width="@dimen/dp_20"
+                            android:layout_height="@dimen/dp_20"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/shape_status_current"/>
+
+                        <View
+                            android:id="@+id/viewFinish"
+                            android:layout_width="wrap_content"
+                            android:layout_height="4dp"
+                            android:background="@color/Blue"
+                            android:layout_toEndOf="@+id/status_progress"
+                            android:layout_toStartOf="@+id/status_end"
+                            android:layout_centerVertical="true"/>
+
+                        <View
+                            android:id="@+id/status_end"
+                            android:layout_width="@dimen/dp_20"
+                            android:layout_height="@dimen/dp_20"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="@dimen/dp_20"
+                            android:background="@drawable/shape_status_completed"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/textBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/AppTheme.TextView"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:textColor="@color/Black"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_below="@+id/layoutStatus"
+                        android:text="Đã đặt"/>
+
+                    <TextView
+                        android:id="@+id/textTransport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/AppTheme.TextView"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@color/Black"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_below="@+id/layoutStatus"
+                        android:text="Đang vận chuyển"/>
+
+                    <TextView
+                        android:id="@+id/textFinish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/AppTheme.TextView"
+                        android:textColor="@color/Black"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="@dimen/dp_5"
+                        android:layout_below="@+id/layoutStatus"
+                        android:text="Hoàn thành"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/viewOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutOne"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/viewOne">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        style="@style/AppTheme.TextView"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AppTheme.TextView"
+                        android:fontFamily="@font/myriadpro_bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/AppTheme.TextView"/>
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/viewTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutTwo"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Địa điểm nhận"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    style="@style/AppTheme.TextView"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/textAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_5"
+                    style="@style/AppTheme.TextView"
+                    android:layout_marginBottom="@dimen/dp_5"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:layout_constraintTop_toBottomOf="@+id/layoutTwo"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/viewTwo"/>
+            </LinearLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

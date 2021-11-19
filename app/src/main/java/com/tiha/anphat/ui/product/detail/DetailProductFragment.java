@@ -177,11 +177,6 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    protected void configToolbar() {
-
-    }
-
-    @Override
     public void onClick(View view) {
 
     }

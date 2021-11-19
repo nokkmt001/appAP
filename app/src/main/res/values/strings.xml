@@ -74,6 +74,8 @@
     <string name="send">Gửi</string>
     <string name="title_button_vote">Đánh giá</string>
     <string name="title_booking_again">Đặt lại</string>
+    <string name="status_start">DADAT</string>
+    <string name="title_update">Cập nhật phần mềm</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

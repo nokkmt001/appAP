@@ -9,7 +9,7 @@ public class AppConstants {
 //    public static String FTP_PASSWORD = "tiha@demo.123$";
     public static String URL_SERVER = "http://" + SERVER_NAME;
     public static String URL_IMAGE = "http://" + SERVER_NAME + "/resources/filereports/";
-    public static String URL_UPDATE_CHANGELOG = URL_SERVER + "/resources/filereports/appupdate/update-changelog.json";
+    public static String URL_UPDATE_CHANGELOG =  "http://autoupdate.tiha.vn/DocumentMobiles/AppUpdate/ANPHATNB/change_log_app.json";
 
     public static final String Error_KetNoiServer = "Kết nối đến Server thất bại, hãy thử lại!";
     public static final String Error_KhongCoInternet = "Không có kết nối Internet, hãy thử lại!";

@@ -38,11 +38,6 @@ public class FriendFragment extends BaseFragment {
     }
 
     @Override
-    protected void configToolbar() {
-
-    }
-
-    @Override
     public void onClick(View view) {
 
     }

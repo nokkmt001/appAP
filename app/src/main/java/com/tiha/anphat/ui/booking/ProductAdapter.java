@@ -42,6 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     public ProductAdapter(Context context) {
         this.mContext = context;
+        this.model = new ProductModel();
     }
 
     public void clear() {

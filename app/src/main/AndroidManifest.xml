@@ -85,7 +85,11 @@
         <activity
             android:name=".ui.login.inputotp.InputOtpActivity"
             android:screenOrientation="portrait" />
+
         <activity android:name=".ui.pay.history.vote.VoteEmployeeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.update.UpdateActivity"
             android:screenOrientation="portrait"/>
     </application>
 

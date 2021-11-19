@@ -50,11 +50,11 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ItemRH> {
                 if (!info.getCheck()) {
                     info.setCheck(true);
                     listChoose.add(info);
-                    holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_primary);
+                    holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_no_radius_primary);
                     holder.text.setBackgroundResource(R.color.colorTransparent);
                 } else {
                     if(listChoose.size()>0){
-                        for (int i = 0; 1 < listChoose.size(); i++) {
+                        for (int i = 0; i < listChoose.size(); i++) {
                             if (info.getLyDoDanhGiaSaoID().equals(listChoose.get(i).getLyDoDanhGiaSaoID())) {
                                 listChoose.remove(i);
                             }

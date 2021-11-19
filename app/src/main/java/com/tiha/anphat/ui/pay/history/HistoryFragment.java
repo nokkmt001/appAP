@@ -56,11 +56,6 @@ public class HistoryFragment extends BaseFragment implements HistoryBookingContr
     }
 
     @Override
-    protected void configToolbar() {
-
-    }
-
-    @Override
     public void onClick(View view) {
 
     }

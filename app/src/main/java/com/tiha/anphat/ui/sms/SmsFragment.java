@@ -1,7 +1,6 @@
 package com.tiha.anphat.ui.sms;
 
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -31,11 +30,6 @@ public class SmsFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-
-    }
-
-    @Override
-    protected void configToolbar() {
 
     }
 

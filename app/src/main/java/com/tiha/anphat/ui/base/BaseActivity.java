@@ -356,6 +356,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                     ResultImageBitMap(bitmap);
                     break;
                 case REQUEST_GALLERY:
+                    onSelectFromGalleryResult(intent);
                     break;
                 default:
                     break;
