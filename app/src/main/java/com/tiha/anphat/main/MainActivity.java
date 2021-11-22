@@ -37,6 +37,7 @@ import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
 import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
+import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
 import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
@@ -120,7 +121,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         appPreference.setLogin(false);
                         appPreference.setPassWord("");
                         appPreference.setUserID("");
-                        Intent intent = new Intent(MainActivity.this, CheckLoginByIDPassActivity.class);
+                        Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }

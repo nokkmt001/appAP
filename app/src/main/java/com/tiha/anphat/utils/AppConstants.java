@@ -9,7 +9,7 @@ public class AppConstants {
 //    public static String FTP_PASSWORD = "tiha@demo.123$";
     public static String URL_SERVER = "http://" + SERVER_NAME;
     public static String URL_IMAGE = "http://" + SERVER_NAME + "/resources/filereports/";
-    public static String URL_UPDATE_CHANGELOG =  "http://autoupdate.tiha.vn/DocumentMobiles/AppUpdate/ANPHATNB/change_log_app.json";
+    public static String URL_UPDATE_CHANGELOG = "http://autoupdate.tiha.vn/DocumentMobiles/AppUpdate/ANPHATNB/change_log_app.json";
 
     public static final String Error_KetNoiServer = "Kết nối đến Server thất bại, hãy thử lại!";
     public static final String Error_KhongCoInternet = "Không có kết nối Internet, hãy thử lại!";
@@ -48,7 +48,7 @@ public class AppConstants {
     public static final String URL_GetListKhoByUser = "api/Kho/GetListKhoByUser?userName={0}";
     // nguoi gioi thieu
     public static final String URL_InsertPresenter = "api/NguoiGioiThieuMobile/InsertNguoiGioiThieuMobile?nguoiDungMobileID={0}&soDienThoaiGioiThieu={1}";
-    public static final String URL_GetListPresenter= "api/NguoiGioiThieuMobile/GetListNguoiDaGioiThieu?nguoiDungMobileID={0}";
+    public static final String URL_GetListPresenter = "api/NguoiGioiThieuMobile/GetListNguoiDaGioiThieu?nguoiDungMobileID={0}";
 
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";

@@ -30,17 +30,20 @@
             android:gravity="center"
             android:text="BTP" />
 
-        <androidx.appcompat.widget.AppCompatRatingBar
+        <RatingBar
             android:id="@+id/rating"
-            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            style="?android:attr/ratingBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_20"
-            android:clickable="true"
-            android:focusable="true"
             android:isIndicator="true"
             android:numStars="5"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:rating="2"
+            android:focusable="true"
+            android:progressBackgroundTint="@color/colorLine"
             android:secondaryProgressTint="@color/Yellow"
             android:stepSize="1" />
 
@@ -103,13 +106,14 @@
                     android:paddingStart="@dimen/dp_5"
                     android:drawableEnd="@drawable/ic_add_circle"
                     android:drawablePadding="@dimen/dp_5"
+                    android:paddingTop="@dimen/dp_5"
                     android:gravity="center"
                     android:text="Thêm hình ảnh" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rclImage"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_height="wrap_content"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

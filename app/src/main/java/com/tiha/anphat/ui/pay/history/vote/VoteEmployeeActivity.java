@@ -9,12 +9,14 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ReasonEvaluate;
 import com.tiha.anphat.data.entities.condition.EvaluateCondition;
 import com.tiha.anphat.databinding.ActivityVoteBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.utils.AppUtils;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
     List<ReasonEvaluate> listChoose = new ArrayList<>();
     String[] permissionsRequired = {Manifest.permission.CAMERA};
     String bitmapImage = "";
+    RatingBar rating;
+    RecyclerView rclImage;
 
     @Override
     protected int getLayoutId() {
@@ -42,13 +46,14 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         binding = ActivityVoteBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        rating = findViewById(R.id.rating);
 
         setHeader();
 
         adapter = new VoteAdapter();
         binding.rcl.setAdapter(adapter);
-        addImageAdapter = new AddImageAdapter(this,new ArrayList<String>());
-        binding.rclImage.setLayoutManager( new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        addImageAdapter = new AddImageAdapter(this, new ArrayList<String>());
+        binding.rclImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.rclImage.setAdapter(addImageAdapter);
 
         checkValidate();
@@ -59,6 +64,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
                 if (adapter.getListChoose().size() == 0) {
                     showMessage("Bạn chưa chọn đề xuất đánh giá");
                 } else {
+                    showProgressDialog(true);
                     EvaluateCondition condition = new EvaluateCondition();
                     condition.setBinhLuan(binding.inputComment.getText().toString());
                     condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
@@ -67,7 +73,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
                 }
             }
         });
-        setRating();
+//        setRating();
 
         binding.textChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,14 +81,33 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
                 showChooseFile();
             }
         });
+        rating.setRating(5);
+
+        this.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                ratingBar.setRating(v);
+                Toast.makeText(VoteEmployeeActivity.this, "Gg", Toast.LENGTH_SHORT).show();
+                if (v == 0) {
+                    showMessage("Bạn phải chọn số sao");
+                } else {
+                    presenter.GetListVote(String.valueOf(v));
+                }
+            }
+        });
+
+        addImageAdapter.setOnClickListener(new BaseEventClick.OnClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+        });
     }
 
     public void ResultImageBitMap(Bitmap bitmap) {
-        if (bitmap==null) return;
+        if (bitmap == null) return;
         addImageAdapter.add(AppUtils.formatBitMapToString(bitmap));
-        Toast.makeText(this,"GG",Toast.LENGTH_SHORT).show();
     }
-
 
 
     private void CheckCamera() {
@@ -97,6 +122,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         binding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                binding.rating.setRating(v);
                 if (v == 0) {
                     showMessage("Bạn phải chọn số sao");
                 } else {
@@ -146,7 +172,6 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         } else {
             adapter.clear();
             adapter.addAll(list);
-            adapter.addAll(list);
         }
 
     }
@@ -158,11 +183,13 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
 
     @Override
     public void onInsertVoteSuccess() {
-
+        finish();
+        showProgressDialog(false);
     }
 
     @Override
     public void onInsertVoteError(String error) {
         showMessage(error);
+        showProgressDialog(false);
     }
 }
