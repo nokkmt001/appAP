@@ -91,6 +91,9 @@
 
         <activity android:name=".ui.update.UpdateActivity"
             android:screenOrientation="portrait"/>
+
+        <activity android:name=".utils.adapterimage.ActivityImage"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

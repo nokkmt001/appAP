@@ -1,8 +1,11 @@
 package com.tiha.anphat.ui.pay.history.vote;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.Toast;
@@ -18,6 +21,8 @@ import com.tiha.anphat.databinding.ActivityVoteBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
+import com.tiha.anphat.utils.adapterimage.ActivityImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +38,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
     String bitmapImage = "";
     RatingBar rating;
     RecyclerView rclImage;
+    List<String> listImageString = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -57,19 +63,27 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         binding.rclImage.setAdapter(addImageAdapter);
 
         checkValidate();
-
         binding.buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (adapter.getListChoose().size() == 0) {
                     showMessage("Bạn chưa chọn đề xuất đánh giá");
                 } else {
+                    String gg = "";
                     showProgressDialog(true);
                     EvaluateCondition condition = new EvaluateCondition();
+                    condition.setSoSao(5);
+//                    condition.setEmployeeID();
                     condition.setBinhLuan(binding.inputComment.getText().toString());
                     condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
-//                    condition.setHinhAnh();
-//                    presenter.InsertVote();
+                    for (String string : listImageString) {
+                        gg += string + ",";
+                    }
+                    if (gg.length() > 0) {
+                        condition.setHinhAnh(gg.substring(0, gg.length() - 1));
+
+                    }
+//                    presenter.InsertVote(condition);
                 }
             }
         });
@@ -96,17 +110,44 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
             }
         });
 
+        setAdapterClick();
+    }
+
+    private void setAdapterClick() {
         addImageAdapter.setOnClickListener(new BaseEventClick.OnClickListener() {
             @Override
-            public void onClick(View view, int position) {
+            public void onClick(View view, final int position) {
+                switch (view.getId()) {
+                    case R.id.imageDelete:
+                        alertDialog("Xóa hình ảnh", "Bạn chắc chắn xóa hình ảnh này?", null, "ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                listImageString.remove(addImageAdapter.getItem(position));
+                                addImageAdapter.removeItem(position);
 
+                            }
+                        });
+                        break;
+                    case R.id.imageAdd:
+                        PublicVariables.listImageVote = addImageAdapter.getListAllData();
+                        Intent intent = new Intent(VoteEmployeeActivity.this, ActivityImage.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
 
     public void ResultImageBitMap(Bitmap bitmap) {
         if (bitmap == null) return;
-        addImageAdapter.add(AppUtils.formatBitMapToString(bitmap));
+        String gg = "";
+        gg = AppUtils.formatBitMapToString(bitmap);
+        if (gg.equals("")) return;
+        listImageString.add(gg);
+        addImageAdapter.add(gg);
     }
 
 
@@ -157,7 +198,7 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
     @Override
     protected void initData() {
         presenter = new VotePresenter(this);
-        presenter.GetListVote("1");
+        presenter.GetListVote("5");
     }
 
     @Override

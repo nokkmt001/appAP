@@ -27,8 +27,14 @@ public class PublicVariables {
 
     public static List<CategoryInfo> listCategory = new ArrayList<>();
 
+    public static ArrayList<String> listImageVote = new ArrayList<>();
+
     public static void ClearData() {
         UserInfo = new NewCustomer();
+        listCategory = new ArrayList<>();
+        listKho = new ArrayList<>();
+        listImageVote = new ArrayList<>();
+        listAllProDuct = new ArrayList<>();
     }
 
 
