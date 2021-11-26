@@ -187,4 +187,6 @@
 
     <color name="back_ground_main">#f6f6f6</color>
 
+    <color name="icon_main">#00ade5</color>
+
 </resources>

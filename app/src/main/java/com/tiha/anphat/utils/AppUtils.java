@@ -1,6 +1,8 @@
 package com.tiha.anphat.utils;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -16,8 +18,13 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
@@ -44,6 +51,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +64,27 @@ public class AppUtils {
 
     private AppUtils() {
         // This class is not publicly instantiable
+    }
+
+    public static Date ChooseDateTime(final Context context,final EditText text) {
+        final Calendar currentDate = Calendar.getInstance();
+        final Calendar date= Calendar.getInstance();
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        date.set(Calendar.MINUTE, minute);
+                        Log.v(TAG, "The choose one " + date.getTime());
+                        text.setText(formatDateToString(date.getTime(),"dd/MM/yyyy HH:mm:ss"));
+                    }
+                }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
+            }
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+        return date.getTime();
     }
 
     public static List<ContactModel> getContacts(Context ctx) {
@@ -94,6 +123,10 @@ public class AppUtils {
             cursor.close();
         }
         return list;
+    }
+
+    public static Bitmap getBitMapFromImage(Context ctx){
+        return null;
     }
 
 //    public static void openPlayStoreForApp(Context context) {

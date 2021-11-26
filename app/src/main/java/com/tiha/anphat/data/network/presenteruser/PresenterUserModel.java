@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.presenteruser;
 
 import com.android.volley.VolleyError;
+import com.tiha.anphat.data.entities.IntroducePerInfo;
 import com.tiha.anphat.data.entities.presenteruser.InsertPresenterInfo;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
@@ -22,11 +23,25 @@ public class PresenterUserModel implements IPresenterUserModel {
             public void onSuccess(String response) {
                 listener.onSuccess(new InsertPresenterInfo().getPresenterInfo(response));
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
+    }
 
+    @Override
+    public void GetListIntroducePer(final IGetListIntroducePerFinish listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GetListPresenter, PublicVariables.UserInfo.getNguoiDungMobileID());
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(new IntroducePerInfo().getListIntroducePerInfo(response));
+            }
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
     }

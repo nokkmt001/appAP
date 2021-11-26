@@ -28,12 +28,13 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.ViewDataBinding;
+import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.utils.ImageFilePath;
 import com.tiha.anphat.utils.ImageUtils;
 import com.tiha.anphat.utils.NetworkUtils;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import java.util.Objects;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.tiha.anphat.utils.ImageUtils.getOutputMediaFileUri;
 
-public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatActivity implements View.OnClickListener {
     Dialog progressDialog;
     String error = "";
     private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
@@ -54,6 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     String imageStoragePath = "";
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
+    protected T binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,18 +64,19 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);
         }
-        setContentView(getLayoutId());
+        binding = getViewBinding();
+        setContentView(binding.getRoot());
         initView();
         initData();
     }
 
-    protected abstract int getLayoutId();
+    public abstract T getViewBinding();
 
     protected abstract void initView();
 
     protected abstract void initData();
 
-    public <T extends View> T bind(int id) {
+    public <N extends View> N bind(int id) {
         return findViewById(id);
     }
 
@@ -218,7 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        ActivityCompat.requestPermissions(BaseActivity.this, permissionsMain, REQUEST_MULTIPLE_PERMISSIONS);
+                        ActivityCompat.requestPermissions(BaseTestActivity.this, permissionsMain, REQUEST_MULTIPLE_PERMISSIONS);
                     }
                 })
                 .setNegativeButton("HỦY", new DialogInterface.OnClickListener() {

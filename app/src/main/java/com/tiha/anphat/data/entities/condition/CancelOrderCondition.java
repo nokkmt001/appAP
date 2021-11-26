@@ -2,14 +2,14 @@ package com.tiha.anphat.data.entities.condition;
 
 public class CancelOrderCondition {
     private String SoDonHang;
-    private float NguoiDungMobileID;
+    private Integer NguoiDungMobileID;
     private String LyDoHuy;
 
     public String getSoDonHang() {
         return SoDonHang;
     }
 
-    public float getNguoiDungMobileID() {
+    public Integer getNguoiDungMobileID() {
         return NguoiDungMobileID;
     }
 
@@ -21,7 +21,7 @@ public class CancelOrderCondition {
         this.SoDonHang = SoDonHang;
     }
 
-    public void setNguoiDungMobileID(float NguoiDungMobileID) {
+    public void setNguoiDungMobileID(Integer NguoiDungMobileID) {
         this.NguoiDungMobileID = NguoiDungMobileID;
     }
 

@@ -1,18 +1,18 @@
-package com.tiha.anphat.ui.account;
+package com.tiha.anphat.ui.introduce;
 
 import android.view.View;
 
-import com.tiha.anphat.R;
 import com.tiha.anphat.ui.base.BaseFragment;
 
-public class AccountFragment extends BaseFragment {
+public class AddIntroduceFragment extends BaseFragment {
     @Override
     protected int getLayoutID() {
-        return R.layout.fragment_account;
+        return 0;
     }
 
     @Override
     protected void initView(View view) {
+
     }
 
     @Override
@@ -21,7 +21,7 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View v) {
 
     }
 }

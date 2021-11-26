@@ -36,6 +36,7 @@ import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
 import com.tiha.anphat.ui.home.HomeFragment;
+import com.tiha.anphat.ui.introduce.IntroduceActivity;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
@@ -132,6 +133,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
@@ -148,6 +151,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             @Override
             public void onClick(View view) {
 
+            }
+        });
+
+        binding.layoutIntroduce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, IntroduceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
         binding.layout.main.setOnClickListener(new View.OnClickListener() {

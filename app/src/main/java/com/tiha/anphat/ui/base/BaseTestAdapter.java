@@ -1,7 +1,6 @@
 package com.tiha.anphat.ui.base;
 
 import android.annotation.SuppressLint;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,37 +8,31 @@ import android.view.ViewGroup;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseTestAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
+public abstract class BaseTestAdapter<T , B extends ViewBinding> extends RecyclerView.Adapter<BindingViewHolder> {
     private final int VIEW_TYPE_ITEM = 1;
     private final int VIEW_TYPE_LOAD_MORE = 2;
-
+    protected B binding;
     ArrayList<T> listData = new ArrayList<>();
     private boolean isLoadMoreOrRefresh = false;
 
-    @LayoutRes
-    public abstract int getLayoutId();
-
     public abstract void setupViews(View itemView, T item, int position);
 
+    public abstract B getViewBinding( ViewGroup parent, int viewType);
     @NonNull
     @Override
-    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View viewOfItem = LayoutInflater.from(parent.getContext()).inflate(getLayoutId(), parent, false);
-        View viewOfLoadMore = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_load_more, parent, false);
-        if (viewType == VIEW_TYPE_LOAD_MORE) {
-            return new BaseViewHolder(viewOfLoadMore);
-        }
-        return new BaseViewHolder(viewOfItem);
+    public BindingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new BindingViewHolder(getViewBinding(parent,viewType));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BindingViewHolder  holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
             setupViews(holder.itemView, listData.get(position), position);
         }

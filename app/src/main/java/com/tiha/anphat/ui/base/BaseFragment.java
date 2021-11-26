@@ -76,6 +76,22 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    protected void alertDialog(String title, String message, String btnPos, String btnNeutral, DialogInterface.OnClickListener ocListener) {
+        AlertDialog.Builder db = new AlertDialog.Builder(getContext());
+        db.setTitle(title);
+        db.setMessage(message);
+        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        if (btnPos != null) db.setPositiveButton(btnPos, ocListener);
+        if (btnNeutral != null) db.setNeutralButton(btnNeutral, ocListener);
+//        db.setIcon(android.R.drawable.ic_dialog_alert);
+        db.show();
+    }
+
     public <T extends View> T bind(View view, int id) {
         return view.findViewById(id);
     }
