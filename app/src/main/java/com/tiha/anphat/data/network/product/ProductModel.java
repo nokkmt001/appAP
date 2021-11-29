@@ -1,19 +1,24 @@
 package com.tiha.anphat.data.network.product;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
+import com.tiha.anphat.data.entities.product.FullProductInfo;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -78,7 +83,7 @@ public class ProductModel implements IProductModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(response);
+                listener.onSuccess(String.valueOf(response));
             }
 
             @Override
@@ -134,7 +139,7 @@ public class ProductModel implements IProductModel {
         Map<String, String> params = new HashMap<>();
         params.put("loaiXem", "NO");
         params.put("listKho", "");
-        params.put("denNgay", AppUtils.formatDateToString(Calendar.getInstance().getTime(),"yyyy-MM-dd'T'HH:mm:ss"));
+        params.put("denNgay", AppUtils.formatDateToString(Calendar.getInstance().getTime(), "yyyy-MM-dd'T'HH:mm:ss"));
         params.put("userName", "TIHA");
         params.put("listNhomHang", condition.getListNhomHang());
         params.put("tenHangSearch", condition.getTenHangSearch());
@@ -159,7 +164,7 @@ public class ProductModel implements IProductModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new CategoryInfo().getListCategory(response) );
+                listener.onSuccess(new CategoryInfo().getListCategory(response));
             }
 
             @Override
@@ -167,5 +172,46 @@ public class ProductModel implements IProductModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
+    }
+
+    @Override
+    public void GetProduct(String ID, final IGetProduct listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GetProduct, ID);
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                listener.onSuccess(new FullProductInfo().getFullProductInfo(response));
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
+    }
+
+    @Override
+    public void UpdateProduct(FullProductInfo info, String image, final IUpdateProductFinish listener) {
+        String URL = AppConstants.URL_GetListTonKho;
+        Map<String, String> params = new HashMap<>();
+        params.put("itemProduct", new Gson().toJson(info));
+        params.put("UserName", PublicVariables.userLoginInfo.UserName);
+        params.put("HinhAnh", image);
+        service = new APIService(URL);
+        service.Update(Request.Method.PUT, new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(new FullProductInfo().getFullProductInfo(response));
+                } catch (Exception e) {
+                    listener.onError(e.getMessage());
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        }, params);
     }
 }

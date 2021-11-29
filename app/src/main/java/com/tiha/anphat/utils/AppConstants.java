@@ -18,6 +18,8 @@ public class AppConstants {
     public static final String URL_INSERT_NEW_CUSTOMER = "api/NguoiDungMobile/InsertNguoiDungMobile";
     public static final String URL_LOGIN_BY_ID_PASS_WORD = "api/NguoiDungMobile/GetNguoiDungMobileByIDPassword?id={0}&password={1}";
     public static final String URL_RESEND_PIN = "api/NguoiDungMobile/GuiLaiMaPin?id={0}";
+    public static final String URL_CHECK_LOGIN = "api/NguoiDung/PostLogin";
+
     //cart
     public static final String URL_INSERT_CART = "api/GioHangMobile/InsertGioHang";
     public static final String URL_UPDATE_CART = "api/GioHangMobile/UpdateGioHang";
@@ -35,6 +37,9 @@ public class AppConstants {
     public static final String URL_GET_PRICE_PRODUCT = "api/Product/GetProductDonGiaByNguoiDungMobileID";
     public static final String URL_GET_PRODUCT_TON_KHO = "api/Product/GetProductTonKho?makho={0}&productID={1}&ngay={2}";
     public static final String URL_GetListTonKho = "api/PhanHeKho/GetListTonKho";
+    public static final String URL_GetProduct= "api/Product/GetProduct?productID={0}";
+    public static final String URL_Update_Product = "api/Product/UpdateProduct";
+
     //booking
     public static final String URL_GetDonHang = "api/DonHangMobile/GetDonHang?soDonHang={0}"; // chi tiết đơn hàng + price
     // history

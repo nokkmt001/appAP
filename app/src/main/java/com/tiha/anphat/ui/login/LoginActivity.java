@@ -1,30 +1,28 @@
 package com.tiha.anphat.ui.login;
 
-import android.app.Dialog;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
+import com.tiha.anphat.data.entities.UserLoginInfo;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseActivity;
-import com.tiha.anphat.ui.custom.DateDialogAdapter;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.aes.AESUtils;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements LoginContract.View {
     EditText inputUserName, inputPassword;
     Button buttonLogin;
-    CheckBox checkboxRememberMe;
-    ImageView imgLogo;
+    CheckBox checkBox;
     LoginPresenter loginPresenter;
     AppPreference appPreference;
-    Dialog progressDialog;
-    DateDialogAdapter adapterDateDialog;
 
     @Override
     protected int getLayoutId() {
@@ -33,8 +31,9 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        loginPresenter = new LoginPresenter(this);
         showProgressDialog(true);
-        checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
+        checkBox = findViewById(R.id.checkboxRememberMe);
         inputUserName = findViewById(R.id.inputUserName);
         inputPassword = findViewById(R.id.inputPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
@@ -42,14 +41,28 @@ public class LoginActivity extends BaseActivity {
         checkValidate();
         TextWatcher imm = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
-            public void afterTextChanged(Editable editable) { checkValidate(); }
+            public void afterTextChanged(Editable editable) {
+                checkValidate();
+            }
         };
         inputUserName.addTextChangedListener(imm);
         inputPassword.addTextChangedListener(imm);
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginPresenter.CheckLogin(inputUserName.getText().toString(), inputPassword.getText().toString());
+                showProgressDialog(true);
+            }
+        });
     }
 
     public void checkValidate() {
@@ -68,17 +81,19 @@ public class LoginActivity extends BaseActivity {
     public void initData() {
         appPreference = new AppPreference(this);
         AESUtils aesUtils = new AESUtils();
+        String userName = "";
         try {
-//            etTenDangNhap.setText(aesUtils.decrypt(appPreference.getTenDangNhap()));
-        } catch (Exception e) {
+            userName = aesUtils.decrypt(appPreference.getUserName());
+        } catch (Exception ignored) {
         }
-//        etServerNameCTy.setText(appPreference.getServerName());
+        String passWord = "";
+        try {
+            passWord = aesUtils.decrypt(appPreference.getPassWord());
+        } catch (Exception ignored) {
+        }
+        inputUserName.setText(userName);
+        inputPassword.setText(passWord);
 
-
-//        Calendar c = Calendar.getInstance();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        PublicVariables.NgayLamViec = simpleDateFormat.format(c.getTime());
-//        etNgayLamViec.setText(PublicVariables.NgayLamViec);
         showProgressDialog(false);
     }
 
@@ -93,4 +108,37 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onCheckLoginSuccess(UserLoginInfo info) {
+        if (checkBox.isChecked()){
+            appPreference.setLogin(true);
+        } else {
+            appPreference.setLogin(false);
+        }
+        AESUtils aesUtils = new AESUtils();
+        String userName = "";
+        try {
+            userName = aesUtils.encrypt(info.UserName);
+        } catch (Exception ignored) {
+        }
+        String passWord = "";
+        try {
+            passWord = aesUtils.encrypt(inputPassword.getText().toString());
+        } catch (Exception ignored) {
+        }
+        appPreference.setPassWord(passWord);
+        appPreference.setUserName(userName);
+        PublicVariables.userLoginInfo = info;
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        showProgressDialog(false);
+
+    }
+
+    @Override
+    public void onCheckLoginError(String error) {
+        showProgressDialog(false);
+        showMessage(error);
+    }
 }

@@ -4,14 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.tiha.anphat.data.entities.NewCustomer;
-
 public class AppPreference {
     public static final String PREF_ServerName = "ServerName";
     public static final String PREF_IS_LOGGED_IN = "is_logged_in";
     public static final String PREF_SDT = "SDT";
     public static final String PREF_MatKhau = "MatKhau";
-    public static final String PREF_NguoiDungID = "NguoiDungID";
+    public static final String PREF_UserName = "UserName";
     public static final String PREF_USER = "user";
     public static final String PREF_BOOKING = "booking";
     public static final String PREF_IS_INPUT_OTP="otp";
@@ -68,12 +66,12 @@ public class AppPreference {
         sharedPreferences.edit().putString(PREF_MatKhau, matKhau).apply();
     }
 
-    public String getUserID() {
-        return sharedPreferences.getString(PREF_NguoiDungID, "0");
+    public String getUserName() {
+        return sharedPreferences.getString(PREF_UserName, "0");
     }
 
-    public void setUserID(String nguoiDungID) {
-        sharedPreferences.edit().putString(PREF_NguoiDungID, nguoiDungID).apply();
+    public void setUserName(String nguoiDungID) {
+        sharedPreferences.edit().putString(PREF_UserName, nguoiDungID).apply();
     }
 
     public String getBooking() {

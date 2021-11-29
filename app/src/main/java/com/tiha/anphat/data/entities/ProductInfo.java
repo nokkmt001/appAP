@@ -24,7 +24,7 @@ public class ProductInfo {
     private Double GiaMua;
     private String Description;
     private Double Ton, Ton2;
-    private String ImageBitMap;
+    private String ImageBitMap = null;
 
     public String getTeninHD() {
         return TeninHD;

@@ -68,22 +68,10 @@
             android:name=".main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.login.register.CreateNewCustomerActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.checkidpass.CheckLoginByIDPassActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.checkphone.CheckPhoneActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.cart.CartActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.booking.BookingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.login.inputotp.InputOtpActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name=".ui.pay.history.vote.VoteEmployeeActivity"
@@ -96,6 +84,9 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".utils.adapterimage.ActivityImage"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.product.update.UpdateProductActivity"
             android:screenOrientation="portrait"/>
     </application>
 

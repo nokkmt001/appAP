@@ -37,8 +37,7 @@ import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
 import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.introduce.IntroduceActivity;
-import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
-import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
+import com.tiha.anphat.ui.login.LoginActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
 import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
@@ -81,7 +80,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
-        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+//        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
         presenter.GetListKho();
         presenter.GetCategory();
     }
@@ -121,9 +120,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         AppPreference appPreference = new AppPreference(MainActivity.this);
                         appPreference.setLogin(false);
                         appPreference.setPassWord("");
-                        appPreference.setUserID("");
+                        appPreference.setUserName("");
                         PublicVariables.ClearData();
-                        Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }

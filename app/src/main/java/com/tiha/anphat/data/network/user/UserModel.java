@@ -3,6 +3,7 @@ package com.tiha.anphat.data.network.user;
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.ResponseInfo;
+import com.tiha.anphat.data.entities.UserLoginInfo;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
@@ -162,5 +163,29 @@ public class UserModel implements IUserModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
+    }
+
+    @Override
+    public void CheckLogin(String userName, String pass,final ICheckLoginSuccess listener) {
+        String URL = AppConstants.URL_CHECK_LOGIN;
+        service = new APIService(URL);
+        Map<String, String> params = new HashMap<>();
+        params.put("UserName", userName);
+        params.put("Password", pass);
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(new UserLoginInfo().getUserLogin(response));
+                } catch (Exception e) {
+                    listener.onError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        },params);
     }
 }

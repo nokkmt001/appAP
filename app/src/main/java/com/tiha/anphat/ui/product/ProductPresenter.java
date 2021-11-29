@@ -4,6 +4,7 @@ import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
+import com.tiha.anphat.data.entities.product.FullProductInfo;
 import com.tiha.anphat.data.network.cart.CartModel;
 import com.tiha.anphat.data.network.cart.ICartModel;
 import com.tiha.anphat.data.network.product.IProductModel;
@@ -29,7 +30,6 @@ public class ProductPresenter implements ProductContract.Presenter {
             public void onSuccess(List<ProductInfo> list, Integer counter) {
                 view.onGetListProductSuccess(list, counter);
             }
-
             @Override
             public void onError(String error) {
                 view.onGetListProductError(error);
@@ -44,25 +44,9 @@ public class ProductPresenter implements ProductContract.Presenter {
             public void onSuccess(String imageBitmap) {
                 view.onGetImageByProDuctIDSuccess(imageBitmap);
             }
-
             @Override
             public void onError(String error) {
                 view.onGetImageByProDuctIDError(error);
-            }
-        });
-    }
-
-    @Override
-    public void InsertCart(CartCondition condition) {
-        modelCart.InsertCart(condition, new ICartModel.IInsertCartFinishListener() {
-            @Override
-            public void onSuccess(CartCondition info) {
-                view.onInsertCartSuccess(info);
-            }
-
-            @Override
-            public void onError(String error) {
-                view.onInsertCartError(error);
             }
         });
     }
@@ -74,7 +58,6 @@ public class ProductPresenter implements ProductContract.Presenter {
             public void onSuccess(Double result) {
                 view.onGetProductInventorySuccess(result);
             }
-
             @Override
             public void onError(String error) {
                 view.onGetProductInventoryError(error);
@@ -89,7 +72,6 @@ public class ProductPresenter implements ProductContract.Presenter {
             public void onSuccess(List<ProductInfo> list) {
                 view.onGetListProductInventorySuccess(list);
             }
-
             @Override
             public void onError(String error) {
                 view.onGetListProductInventoryError(error);

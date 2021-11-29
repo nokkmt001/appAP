@@ -5,8 +5,8 @@ import android.os.CountDownTimer;
 
 import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.data.entities.NguoiDungInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
+import com.tiha.anphat.data.entities.UserLoginInfo;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
 
 import java.util.ArrayList;
@@ -18,6 +18,8 @@ public class PublicVariables {
     public static String NgayLamViec;
 
     public static NewCustomer UserInfo;
+
+    public static UserLoginInfo userLoginInfo = new UserLoginInfo();
 
     public static List<ProductInfo> listAllProDuct = new ArrayList<>();
 

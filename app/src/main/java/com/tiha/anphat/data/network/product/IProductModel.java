@@ -5,6 +5,7 @@ import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.InventoryCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.condition.ProductPriceCondition;
+import com.tiha.anphat.data.entities.product.FullProductInfo;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public interface IProductModel {
         void onError(String error);
     }
 
-    void GetProductInventory(String makho, String productID, String Ngay,IGetProductInventoryFinish listener); // tồn kho
+    void GetProductInventory(String makho, String productID, String Ngay, IGetProductInventoryFinish listener); // tồn kho
 
     interface IGetProductInventoryFinish {
         void onSuccess(Double result);
@@ -50,7 +51,8 @@ public interface IProductModel {
         void onError(String error);
     }
 
-    void GetListProductInventory(InventoryCondition condition,IGetAllProductInventoryFinish listener);
+    void GetListProductInventory(InventoryCondition condition, IGetAllProductInventoryFinish listener);
+
     interface IGetAllProductInventoryFinish {
         void onSuccess(List<ProductInfo> list);
 
@@ -58,8 +60,25 @@ public interface IProductModel {
     }
 
     void GetListCategory(IGetListCategoryFinish listener);
-    interface IGetListCategoryFinish{
-        void onSuccess(List<CategoryInfo>list);
+
+    interface IGetListCategoryFinish {
+        void onSuccess(List<CategoryInfo> list);
+
+        void onError(String error);
+    }
+
+    void GetProduct(String ID, IGetProduct listener);
+
+    interface IGetProduct {
+        void onSuccess(FullProductInfo info);
+
+        void onError(String error);
+    }
+
+    void UpdateProduct(FullProductInfo info, String image,IUpdateProductFinish listener);
+
+    interface IUpdateProductFinish {
+        void onSuccess(FullProductInfo info);
 
         void onError(String error);
     }

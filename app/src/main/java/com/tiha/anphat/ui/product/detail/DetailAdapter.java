@@ -3,6 +3,7 @@ package com.tiha.anphat.ui.product.detail;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.provider.ContactsContract;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.tiha.anphat.data.network.product.ProductModel;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.SquaredImageView;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -106,9 +108,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             public void onSuccess(String imageBitmap) {
                 if (imageBitmap != null) {
                     info.setImageBitMap(imageBitmap);
-//                    ProductInfo ininfo = info;
-//                    listAllData.remove(position);
-//                    listAllData.add(position,ininfo);
                     Glide.with(mContext).asBitmap()
                             .load(AppUtils.formatStringToBitMap(imageBitmap))
                             .apply(new RequestOptions().override(10, 10))
@@ -160,7 +159,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             tvCodeProduct = bind(view,R.id.tvCodeProduct);
             tvTitle = bind(view, R.id.tvTitle);
             tvPrice = bind(view, R.id.textPrice);
-            imageView = bind(view, R.id.imageView);
+            imageView =  bind(view, R.id.imageView);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

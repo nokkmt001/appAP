@@ -43,7 +43,7 @@ public class ProductFragment extends BaseFragment {
     }
 
     public void setupViewPager(){
-        int tabCount = 2;
+        int tabCount = 1;
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(),getChildFragmentManager(), tabCount);
         int position = 0;

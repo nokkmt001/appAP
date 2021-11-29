@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.user;
 
 import com.tiha.anphat.data.entities.NewCustomer;
+import com.tiha.anphat.data.entities.UserLoginInfo;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
 
 import java.util.List;
@@ -42,6 +43,13 @@ public interface IUserModel {
 
     interface IGetListKhoByUserFinish {
         void onSuccess(List<KhoInfo> list);
+
+        void onError(String error);
+    }
+
+    void CheckLogin(String userName, String pass,ICheckLoginSuccess listener);
+    interface ICheckLoginSuccess{
+        void onSuccess(UserLoginInfo info);
 
         void onError(String error);
     }

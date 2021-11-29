@@ -347,7 +347,7 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
     private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         intent.setAction(Intent.ACTION_GET_CONTENT);//
         startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_GALLERY);
     }

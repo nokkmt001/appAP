@@ -2,63 +2,74 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_4"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="@dimen/dp_4"
+    android:layout_marginTop="@dimen/dp_4"
+    android:layout_marginEnd="@dimen/dp_4"
     android:background="@drawable/table_content_cell_radius_5_white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_margin="@dimen/dp_2"
-        android:scaleType="fitXY"
-        android:src="@drawable/img_no_image" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_2"
+            android:layout_weight="0.25"
+            android:src="@drawable/ic_user_default" />
 
-    <TextView
-        android:id="@+id/tvTitle"
-        style="@style/AppTheme.TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginEnd="@dimen/dp_5"
-        android:fontFamily="@font/myriadpro_bold"
-        android:gravity="center" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvCodeProduct"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/myriadpro_bold"
-        android:layout_marginStart="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginEnd="@dimen/dp_5"
-        android:gravity="center"
-        style="@style/AppTheme.TextView"/>
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:fontFamily="@font/myriadpro_bold"
+                android:gravity="center" />
 
-    <TextView
-        android:id="@+id/tvCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/myriadpro_bold"
-        android:layout_marginStart="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginEnd="@dimen/dp_5"
-        android:gravity="center"
-        style="@style/AppTheme.TextView"/>
+            <TextView
+                android:id="@+id/tvCodeProduct"
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:fontFamily="@font/myriadpro_bold"
+                android:gravity="center" />
 
-    <TextView
-        android:id="@+id/textPrice"
-        style="@style/AppTheme.TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_5"
-        android:gravity="center"
-        android:textColor="@color/Red" />
+            <TextView
+                android:id="@+id/tvCategory"
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:fontFamily="@font/myriadpro_bold"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/textPrice"
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_5"
+                android:gravity="center"
+                android:textColor="@color/Red" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

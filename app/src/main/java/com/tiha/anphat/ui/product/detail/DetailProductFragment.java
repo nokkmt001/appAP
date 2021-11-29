@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,12 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -34,8 +37,10 @@ import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
+import com.tiha.anphat.ui.base.PageScrollListener;
 import com.tiha.anphat.ui.product.ProductContract;
 import com.tiha.anphat.ui.product.ProductPresenter;
+import com.tiha.anphat.ui.product.update.UpdateProductActivity;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
@@ -59,7 +64,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     private boolean isLastPage = false;
     private int TOTAL_PAGES = 1;
     private static final int PAGE_START = 1;
-    private static int PAGE_RECORD = 20;
+    private static int PAGE_RECORD = 10;
     private int currentPage = PAGE_START;
     ProductCondition condition = new ProductCondition();
     TextView textError;
@@ -71,6 +76,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     ProductInfo info;
     MainActivity activity;
     Double inventory = 0.0; // tồn kho
+    List<ProductInfo> listData;
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -89,7 +95,6 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         adapter = new DetailAdapter(getActivity(), new ArrayList<ProductInfo>(), title);
         textError = bind(view, R.id.textError);
         rlv = bind(view, R.id.rlvProduct);
-        rlv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rlv.setAdapter(adapter);
         rlv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -97,7 +102,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
                 super.onScrolled(recyclerView, dx, dy);
                 isLoading = true;
                 currentPage += 1;
-                loadNextPage();
+//                loadNextPage();
             }
         });
 
@@ -105,7 +110,15 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             @Override
             public void onClick(View view, int position) {
                 info = adapter.getItem(position);
-                presenter.GetProductInventory("CTY", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/MM/yyyy"));
+                String gg = info.getImageBitMap();
+                Intent intent = new Intent(getContext(), UpdateProductActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle bundle = new Bundle();
+                bundle.putString("ProductID", info.getProduct_ID());
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+//                presenter.GetProductInventory("CTY", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/MM/yyyy"));
             }
         });
         Search();
@@ -156,9 +169,10 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     protected void initData() {
+        listData =new ArrayList<>();
         presenter = new ProductPresenter(this);
         condition.setBegin(PAGE_START);
-        condition.setUserName("TIHA");
+        condition.setUserName(PublicVariables.userLoginInfo.UserName);
         condition.setNhomLoaiHang(title);
         if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
             condition.setEnd(100000);
@@ -188,10 +202,13 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onGetListProductSuccess(List<ProductInfo> list, Integer total) {
-        if (condition.getBegin() == 1) {
+        showError(false);
+        if (condition.getBegin() == 1){
             adapter.clear();
+            if (list.size()== 0){
+                showError(true);
+            }
         }
-
         adapter.addAll(list);
         showProgressDialog(false);
     }
@@ -213,33 +230,13 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     }
 
     @Override
-    public void onInsertCartSuccess(CartCondition info) {
-//        activity.onLoadCartListener();
-
-        Intent intent = new Intent();
-        intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-        intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
-        intent.putExtra("ItemGioHang", info);
-        getActivity().sendBroadcast(intent);
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-        showMessage(error);
-    }
-
-    @Override
     public void onGetProductInventorySuccess(Double result) {
         if (result != null) inventory = result;
-        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                inventory, info.getDescription());
     }
 
     @Override
     public void onGetProductInventoryError(String error) {
 //        showMessage(error);
-        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                0.0, info.getDescription());
     }
 
     @Override
@@ -253,104 +250,4 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         showMessage(error);
     }
 
-    Integer count = 1;
-
-    private void showBottomSheet(String imageBitMap, String title, String price, final Double number, String description) {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
-        final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
-        dialog.setContentView(view);
-        View bottomSheet = view.findViewById(R.id.bottom_sheet);
-        assert bottomSheet != null;
-        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        dialog.show();
-        final RelativeLayout layoutCountBuy = bind(view, R.id.layoutCountBuy);
-        final ImageView imageMain = bind(view, R.id.imageView);
-        final ImageView imageClose = bind(view, R.id.imageClose);
-        imageClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
-        TextView tvTitle = bind(view, R.id.textName);
-        TextView tvPrice = bind(view, R.id.textPrice);
-        TextView tvDeception = bind(view, R.id.textDeception);
-        final TextView tvCountBuy = bind(view, R.id.textCountBuy);
-        Button btAddCart = bind(view, R.id.btnAddCart);
-        Button btnBuyNow = bind(view, R.id.btnBuy);
-        Button btnEmpty = bind(view, R.id.btnEmpty);
-        ImageView imgAdd = bind(view, R.id.imageAdd);
-        ImageView imgMinus = bind(view, R.id.imageMinus);
-        count = 1;
-        tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-        tvTitle.setText(title);
-        tvPrice.setText(price);
-        tvDeception.setText(description);
-        if (number != 0) {
-            layoutCountBuy.setVisibility(View.VISIBLE);
-        } else {
-            layoutCountBuy.setVisibility(View.GONE);
-        }
-        final Date date = new Date(System.currentTimeMillis());
-        imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!count.toString().equals(AppUtils.formatNumber("NO").format(number))) {
-                    count = count + 1;
-                }
-                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-            }
-        });
-        imgMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (count != 1) {
-                    count = count - 1;
-                }
-                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-            }
-        });
-        if (number <= 0.0) {
-            btnEmpty.setVisibility(View.VISIBLE);
-            btAddCart.setVisibility(View.GONE);
-            btnBuyNow.setVisibility(View.GONE);
-        } else {
-        btnEmpty.setVisibility(View.GONE);
-        btAddCart.setVisibility(View.VISIBLE);
-        btnBuyNow.setVisibility(View.VISIBLE);
-        }
-        btAddCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CartCondition condition = new CartCondition();
-                condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
-                condition.setSoLuong(count);
-                condition.setProductID(info.getProduct_ID());
-                condition.setGhiChu("");
-                condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-                condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-                presenter.InsertCart(condition);
-            }
-        });
-        if (imageBitMap != null) {
-            Glide.with(getActivity()).asBitmap()
-                    .load(AppUtils.formatStringToBitMap(imageBitMap))
-                    .apply(new RequestOptions().override(10, 10))
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
-                                Transition<? super Bitmap> transition) {
-                            imageMain.setImageBitmap(resource);
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                        }
-                    });
-        } else {
-            imageMain.setImageResource(R.drawable.img_no_image);
-        }
-    }
 }
