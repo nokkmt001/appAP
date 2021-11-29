@@ -29,9 +29,9 @@ import java.util.List;
 public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ItemRowHolder> {
     private BaseEventClick.OnClickListener clickListener;
     Context mContext;
-    List<String> listAllData;
+    ArrayList<String> listAllData;
 
-    public AddImageAdapter(Context context, List<String> list) {
+    public AddImageAdapter(Context context, ArrayList<String> list) {
         this.listAllData = list;
         this.mContext = context;
     }
@@ -62,7 +62,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ItemRo
         notifyDataSetChanged();
     }
 
-    public List<String> getListAllData() {
+    public ArrayList<String> getListAllData() {
         return listAllData;
     }
 

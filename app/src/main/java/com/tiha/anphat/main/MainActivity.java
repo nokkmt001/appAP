@@ -122,6 +122,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         appPreference.setLogin(false);
                         appPreference.setPassWord("");
                         appPreference.setUserID("");
+                        PublicVariables.ClearData();
                         Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
