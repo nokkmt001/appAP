@@ -1,11 +1,13 @@
 package com.tiha.anphat.utils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,6 +15,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.Settings;
@@ -23,16 +27,22 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.tiha.anphat.R;
 import com.tiha.anphat.ui.sms.contact.ContactModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -66,9 +76,9 @@ public class AppUtils {
         // This class is not publicly instantiable
     }
 
-    public static Date ChooseDateTime(final Context context,final EditText text) {
+    public static Date ChooseDateTime(final Context context, final EditText text) {
         final Calendar currentDate = Calendar.getInstance();
-        final Calendar date= Calendar.getInstance();
+        final Calendar date = Calendar.getInstance();
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -79,7 +89,7 @@ public class AppUtils {
                         date.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         date.set(Calendar.MINUTE, minute);
                         Log.v(TAG, "The choose one " + date.getTime());
-                        text.setText(formatDateToString(date.getTime(),"dd/MM/yyyy HH:mm:ss"));
+                        text.setText(formatDateToString(date.getTime(), "dd/MM/yyyy HH:mm:ss"));
                     }
                 }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
             }
@@ -113,7 +123,7 @@ public class AppUtils {
                         info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         info.mobileNumber = cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         info.photo = photo;
-                        info.photoURI= pURI;
+                        info.photoURI = pURI;
                         list.add(info);
                     }
 
@@ -125,7 +135,7 @@ public class AppUtils {
         return list;
     }
 
-    public static Bitmap getBitMapFromImage(Context ctx){
+    public static Bitmap getBitMapFromImage(Context ctx) {
         return null;
     }
 
@@ -150,8 +160,8 @@ public class AppUtils {
     }
 
     @SuppressLint("ResourceAsColor")
-    public static void enableButton(final boolean isShow, Button button,Context context){
-        if (isShow){
+    public static void enableButton(final boolean isShow, Button button, Context context) {
+        if (isShow) {
             button.setEnabled(true);
             button.setTextColor(context.getResources().getColor(R.color.White));
             button.setBackgroundResource(R.drawable.bg_button_dark);
@@ -162,7 +172,7 @@ public class AppUtils {
         }
     }
 
-    public static boolean isValidateUsername(String userName){
+    public static boolean isValidateUsername(String userName) {
         return userName.length() >= 1;
     }
 
@@ -177,7 +187,7 @@ public class AppUtils {
         return matcher.matches();
     }
 
-    public static boolean ValidateEmail(String email){
+    public static boolean ValidateEmail(String email) {
         Pattern pattern;
         Matcher matcher;
         final String EMAIL_PATTERN = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@" + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?" + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\." + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?" + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|" + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
@@ -372,11 +382,10 @@ public class AppUtils {
         String strMD5Pass = "";
         byte byteData[] = messageDigest.digest(pwBytes);
         for (int i = 0; i < byteData.length; i++) {
-            strMD5Pass += "-" + Integer.toString((byteData[i] & 0xff) + 0x100, 16).toString().toUpperCase().substring(1);
+            strMD5Pass += "-" + Integer.toString((byteData[i] & 0xff) + 0x100, 16).toUpperCase().substring(1);
         }
         return strMD5Pass.substring(1);
     }
-
     // convert from bitmap to byte array
     public static byte[] BitMapToByte(Bitmap bitmap, Bitmap.CompressFormat format) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -451,78 +460,15 @@ public class AppUtils {
     public static String getMessageVolleyError(VolleyError error) {
         String message = "";
         String responseBody = null;
-//        try {
-//            if (error instanceof NetworkError) {
-//                return AppConstants.Error_KhongCoInternet;
-//            } else if (error instanceof ServerError) {
-//                return AppConstants.Error_KetNoiServer;
-//            } else if (error instanceof AuthFailureError) {
-//                return AppConstants.Error_KhongCoInternet;
-//            } else if (error instanceof ParseError) {
-//                return AppConstants.Error_KetNoiServer;
-//            } else if (error instanceof NoConnectionError) {
-//                return AppConstants.Error_KhongCoInternet;
-//            } else if (error instanceof TimeoutError) {
-//                return AppConstants.Error_KetNoiServer;
-//            }
-//        if (//error instanceof ServerError
-//                error instanceof AuthFailureError
-////                    || error instanceof ParseError
-//                        || error instanceof NoConnectionError
-//                        || error instanceof TimeoutError) {
-//            return AppConstants.Error_KetNoiServer;
-//        }
-        if (error instanceof AuthFailureError) {
-            return AppConstants.Error_KetNoiServer + "\nError: AuthFailureError";
-        } else if (error instanceof NoConnectionError) {
-            return AppConstants.Error_KetNoiServer + "\nError: NoConnectionError";
-        } else if (error instanceof TimeoutError) {
-            return AppConstants.Error_KetNoiServer + "\nError: TimeoutError";
-        }
-
-//            if (error.toString().equals("com.android.volley.TimeoutError")
-//                    || error.toString().equals("com.android.volley.NoConnectionError: java.net.NoRouteToHostException: No route to host")) {
-//                return AppConstants.Error_KetNoiServer;
-//            }
         try {
-            if (error.networkResponse != null) {
-                responseBody = new String(error.networkResponse.data, "utf-8");
-            } else {
-                message = error.getMessage();
-                if (message.contains(AppConstants.URL_SERVER)) {
-                    return AppConstants.Error_KetNoiServer;
-                }
-                return error.getMessage();
-            }
-        } catch (UnsupportedEncodingException e) {
-            return "";
+            responseBody = new String(error.networkResponse.data, "utf-8");
+            JSONObject data = new JSONObject(responseBody);
+            JSONArray errors = data.getJSONArray("errors");
+            JSONObject jsonMessage = errors.getJSONObject(0);
+            message = jsonMessage.getString("message");
+        } catch (JSONException | UnsupportedEncodingException e) {
+            message = e.getMessage();
         }
-
-        try {
-            JSONObject jsonObject = new JSONObject(responseBody);
-            message = jsonObject.getString("Message");
-        } catch (JSONException e) {
-
-            try {
-                Document doc = Jsoup.parse(responseBody);
-//                    Elements element = doc.getAllElements();
-//                    for(Element element1: element)
-//                    {
-//                        Elements str = element1.getElementsByTag("head");
-//                        for(Element el: str)
-//                        {
-//                            String title = el.attr("title");
-//                            return title;
-//                        }
-//                    }
-                return doc.title();
-            } catch (Exception e1) {
-                return e.getMessage();
-            }
-        }
-//        } catch (JSONException e) {
-//            return "";
-//        }
         return message;
     }
 
@@ -576,5 +522,43 @@ public class AppUtils {
         } catch (NumberFormatException e) {
         }
         return doubleResult;
+    }
+
+    public static Location getLocationWithCheckNetworkAndGPS(Context mContext) {
+        LocationManager lm = (LocationManager)
+                mContext.getSystemService(Context.LOCATION_SERVICE);
+        assert lm != null;
+        Boolean isGpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        Boolean isNetworkLocationEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        Location networkLoacation = null, gpsLocation = null, finalLoc = null;
+        if (isGpsEnabled)
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return null;
+            }
+        gpsLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (isNetworkLocationEnabled)
+            networkLoacation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (gpsLocation != null && networkLoacation != null) {
+
+            //smaller the number more accurate result will
+            if (gpsLocation.getAccuracy() > networkLoacation.getAccuracy()) return finalLoc = networkLoacation;
+            else return finalLoc = gpsLocation;
+        } else {
+            if (gpsLocation != null) {
+                return finalLoc = gpsLocation;
+            } else if (networkLoacation != null) {
+                return finalLoc = networkLoacation;
+            }
+        }
+        return finalLoc;
+    }
+
+    public static BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

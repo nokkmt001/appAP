@@ -9,11 +9,11 @@ import android.text.TextWatcher;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.tiha.anphat.databinding.ActivityCheckLoginIdPassBinding;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.databinding.ActivityCheckLoginIdPassBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.utils.AppUtils;

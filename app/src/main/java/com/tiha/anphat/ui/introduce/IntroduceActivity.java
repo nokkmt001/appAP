@@ -25,6 +25,7 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
     protected void initView() {
         adapter = new IntroduceAdapter();
         binding.rcl.setAdapter(adapter);
+        showProgressDialog(true);
     }
 
     @Override
@@ -32,13 +33,12 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
         presenter = new IntroducePresenter(this);
         presenter.GetListIntroduce();
         listAllData = new ArrayList<>();
-        for (int i = 0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             IntroducePerInfo info = new IntroducePerInfo();
             info.HoTen = "Bui Tan Phat";
-            info.NguoiDungMobileID =14;
+            info.NguoiDungMobileID = 14;
             listAllData.add(info);
         }
-        adapter.addData(listAllData);
     }
 
     @Override
@@ -48,21 +48,25 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
 
     @Override
     public void onGetListIntroduceSuccess(List<IntroducePerInfo> list) {
-
+        adapter.clearData();
+        adapter.addData(listAllData);
+        showProgressDialog(false);
     }
 
     @Override
     public void onGetListIntroduceError(String error) {
-
+        showMessage(error);
+        showProgressDialog(false);
     }
 
     @Override
     public void onInsertIntroduceSuccess(InsertPresenterInfo info) {
-
+        showProgressDialog(false);
     }
 
     @Override
     public void onInsertIntroduceError(String error) {
-
+        showMessage(error);
+        showProgressDialog(false);
     }
 }

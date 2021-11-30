@@ -13,7 +13,6 @@ import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.inputotp.InputOtpActivity;
 import com.tiha.anphat.ui.login.register.CreateNewCustomerActivity;
 import com.tiha.anphat.utils.AppUtils;
-import com.tiha.anphat.utils.CommonUtils;
 
 import java.util.Objects;
 
@@ -65,8 +64,8 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
                 startActivity(intent);
             }
         });
-        binding.layoutHeader.textTitle.setText(getResources().getText(R.string.login));
-        binding.layoutHeader.imageBack.setVisibility(View.GONE);
+//        binding.layoutHeader..setText(getResources().getText(R.string.login));
+//        binding.layoutHeader.imageBack.setVisibility(View.GONE);
     }
 
     @Override

@@ -51,11 +51,11 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
     }
 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = getBinding();
+        binding = getBinding(inflater,container,savedInstanceState);
         return binding.getRoot();
     }
 
-    protected abstract T getBinding();
+    protected abstract T getBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     protected abstract void initView(View view);
 

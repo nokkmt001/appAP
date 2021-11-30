@@ -1,35 +1,26 @@
 package com.tiha.anphat.ui.introduce;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.IntroducePerInfo;
+import com.tiha.anphat.databinding.ItemIntroduceBinding;
 import com.tiha.anphat.ui.base.BaseAdapter;
+import com.tiha.anphat.ui.base.BaseTestAdapter;
 
-public class IntroduceAdapter extends BaseAdapter<IntroducePerInfo> {
-    ImageView imageMain;
-    TextView textName,textSdt,textAddress;
-    @Override
-    public int getLayoutId() {
-        return R.layout.item_introduce;
-    }
-
-    @Override
-    public void bind(View view) {
-        imageMain = bind(view,R.id.imageMain);
-        textSdt = bind(view,R.id.textSdt);
-        textName = bind(view,R.id.textName);
-        textAddress = bind(view,R.id.textAddress);
-    }
-
+public class IntroduceAdapter extends BaseTestAdapter<IntroducePerInfo, ItemIntroduceBinding> {
+    ItemIntroduceBinding bd;
     @Override
     public void setupViews(View itemView, IntroducePerInfo item, int position) {
-        textName.setText(item.HoTen);
+        bd.textName.setText(item.HoTen);
     }
 
     @Override
-    public void setupActions(View itemView, IntroducePerInfo item, int position) {
+    public ItemIntroduceBinding getViewBinding(ViewGroup parent, int viewType) {
+        return bd = ItemIntroduceBinding.inflate(LayoutInflater.from(parent.getContext()));
     }
 }

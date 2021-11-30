@@ -35,12 +35,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.regex.Pattern;
 
-public class UpdateActivity extends BaseActivity implements UpdateContarct.View{
+public class UpdateActivity extends BaseActivity implements UpdateContarct.View {
     ActivityUpdateBinding binding;
     UpdatePresenter presenter;
-    String[] permissionsRequired ={android.Manifest.permission.READ_EXTERNAL_STORAGE,
+    String[] permissionsRequired = {android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.REQUEST_INSTALL_PACKAGES};
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_booking;
@@ -89,7 +90,7 @@ public class UpdateActivity extends BaseActivity implements UpdateContarct.View{
             checkSelfPermission(permissionsRequired);
             isShowUpdate(url);
         } else {
-            showInfo( "Phần mềm đã được cập nhật.");
+            showInfo("Phần mềm đã được cập nhật.");
         }
     }
 
@@ -103,24 +104,21 @@ public class UpdateActivity extends BaseActivity implements UpdateContarct.View{
         builder.setTitle("Cập nhật")
                 .setMessage("Vui lòng cập nhật phần mềm để tiếp tục sử dụng")
                 .setCancelable(false)
-                .setPositiveButton("CÓ", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                        showProgress(true);
-                        DownloadFileUpdateAplicationTask downloadFileUpdateAplicationTask = new DownloadFileUpdateAplicationTask(url);
-                        downloadFileUpdateAplicationTask.execute();
-                    }
+                .setPositiveButton("CÓ", (dialog, id) -> {
+                    dialog.cancel();
+                    showProgress(true);
+                    DownloadFileUpdateAplicationTask downloadFileUpdateAplicationTask = new DownloadFileUpdateAplicationTask(url);
+                    downloadFileUpdateAplicationTask.execute();
                 })
-                .setNegativeButton("KHÔNG", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-
-                        moveTaskToBack(true);
-                        finishAffinity();
-                    }
+                .setNegativeButton("KHÔNG", (dialog, id) -> {
+                    finish();
+//                        moveTaskToBack(true);
+//                        finishAffinity();
                 });
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     ProgressBar progressBarDownload;
     TextView tvProgress;
     TextView tvTotalProgress;

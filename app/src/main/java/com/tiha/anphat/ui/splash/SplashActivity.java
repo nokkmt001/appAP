@@ -39,54 +39,48 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     @Override
     public void onCheckStatusLoginSuccess(boolean isLogin) {
         if (isLogin) {
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
+            thread = new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                    String userID = "", passWord = "";
+                    AESUtils aesUtils = new AESUtils();
                     try {
-                        Thread.sleep(1000);
-                        String userID = "", passWord = "";
-                        AESUtils aesUtils = new AESUtils();
-                        try {
-                            userID = aesUtils.decrypt(appPreference.getUserID());
-                        } catch (Exception ignored) {
-                        }
-                        try {
-                            passWord = aesUtils.decrypt(appPreference.getPassWord());
-                        } catch (Exception ignored) {
-                        }
-                        presenter.CheckLogin(userID, passWord);
+                        userID = aesUtils.decrypt(appPreference.getUserID());
                     } catch (Exception ignored) {
                     }
+                    try {
+                        passWord = aesUtils.decrypt(appPreference.getPassWord());
+                    } catch (Exception ignored) {
+                    }
+                    presenter.CheckLogin(userID, passWord);
+                } catch (Exception ignored) {
                 }
             });
         } else {
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (appPreference.isOtp()){
-                            Thread.sleep(1000);
-                            if (appPreference.getUser()!=null){
-                                NewCustomer info = new NewCustomer().getNewCustomer(appPreference.getUser());
-                                Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("Object", info);
-                                intent.putExtras(bundle);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                        } else {
-                            Thread.sleep(1000);
-                            Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+            thread = new Thread(() -> {
+                try {
+                    if (appPreference.isOtp()){
+                        Thread.sleep(1000);
+                        if (appPreference.getUser()!=null){
+                            NewCustomer info = new NewCustomer().getNewCustomer(appPreference.getUser());
+                            Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Object", info);
+                            intent.putExtras(bundle);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
                         }
 
-                    } catch (Exception ignored) {
+                    } else {
+                        Thread.sleep(1000);
+                        Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
                     }
+
+                } catch (Exception ignored) {
                 }
             });
 
@@ -143,32 +137,26 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                         builder.setTitle(getResources().getString(R.string.title_error_msg))
                                 .setMessage(error)
                                 .setCancelable(false)
-                                .setNegativeButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        alertDialog.dismiss();
-                                        dialog.cancel();
-                                        moveTaskToBack(true);
-                                        finish();
-                                    }
-                                }).setPositiveButton("ĐĂNG NHẬP LẠI", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                PublicVariables.ClearData();
-                                AppPreference appPreference = new AppPreference(SplashActivity.this);
-                                appPreference.setLogin(false);
-                                appPreference.setPassWord("");
-                                appPreference.setUserID("");
+                                .setNegativeButton(getResources().getString(R.string.dialog_btn_ok), (dialog, which) -> {
+                                    alertDialog.dismiss();
+                                    dialog.cancel();
+                                    moveTaskToBack(true);
+                                    finish();
+                                }).setPositiveButton("ĐĂNG NHẬP LẠI", (dialogInterface, i) -> {
+                                    PublicVariables.ClearData();
+                                    AppPreference appPreference = new AppPreference(SplashActivity.this);
+                                    appPreference.setLogin(false);
+                                    appPreference.setPassWord("");
+                                    appPreference.setUserID("");
 
-                                Intent intent = getBaseContext().getPackageManager().
-                                        getLaunchIntentForPackage(getBaseContext().getPackageName());
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    Intent intent = getBaseContext().getPackageManager().
+                                            getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                startActivity(intent);
-                                SplashActivity.this.finish();
-                            }
-                        });
+                                    startActivity(intent);
+                                    SplashActivity.this.finish();
+                                });
 
                         alertDialog = builder.create();
                         alertDialog.show();

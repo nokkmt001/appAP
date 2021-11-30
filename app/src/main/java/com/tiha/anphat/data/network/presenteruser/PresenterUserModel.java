@@ -32,7 +32,7 @@ public class PresenterUserModel implements IPresenterUserModel {
 
     @Override
     public void GetListIntroducePer(final IGetListIntroducePerFinish listener) {
-        String URL = MessageFormat.format(AppConstants.URL_GetListPresenter, PublicVariables.UserInfo.getNguoiDungMobileID());
+        String URL = MessageFormat.format(AppConstants.URL_GetListPresenter, "13");
         service = new APIService(URL);
         service.DownloadJson(new VolleyCallback() {
             @Override
