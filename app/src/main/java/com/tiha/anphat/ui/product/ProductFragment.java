@@ -43,7 +43,7 @@ public class ProductFragment extends BaseFragment {
     }
 
     public void setupViewPager(){
-        int tabCount = 1;
+        int tabCount = 0;
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(),getChildFragmentManager(), tabCount);
         int position = 0;
@@ -53,7 +53,7 @@ public class ProductFragment extends BaseFragment {
         }
         viewPager.setAdapter(adapterPager);
         tabLayout.setupWithViewPager(viewPager);
+        adapterPager.notifyDataSetChanged();
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
     }
 }

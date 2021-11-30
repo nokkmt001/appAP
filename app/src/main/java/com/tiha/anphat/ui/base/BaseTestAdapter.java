@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
+import com.tiha.anphat.databinding.RowLoadMoreBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,9 @@ public abstract class BaseTestAdapter<T , B extends ViewBinding> extends Recycle
     @NonNull
     @Override
     public BindingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_LOAD_MORE){
+            return new BindingViewHolder(RowLoadMoreBinding.inflate(LayoutInflater.from(parent.getContext())));
+        }
         return new BindingViewHolder(getViewBinding(parent,viewType));
     }
 

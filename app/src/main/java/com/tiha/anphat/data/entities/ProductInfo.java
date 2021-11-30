@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class ProductInfo {
+public class ProductInfo implements Serializable {
     private String TeninHD;
     private String Loaitien;
     private String Donvitien;
@@ -25,6 +26,7 @@ public class ProductInfo {
     private String Description;
     private Double Ton, Ton2;
     private String ImageBitMap = null;
+    private String Diachifileanh;
 
     public String getTeninHD() {
         return TeninHD;
@@ -154,5 +156,13 @@ public class ProductInfo {
 
     public void setCategory_ID(String category_ID) {
         Category_ID = category_ID;
+    }
+
+    public String getDiachifileanh() {
+        return Diachifileanh;
+    }
+
+    public void setDiachifileanh(String diachifileanh) {
+        Diachifileanh = diachifileanh;
     }
 }

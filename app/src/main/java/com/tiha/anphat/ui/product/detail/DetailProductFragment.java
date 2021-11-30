@@ -37,6 +37,7 @@ import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
+import com.tiha.anphat.ui.base.BaseTestAdapter;
 import com.tiha.anphat.ui.base.PageScrollListener;
 import com.tiha.anphat.ui.product.ProductContract;
 import com.tiha.anphat.ui.product.ProductPresenter;
@@ -69,6 +70,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     ProductCondition condition = new ProductCondition();
     TextView textError;
     DetailAdapter adapter;
+//    TestAdapter adapter;
     RecyclerView rlv;
     EditText inputSearch;
     ImageView imageDelete;
@@ -93,16 +95,44 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         inputSearch = bind(view, R.id.inputSearch);
         imageDelete = bind(view, R.id.imageDelete);
         adapter = new DetailAdapter(getActivity(), new ArrayList<ProductInfo>(), title);
+//        adapter = new TestAdapter(getActivity());
         textError = bind(view, R.id.textError);
         rlv = bind(view, R.id.rlvProduct);
         rlv.setAdapter(adapter);
-        rlv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//        rlv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                isLoading = true;
+//                currentPage += 1;
+//                loadNextPage();
+//            }
+//        });
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        rlv.setLayoutManager(llm);
+
+        rlv.addOnScrollListener(new PageScrollListener(llm) {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            protected void loadMoreItems() {
                 isLoading = true;
                 currentPage += 1;
-//                loadNextPage();
+
+                loadNextPage();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
             }
         });
 
@@ -121,6 +151,19 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 //                presenter.GetProductInventory("CTY", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/MM/yyyy"));
             }
         });
+//        adapter.setOnClick(new BaseTestAdapter.OnClick() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                info = adapter.getItem(position);
+//                String gg = info.getImageBitMap();
+//                Intent intent = new Intent(getContext(), UpdateProductActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("ProductID", info.getProduct_ID());
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+//            }
+//        });
         Search();
 
     }
@@ -169,7 +212,9 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     protected void initData() {
+        isLastPage = false;
         listData =new ArrayList<>();
+        adapter.clear();
         presenter = new ProductPresenter(this);
         condition.setBegin(PAGE_START);
         condition.setUserName(PublicVariables.userLoginInfo.UserName);
@@ -208,8 +253,19 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             if (list.size()== 0){
                 showError(true);
             }
+        } else {
+            adapter.removeLoadingFooter();
+            isLoading = false;
         }
         adapter.addAll(list);
+
+        double phanDu = Double.parseDouble(String.valueOf(total)) % PAGE_RECORD;
+        int phanNguyen = (Integer.parseInt(String.valueOf(total)) / PAGE_RECORD);
+        TOTAL_PAGES = (phanDu > 0) ? phanNguyen + 1 : phanNguyen;
+        if (currentPage < TOTAL_PAGES){
+            adapter.addLoadingFooter();
+        }
+        else isLastPage = true;
         showProgressDialog(false);
     }
 
@@ -236,7 +292,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onGetProductInventoryError(String error) {
-//        showMessage(error);
+        showMessage(error);
     }
 
     @Override

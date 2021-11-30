@@ -15,16 +15,15 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_2"
-            android:layout_weight="0.25"
-            android:src="@drawable/ic_user_default" />
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_120"
+            android:layout_margin="@dimen/dp_5"
+            android:adjustViewBounds="true"
+            android:src="@drawable/img_no_image" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.75"
             android:orientation="vertical">
 
             <TextView
@@ -35,8 +34,7 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
-                android:fontFamily="@font/myriadpro_bold"
-                android:gravity="center" />
+                android:fontFamily="@font/myriadpro_bold" />
 
             <TextView
                 android:id="@+id/tvCodeProduct"
@@ -46,8 +44,7 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
-                android:fontFamily="@font/myriadpro_bold"
-                android:gravity="center" />
+                android:fontFamily="@font/myriadpro_bold" />
 
             <TextView
                 android:id="@+id/tvCategory"
@@ -57,8 +54,7 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
-                android:fontFamily="@font/myriadpro_bold"
-                android:gravity="center" />
+                android:fontFamily="@font/myriadpro_bold" />
 
             <TextView
                 android:id="@+id/textPrice"
@@ -66,7 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_5"
-                android:gravity="center"
                 android:textColor="@color/Red" />
 
         </LinearLayout>
