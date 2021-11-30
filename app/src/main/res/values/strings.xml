@@ -82,6 +82,7 @@
     <string name="m_t">Mô tả</string>
     <string name="title_empty_product_name">Tên sản phẩm không được để trống!</string>
     <string name="title_empty_product_price">Giá sản phẩm không được để trống!</string>
+    <string name="map_et_hint_destination">Điểm đến</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>
