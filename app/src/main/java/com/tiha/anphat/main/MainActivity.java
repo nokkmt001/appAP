@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -37,7 +36,6 @@ import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
 import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.introduce.IntroduceActivity;
-import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
 import com.tiha.anphat.ui.product.ProductFragment;
@@ -58,6 +56,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CALL_PHONE
     };
 
@@ -103,79 +102,48 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
 
-        binding.layoutHeader.imageDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.drawerLayout.openDrawer(GravityCompat.START);
+        binding.layoutHeader.imageDrawer.setOnClickListener(view16 -> binding.drawerLayout.openDrawer(GravityCompat.START));
 
-            }
-        });
-
-        binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        PublicVariables.ClearData();
-                        AppPreference appPreference = new AppPreference(MainActivity.this);
-                        appPreference.setLogin(false);
-                        appPreference.setPassWord("");
-                        appPreference.setUserID("");
-                        PublicVariables.ClearData();
-                        Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
-        binding.layoutUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        binding.layoutLogout.setOnClickListener(view15 -> alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, (dialogInterface, i) -> {
+            PublicVariables.ClearData();
+            AppPreference appPreference = new AppPreference(MainActivity.this);
+            appPreference.setLogin(false);
+            appPreference.setPassWord("");
+            appPreference.setUserID("");
+            PublicVariables.ClearData();
+            Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }));
+        binding.layoutUpdate.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
-        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CartActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent, FROM_MAIN);
-            }
+        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view13 -> {
+            Intent intent = new Intent(MainActivity.this, CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, FROM_MAIN);
         });
 
-        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(view12 -> {
 
-            }
         });
 
-        binding.layoutIntroduce.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IntroduceActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        binding.layoutIntroduce.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, IntroduceActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
-        binding.layout.main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linkWed();
-            }
-        });
+        binding.layout.main.setOnClickListener(view14 -> linkWed());
         binding.layoutHeader.textTitle.setText(getResources().getString(R.string.hotline));
-        binding.layoutHeader.textTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onCallHotline();
-            }
-        });
+        binding.layoutHeader.textTitle.setOnClickListener(view1 -> onCallHotline());
+
+        if (!CommonUtils.checkLocation(this)){
+            alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
+                    (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+        }
     }
 
     private void onCallHotline(){
@@ -198,10 +166,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onClick(View view) {
-
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
                 @SuppressLint("NonConstantResourceId")
                 @Override
@@ -239,12 +206,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             alertDialog("THOÁT ỨNG DỤNG", "Bạn có chắc muốn thoát ứng dụng?", "CÓ", null,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            moveTaskToBack(true);
-                            finishAffinity();
-                        }
+                    (dialogInterface, i) -> {
+                        moveTaskToBack(true);
+                        finishAffinity();
                     });
 
         }
@@ -360,7 +324,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         try {
             if (testReceiver != null)
                 unregisterReceiver(testReceiver);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -371,13 +335,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Bundle bundle = intent.getExtras();
             if (bundle == null) return;
             String eventName = bundle.getString("eventName");
-            switch (eventName) {
-                case TestConstants.RECEIVE_ThayDoiGioHang:
-                    Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
-                    presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
-                    break;
-                default:
-                    break;
+            if (TestConstants.RECEIVE_ThayDoiGioHang.equals(eventName)) {
+                Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
+                presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
             }
         }
     }
