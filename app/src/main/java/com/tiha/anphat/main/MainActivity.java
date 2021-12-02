@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -35,9 +37,11 @@ import com.tiha.anphat.databinding.ActivityMainBinding;
 import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
+import com.tiha.anphat.ui.home.HomeEmployeeFragment;
 import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.introduce.IntroduceActivity;
 import com.tiha.anphat.ui.login.LoginActivity;
+import com.tiha.anphat.ui.map.GPSTracker;
 import com.tiha.anphat.ui.pay.PayFragment;
 import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
@@ -57,6 +61,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CALL_PHONE
     };
 
@@ -94,6 +99,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         checkSelfPermission(permissionsRequired);
 
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            checkSelfPermission(permissionsRequired);
+        }
+
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
@@ -110,71 +119,44 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             }
         });
 
-        binding.layoutLogout.setOnClickListener(new View.OnClickListener() {
+        binding.layoutLogout.setOnClickListener(view1 -> alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        PublicVariables.ClearData();
-                        AppPreference appPreference = new AppPreference(MainActivity.this);
-                        appPreference.setLogin(false);
-                        appPreference.setPassWord("");
-                        appPreference.setUserName("");
-                        PublicVariables.ClearData();
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
-        binding.layoutUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+            public void onClick(DialogInterface dialogInterface, int i) {
+                PublicVariables.ClearData();
+                AppPreference appPreference = new AppPreference(MainActivity.this);
+                appPreference.setLogin(false);
+                appPreference.setPassWord("");
+                appPreference.setUserName("");
+                PublicVariables.ClearData();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
+        }));
+        binding.layoutUpdate.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
-        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CartActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent, FROM_MAIN);
-            }
+        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view12 -> {
+            Intent intent = new Intent(MainActivity.this, CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, FROM_MAIN);
         });
 
-        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(view13 -> {
 
-            }
         });
 
-        binding.layoutIntroduce.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, IntroduceActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-        binding.layout.main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linkWed();
-            }
-        });
+        binding.layout.main.setOnClickListener(view15 -> linkWed());
         binding.layoutHeader.textTitle.setText(getResources().getString(R.string.hotline));
-        binding.layoutHeader.textTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onCallHotline();
-            }
-        });
+        binding.layoutHeader.textTitle.setOnClickListener(view14 -> onCallHotline());
+
+        if (!CommonUtils.checkLocation(this)){
+            alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
+                    (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+        }
     }
 
     private void onCallHotline(){
@@ -207,21 +189,17 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_main:
-                            setBottomNavigationView(fmMain, new HomeFragment(), "1");
+                            setBottomNavigationView(fmMain, new HomeEmployeeFragment(), "1");
                             return true;
-
                         case R.id.navigation_history:
                             setBottomNavigationView(fmHistory, new ProductFragment(), "2");
                             return true;
-
                         case R.id.navigation_sms:
                             setBottomNavigationView(fmSms, new SmsFragment(), "4");
                             return true;
-
                         case R.id.navigation_pay:
-                            setBottomNavigationView(fmPay, new PayFragment(), "3");
+                            setBottomNavigationView(fmPay, new SmsFragment(), "3");
                             return true;
-
                         case R.id.navigation_account:
                             setBottomNavigationView(fmAccount, new AccountFragment(), "5");
                             return true;

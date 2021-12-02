@@ -54,12 +54,9 @@ public class TestAdapter extends BaseTestAdapter<ProductInfo, ItemProductBinding
 
                     }
                 });
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onClick!=null){
-                    onClick.onClick(v,position);
-                }
+        itemView.setOnClickListener(v -> {
+            if (onClick!=null){
+                onClick.onClick(v,position);
             }
         });
     }

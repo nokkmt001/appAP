@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.location;
 
 import com.android.volley.VolleyError;
+import com.tiha.anphat.data.entities.condition.LocationCondition;
 import com.tiha.anphat.data.entities.location.InsertLocationInfo;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
@@ -29,7 +30,42 @@ public class Location implements ILocation {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new InsertLocationInfo().getInsertLocationInfo(response));
+                try {
+                    listener.onSuccess(new InsertLocationInfo().getInsertLocationInfo(response));
+
+                }catch (Exception e){
+                    listener.onError(e.getMessage());
+                }
+            }
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        }, params);
+    }
+
+    @Override
+    public void GetListUserLocation(LocationCondition condition,final IGetListUserLocationFinish listener) {
+        String URL = AppConstants.URL_InsertUserLocation;
+        Map<String, String> params = new HashMap<>();
+        params.put("MaxResults",condition.MaxResults.toString());
+        params.put("UserName", condition.UserName);
+        params.put("Phone",condition.Phone );
+        params.put("OS", condition.OS);
+        params.put("SoCT", condition.SoCT);
+        params.put("LoaiPhieu", condition.LoaiPhieu);
+        params.put("StartTime", condition.StartTime);
+        params.put("EndTime", condition.EndTime);
+        service = new APIService(URL);
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(new InsertLocationInfo().getListInsertLocationInfo(response));
+                }catch (Exception e){
+                    listener.onError(e.getMessage());
+
+                }
             }
 
             @Override

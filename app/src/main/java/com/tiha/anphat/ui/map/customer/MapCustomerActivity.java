@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -46,6 +49,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.RouteInfo;
+import com.tiha.anphat.data.entities.condition.LocationCondition;
+import com.tiha.anphat.data.entities.location.InsertLocationInfo;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.map.GPSTracker;
 import com.tiha.anphat.ui.map.MapContract;
@@ -55,10 +60,11 @@ import com.tiha.anphat.utils.CommonUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallback, MapContract.View,
+public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallback, MapContract.View, LocationContract.View,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private GoogleMap mMap;
     private Button btnFindPath, btnGoogleMap;
@@ -85,6 +91,7 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
     Boolean isDestination = false;
     Boolean isClick = false;
     LocationManager lm;
+    LocationPresenter presenter;
 
     @Override
     protected int getLayoutId() {
@@ -93,7 +100,6 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
 
     @Override
     protected void initView() {
-
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         registerReceiver(gpsReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
@@ -152,13 +158,13 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
             }
         });
 
-        etDestination.setOnLongClickListener(view -> {
-            isDestination = true;
-            return true;
-        });
-
         textShowCustomer.setOnClickListener(this);
-        imageBack.setOnClickListener(view -> finish());
+        imageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
@@ -174,6 +180,12 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
 
         setDiaChiXem("");
         sendRequest();
+        presenter = new LocationPresenter(this);
+        LocationCondition condition = new LocationCondition();
+        condition.UserName = "1";
+        condition.MaxResults = 10;
+        condition.EndTime = AppUtils.formatDateToString(Calendar.getInstance().getTime(), "yyyy-MM-dd'T'HH:mm:ss");
+        presenter.GetListLocation(condition);
     }
 
     @Override
@@ -425,14 +437,19 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
 //            mMap.addMarker(markerOptions);
 //        });
 //
-        mMap.setOnMarkerClickListener(marker -> {
-            if (!isClick) {
-                marker.showInfoWindow();
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                {
+                    if (!isClick) {
+                        marker.showInfoWindow();
 
-            } else {
-                marker.hideInfoWindow();
+                    } else {
+                        marker.hideInfoWindow();
+                    }
+                    return true;
+                }
             }
-            return true;
         });
     }
 
@@ -520,17 +537,19 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
         return p1;
     }
 
-   /** LatLng latLng = null;
-                latLng = getLocationFromAddress(item.getDiachi());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                if (latLng != null) {
-                    mMap.addMarker(new MarkerOptions()
-                            .icon(CommonUtils.bitmapDescriptorFromVector(this, R.drawable.ic_map_location_customer))
-                            .title(item.getMaKhachHang())
-                            .snippet(item.getDiachi())
-                            .position(new LatLng(latLng.latitude, latLng.longitude)))
-                            .showInfoWindow();
-                }*/
+    /**
+     * LatLng latLng = null;
+     * latLng = getLocationFromAddress(item.getDiachi());
+     * mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+     * if (latLng != null) {
+     * mMap.addMarker(new MarkerOptions()
+     * .icon(CommonUtils.bitmapDescriptorFromVector(this, R.drawable.ic_map_location_customer))
+     * .title(item.getMaKhachHang())
+     * .snippet(item.getDiachi())
+     * .position(new LatLng(latLng.latitude, latLng.longitude)))
+     * .showInfoWindow();
+     * }
+     */
 
     private BroadcastReceiver gpsReceiver = new BroadcastReceiver() {
         @Override
@@ -548,12 +567,30 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Vui lòng bật chức năng định vị để tiếp tục sử dụng dịch vụ")
                 .setCancelable(false)
-                .setPositiveButton("Yes", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
-                .setNegativeButton("No", (dialog, id) -> {
-                    dialog.cancel();
-                    finish();
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onGetListLocationSuccess(List<InsertLocationInfo> list) {
+        Log.d("GGGGG", "success");
+    }
+
+    @Override
+    public void onGetListLocationError(String error) {
+        showMessage(error);
     }
 }
