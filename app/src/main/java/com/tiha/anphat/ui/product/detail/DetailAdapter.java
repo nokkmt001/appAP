@@ -18,6 +18,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.signature.ObjectKey;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.network.product.IProductModel;
@@ -101,38 +104,68 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
         holder.tvCodeProduct.setText(info.getProduct_ID()==null?"":"Mã sản phẩm: "+info.getProduct_ID());
         holder.tvCategory.setText(info.getCategory_ID()==null?"":"Loại hàng: "+info.getCategory_ID());
-        model.GetImageFromProductID(info.getProduct_ID(), new IProductModel.IGetImageFromProductIDFinishListener() {
-            @Override
-            public void onSuccess(String imageBitmap) {
-                if (imageBitmap != null) {
-                    info.setImageBitMap(imageBitmap);
-//                    ProductInfo ininfo = info;
-//                    listAllData.remove(position);
-//                    listAllData.add(position,ininfo);
-                    Glide.with(mContext).asBitmap()
-                            .load(AppUtils.formatStringToBitMap(imageBitmap))
-                            .apply(new RequestOptions().override(10, 10))
-                            .into(new CustomTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
-                                        Transition<? super Bitmap> transition) {
-                                    holder.imageView.setImageBitmap(resource);
-                                }
+//        model.GetImageFromProductID(info.getProduct_ID(), new IProductModel.IGetImageFromProductIDFinishListener() {
+//            @Override
+//            public void onSuccess(String imageBitmap) {
+//                if (imageBitmap != null) {
+//                    info.setImageBitMap(imageBitmap);
+////                    ProductInfo ininfo = info;
+////                    listAllData.remove(position);
+////                    listAllData.add(position,ininfo);
+//                    Glide.with(mContext).asBitmap()
+//                            .load(AppUtils.formatStringToBitMap(imageBitmap))
+//                            .apply(new RequestOptions().override(10, 10))
+//                            .into(new CustomTarget<Bitmap>() {
+//                                @Override
+//                                public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
+//                                        Transition<? super Bitmap> transition) {
+//                                    holder.imageView.setImageBitmap(resource);
+//                                }
+//
+//                                @Override
+//                                public void onLoadCleared(@Nullable Drawable placeholder) {
+//                                }
+//                            });
+//                } else {
+//                    holder.imageView.setImageResource(R.drawable.img_no_image);
+//                }
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//                holder.imageView.setImageResource(R.drawable.img_no_image);
+//            }
+//        });
+        String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
 
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {
-                                }
-                            });
-                } else {
-                    holder.imageView.setImageResource(R.drawable.img_no_image);
-                }
-            }
+//        Glide.with(mContext)
+//                .load(url)
+//                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
+//                .apply(new RequestOptions()
+//                        .placeholder(R.drawable.img_no_image).error(R.drawable.img_no_image))
+//                .into(new CustomTarget<Drawable>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+//                        holder.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
+//                    }
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                    }
+//                });
 
+        Target target = new Target() {
             @Override
-            public void onError(String error) {
-                holder.imageView.setImageResource(R.drawable.img_no_image);
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                holder.imageView.setImageBitmap(bitmap);
             }
-        });
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        };
+        Picasso.with(mContext).load(url).into(target);
     }
 
     @Override

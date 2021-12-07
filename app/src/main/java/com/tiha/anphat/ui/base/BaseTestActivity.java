@@ -298,7 +298,7 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
         });
     }
 
-    public void showChooseFile() {
+    public void showChooseFile(Boolean gg) {
         final List<String> listChoose = new ArrayList<>();
         listChoose.add("Chụp ảnh");
         listChoose.add("Chọn ảnh");
@@ -320,7 +320,11 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
                         cameraIntent();
                         break;
                     case "Chọn ảnh":
-                        galleryIntent();
+                        if (gg) {
+                            gallerySingle();
+                        } else {
+                            galleryIntent();
+                        }
                         break;
                     default:
                         break;
@@ -337,11 +341,18 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
         if (file != null) {
             imageStoragePath = file.getAbsolutePath();
         }
-
         Uri fileUri = getOutputMediaFileUri(getApplicationContext(), file);
-
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    private void gallerySingle() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_GALLERY);
+
     }
 
     private void galleryIntent() {

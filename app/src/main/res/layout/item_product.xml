@@ -10,15 +10,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_margin="@dimen/dp_2"
-        android:scaleType="fitXY"
-        android:src="@drawable/img_no_image" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_200"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_2"
+            android:src="@drawable/img_no_image" />
 
-    <TextView
+        <TextView
         android:id="@+id/tvTitle"
         style="@style/AppTheme.TextView"
         android:layout_width="match_parent"

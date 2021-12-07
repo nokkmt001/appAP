@@ -100,6 +100,7 @@
 
         <activity android:name=".ui.map.mapcty.MapCustomerActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.login.forgetpass.ForgetPassActivity" />
     </application>
 
 </manifest>

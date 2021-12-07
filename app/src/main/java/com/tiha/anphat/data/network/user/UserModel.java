@@ -101,13 +101,30 @@ public class UserModel implements IUserModel {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new NewCustomer().getNewCustomer(response));
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(new NewCustomer().getNewCustomer(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
+
+                } else {
+                    listener.onError(AppConstants.Error_Unknown);
+                }
             }
+
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
-        }, params);
+        },params);
     }
 
     @Override
@@ -162,5 +179,46 @@ public class UserModel implements IUserModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         });
+    }
+
+    @Override
+    public void UpdateCustomer(NewCustomer condition, IUpdateCustomerFinish listener) {
+        String URL = AppConstants.URL_INSERT_NEW_CUSTOMER;
+        Map<String, String> params = new HashMap<>();
+        params.put("HoTen", condition.getHoTen());
+        params.put("SoDienThoai", condition.getSoDienThoai());
+        params.put("DiaChi", condition.getDiaChi());
+        params.put("NgayGio", condition.getNgayGio());
+        params.put("MaPIN", condition.getMaPIN().toString());
+        params.put("ModifiedDate", condition.getNgayGio());
+        params.put("Password", condition.getPassword());
+        service = new APIService(URL);
+        service.DownloadJsonPOST(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(new NewCustomer().getNewCustomer(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
+
+                } else {
+                    listener.onError(AppConstants.Error_Unknown);
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        },params);
     }
 }

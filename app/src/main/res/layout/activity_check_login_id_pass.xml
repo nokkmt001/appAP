@@ -91,6 +91,7 @@
             android:layout_marginStart="@dimen/dp_5"
             android:text="@string/forget_pass"
             android:textColor="@color/colorPrimary" />
+
     </LinearLayout>
 
     <Button

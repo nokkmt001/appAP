@@ -54,6 +54,7 @@ public class UpdateActivity extends BaseActivity implements UpdateContarct.View 
         setContentView(view);
 
         binding.layoutHeader.textTitle.setText(R.string.title_update);
+        binding.layoutHeader.imageBack.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -144,18 +145,14 @@ public class UpdateActivity extends BaseActivity implements UpdateContarct.View 
     }
 
     private class DownloadFileUpdateAplicationTask extends AsyncTask<String, String, String> {
-
         URL url;
-
         public DownloadFileUpdateAplicationTask(URL url) {
             this.url = url;
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
         @Override
         protected String doInBackground(String... strings) {
             try {

@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.pay.history.vote;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import com.tiha.anphat.data.entities.condition.EvaluateCondition;
 import com.tiha.anphat.databinding.ActivityVoteBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
+import com.tiha.anphat.ui.base.BaseTestActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.adapterimage.ActivityImage;
@@ -27,126 +29,100 @@ import com.tiha.anphat.utils.adapterimage.ActivityImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteEmployeeActivity extends BaseActivity implements VoteContract.View {
+public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> implements VoteContract.View {
     ActivityVoteBinding binding;
     VoteAdapter adapter;
     VotePresenter presenter;
     Boolean isCheck = true;
     AddImageAdapter addImageAdapter;
-    List<ReasonEvaluate> listChoose = new ArrayList<>();
     String[] permissionsRequired = {Manifest.permission.CAMERA};
-    String bitmapImage = "";
-    RatingBar rating;
-    RecyclerView rclImage;
     List<String> listImageString = new ArrayList<>();
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_vote;
+    public ActivityVoteBinding getViewBinding() {
+        return binding = ActivityVoteBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         CheckCamera();
         checkSelfPermission(permissionsRequired);
-        binding = ActivityVoteBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-        rating = findViewById(R.id.rating);
-
         setHeader();
-
         adapter = new VoteAdapter();
         binding.rcl.setAdapter(adapter);
-        addImageAdapter = new AddImageAdapter(this, new ArrayList<String>());
+        addImageAdapter = new AddImageAdapter(this, new ArrayList<>());
         binding.rclImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.rclImage.setAdapter(addImageAdapter);
 
         checkValidate();
-        binding.buttonOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (adapter.getListChoose().size() == 0) {
-                    showMessage("Bạn chưa chọn đề xuất đánh giá");
-                } else {
-                    String gg = "";
-                    showProgressDialog(true);
-                    EvaluateCondition condition = new EvaluateCondition();
-                    condition.setSoSao(5);
-//                    condition.setEmployeeID();
-                    condition.setBinhLuan(binding.inputComment.getText().toString());
-                    condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
-                    for (String string : listImageString) {
-                        gg += string + ",";
-                    }
-                    if (gg.length() > 0) {
-                        condition.setHinhAnh(gg.substring(0, gg.length() - 1));
-
-                    }
-//                    presenter.InsertVote(condition);
+        binding.buttonOK.setOnClickListener(view -> {
+            if (adapter.getListChoose().size() == 0) {
+                showMessage("Bạn chưa chọn đề xuất đánh giá");
+            } else {
+                String gg = "";
+                showProgressDialog(true);
+                EvaluateCondition condition = new EvaluateCondition();
+                condition.setSoSao(5);
+                condition.setEmployeeID("TIHA");
+                condition.setBinhLuan(binding.inputComment.getText().toString());
+                condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
+                for (String string : listImageString) {
+                    gg = string;
                 }
+                if (gg.length()>0){
+                    condition.setHinhAnh(gg);
+                }
+                presenter.InsertVote(condition);
             }
         });
 //        setRating();
 
-        binding.textChooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChooseFile();
-            }
-        });
-        rating.setRating(5);
+        binding.textChooseImage.setOnClickListener(v -> showChooseFile(true));
+        binding.rating.setRating(5);
 
-        this.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                ratingBar.setRating(v);
-                Toast.makeText(VoteEmployeeActivity.this, "Gg", Toast.LENGTH_SHORT).show();
-                if (v == 0) {
-                    showMessage("Bạn phải chọn số sao");
-                } else {
-                    presenter.GetListVote(String.valueOf(v));
-                }
+        binding.rating.setOnRatingBarChangeListener((ratingBar, v, b) -> {
+            ratingBar.setRating(v);
+            if (v == 0) {
+                showMessage("Bạn phải chọn số sao");
+            } else {
+                presenter.GetListVote(String.valueOf(v));
             }
         });
 
         setAdapterClick();
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void setAdapterClick() {
-        addImageAdapter.setOnClickListener(new BaseEventClick.OnClickListener() {
-            @Override
-            public void onClick(View view, final int position) {
-                switch (view.getId()) {
-                    case R.id.imageDelete:
-                        alertDialog("Xóa hình ảnh", "Bạn chắc chắn xóa hình ảnh này?", null, "ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                listImageString.remove(addImageAdapter.getItem(position));
-                                addImageAdapter.removeItem(position);
+        addImageAdapter.setOnClickListener((view, position) -> {
+            switch (view.getId()) {
+                case R.id.imageDelete:
+                    alertDialog("Xóa hình ảnh", "Bạn chắc chắn xóa hình ảnh này?", null, "ok", (dialogInterface, i) -> {
+                        listImageString.remove(addImageAdapter.getItem(position));
+                        addImageAdapter.removeItem(position);
 
-                            }
-                        });
-                        break;
-                    case R.id.imageAdd:
-                        PublicVariables.listImageVote = addImageAdapter.getListAllData();
-                        Intent intent = new Intent(VoteEmployeeActivity.this, ActivityImage.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        break;
-                    default:
-                        break;
-                }
+                    });
+                    break;
+                case R.id.imageAdd:
+                    PublicVariables.listImageVote = addImageAdapter.getListAllData();
+                    Intent intent = new Intent(VoteEmployeeActivity.this, ActivityImage.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    break;
+                default:
+                    break;
             }
         });
     }
 
     public void ResultImageBitMap(Bitmap bitmap) {
         if (bitmap == null) return;
-        String gg = "";
+        String gg;
         gg = AppUtils.formatBitMapToString(bitmap);
         if (gg.equals("")) return;
+        listImageString.clear();
         listImageString.add(gg);
+        addImageAdapter.clear();
         addImageAdapter.add(gg);
     }
 
@@ -155,43 +131,31 @@ public class VoteEmployeeActivity extends BaseActivity implements VoteContract.V
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             checkSelfPermission(permissionsRequired);
         } else {
-            showChooseFile();
+            showChooseFile(true);
         }
     }
 
-    private void setRating() {
-        binding.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                binding.rating.setRating(v);
-                if (v == 0) {
-                    showMessage("Bạn phải chọn số sao");
-                } else {
-                    presenter.GetListVote(String.valueOf(v));
-                }
-            }
-        });
-    }
+//    private void setRating() {
+//        binding.rating.setOnRatingBarChangeListener((ratingBar, v, b) -> {
+//            binding.rating.setRating(v);
+//            if (v == 0) {
+//                showMessage("Bạn phải chọn số sao");
+//            } else {
+//                presenter.GetListVote(String.valueOf(v));
+//            }
+//        });
+//    }
 
     public void checkValidate() {
         if (isCheck) {
             binding.buttonOK.setEnabled(true);
             binding.buttonOK.setTextColor(getResources().getColor(R.color.White));
             binding.buttonOK.setBackgroundResource(R.drawable.bg_button_dark_no_radius);
-//        } else {
-//            binding.buttonOK.setEnabled(false);
-//            binding.buttonOK.setTextColor(getResources().getColor(R.color.text_disable));
-//            binding.buttonOK.setBackgroundResource(R.drawable.bg_button_light);
         }
     }
 
     private void setHeader() {
-        binding.layoutHeader.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.layoutHeader.imageBack.setOnClickListener(view -> finish());
         binding.layoutHeader.textTitle.setText(getText(R.string.title_vote_employee));
     }
 

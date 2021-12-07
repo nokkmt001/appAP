@@ -37,6 +37,8 @@ public class AppConstants {
     public static final String URL_GetListTonKho = "api/PhanHeKho/GetListTonKho";
     //booking
     public static final String URL_GetDonHang = "api/DonHangMobile/GetDonHang?soDonHang={0}"; // chi tiết đơn hàng + price
+    public static final String URL_InsertDonHang = "api/DonHangMobile/InsertDonHang";
+
     // history
     public static final String URL_GetListHISTORYBOOKING = "api/DonHangMobile/GetListLichSuMuaHang?nguoiDungMobileID={0}";
     public static final String URL_HuyDonHang = "api/DonHangMobile/HuyDonHang";

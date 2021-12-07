@@ -16,6 +16,7 @@ import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
+import com.tiha.anphat.ui.login.forgetpass.ForgetPassActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
@@ -27,7 +28,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     private ActivityCheckLoginIdPassBinding binding;
     LoginIDPassPresenter presenter;
     AppPreference preference;
-    NewCustomer info;
+    NewCustomer info = null;
 
     @Override
     protected int getLayoutId() {
@@ -57,28 +58,21 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         };
         binding.inputID.addTextChangedListener(imm);
         binding.inputPassword.addTextChangedListener(imm);
-        binding.buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter = new LoginIDPassPresenter(CheckLoginByIDPassActivity.this);
-                presenter.CheckLoginByIDPass(info.getNguoiDungMobileID().toString(), Objects.requireNonNull(binding.inputPassword.getText()).toString());
-                showProgressDialog(true);
-            }
+        binding.buttonLogin.setOnClickListener(view12 -> {
+            presenter = new LoginIDPassPresenter(CheckLoginByIDPassActivity.this);
+            presenter.CheckLoginByIDPass(info.getNguoiDungMobileID().toString(), Objects.requireNonNull(binding.inputPassword.getText()).toString());
+            showProgressDialog(true);
         });
-        binding.textForgetPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CheckLoginByIDPassActivity.this, CheckPhoneActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        binding.textForgetPass.setOnClickListener(view1 -> {
+            if (info==null) return;
+            Intent intent = new Intent(CheckLoginByIDPassActivity.this, ForgetPassActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Object", info);
+            intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
-        binding.imageLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linkWed();
-            }
-        });
+        binding.imageLogo.setOnClickListener(view13 -> linkWed());
     }
 
     private void linkWed(){
@@ -88,15 +82,19 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         startActivity(intent);
     }
 
+    private void disableButton(){
+        binding.buttonLogin.setEnabled(false);
+        binding.buttonLogin.setTextColor(getResources().getColor(R.color.text_disable));
+        binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_light);
+    }
+
     public void checkValidate() {
         if (AppUtils.isValidateUsername(Objects.requireNonNull(binding.inputPassword.getText()).toString())) {
             binding.buttonLogin.setEnabled(true);
             binding.buttonLogin.setTextColor(getResources().getColor(R.color.White));
             binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_dark_no_radius);
         } else {
-            binding.buttonLogin.setEnabled(false);
-            binding.buttonLogin.setTextColor(getResources().getColor(R.color.text_disable));
-            binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_light);
+            disableButton();
         }
     }
 
@@ -105,12 +103,6 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         info = (NewCustomer) bundle.getSerializable("Object") ;
-//        AESUtils aesUtils = new AESUtils();
-//        try {
-//            binding.inputID.setText(aesUtils.decrypt(preference.getUserID()));
-//            binding.inputPassword.setText(aesUtils.decrypt(preference.getPassWord()));
-//        } catch (Exception ignored) {
-//        }
         if (info!=null){
             onLoadTitle(info);
         }
@@ -156,6 +148,6 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
     @Override
     public void onCheckLoginByIDPassError(String error) {
         showProgressDialog(false);
-        CommonUtils.showMessageError(this, error);
+        showMessage(error);
     }
 }

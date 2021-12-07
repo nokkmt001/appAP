@@ -33,12 +33,12 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
         presenter = new IntroducePresenter(this);
         presenter.GetListIntroduce();
         listAllData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            IntroducePerInfo info = new IntroducePerInfo();
-            info.HoTen = "Bui Tan Phat";
-            info.NguoiDungMobileID = 14;
-            listAllData.add(info);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            IntroducePerInfo info = new IntroducePerInfo();
+//            info.HoTen = "Bui Tan Phat";
+//            info.NguoiDungMobileID = 14;
+//            listAllData.add(info);
+//        }
     }
 
     @Override

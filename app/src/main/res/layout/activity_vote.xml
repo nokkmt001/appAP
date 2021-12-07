@@ -37,13 +37,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_20"
-            android:isIndicator="true"
-            android:numStars="5"
             android:clickable="true"
-            android:focusableInTouchMode="true"
-            android:rating="2"
             android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:numStars="5"
             android:progressBackgroundTint="@color/colorLine"
+            android:rating="2"
+            android:isIndicator="false"
             android:secondaryProgressTint="@color/Yellow"
             android:stepSize="1" />
 

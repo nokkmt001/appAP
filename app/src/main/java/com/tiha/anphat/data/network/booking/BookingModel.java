@@ -27,7 +27,7 @@ public class BookingModel implements IBookingModel {
 
     @Override
     public void InsertOrder(List<CartInfo> list, final IInsertOrderFinish listener) {
-        String URL = AppConstants.URL_INSERT_CART;
+        String URL = AppConstants.URL_InsertDonHang;
         Map<String, String> params = new HashMap<>();
         params.put("ListGioHang", new Gson().toJson(list));
         params.put("NguoiDungMobileID", PublicVariables.UserInfo.getNguoiDungMobileID().toString());

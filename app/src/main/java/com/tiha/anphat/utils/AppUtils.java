@@ -196,6 +196,15 @@ public class AppUtils {
         return matcher.matches();
     }
 
+    public static boolean validateNumberPhone(String number){
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[0-9]{10,13}$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(number);
+        return matcher.matches();
+    }
+
     public static String loadJSONFromAsset(Context context, String jsonFileName)
             throws IOException {
 
@@ -460,14 +469,39 @@ public class AppUtils {
     public static String getMessageVolleyError(VolleyError error) {
         String message = "";
         String responseBody = null;
+        if (error instanceof AuthFailureError) {
+            return AppConstants.Error_KetNoiServer + "\nError: AuthFailureError";
+        } else if (error instanceof NoConnectionError) {
+            return AppConstants.Error_KetNoiServer + "\nError: NoConnectionError";
+        } else if (error instanceof TimeoutError) {
+            return AppConstants.Error_KetNoiServer + "\nError: TimeoutError";
+        }
+
         try {
-            responseBody = new String(error.networkResponse.data, "utf-8");
-            JSONObject data = new JSONObject(responseBody);
-            JSONArray errors = data.getJSONArray("errors");
-            JSONObject jsonMessage = errors.getJSONObject(0);
-            message = jsonMessage.getString("message");
-        } catch (JSONException | UnsupportedEncodingException e) {
-            message = e.getMessage();
+            if (error.networkResponse != null) {
+                responseBody = new String(error.networkResponse.data, "utf-8");
+            } else {
+                message = error.getMessage();
+                if (message.contains(AppConstants.URL_SERVER)) {
+                    return AppConstants.Error_KetNoiServer;
+                }
+                return error.getMessage();
+            }
+        } catch (UnsupportedEncodingException e) {
+            return "";
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject(responseBody);
+            message = jsonObject.getString("Message");
+        } catch (JSONException e) {
+
+            try {
+                Document doc = Jsoup.parse(responseBody);
+                return doc.title();
+            } catch (Exception e1) {
+                return e.getMessage();
+            }
         }
         return message;
     }

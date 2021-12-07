@@ -63,7 +63,7 @@ public class VoteAdapter extends RecyclerView.Adapter<VoteAdapter.ItemRH> {
 
                     info.setCheck(false);
                     holder.layoutColor.setBackgroundResource(R.color.colorTransparent);
-                    holder.text.setBackgroundResource(R.color.colorLine);
+                    holder.text.setBackgroundResource(R.color.back_ground_main);
                 }
             }
         });

@@ -77,6 +77,8 @@
     <string name="status_start">DADAT</string>
     <string name="title_update">Cập nhật phần mềm</string>
     <string name="title_input_introduce">Nhập mã giới thiệu</string>
+    <string name="pass_word_again">Nhập lại mật khẩu</string>
+    <string name="error_booking">Đơn hàng này chưa hoàn thành nên chưa đánh giá được!</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

@@ -43,28 +43,23 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (AppUtils.isValidPhoneNumber(editable)) {
+                if (AppUtils.validateNumberPhone(editable.toString())) {
                     AppUtils.enableButton(true, binding.buttonLogin, CheckPhoneActivity.this);
                 } else AppUtils.enableButton(false, binding.buttonLogin, CheckPhoneActivity.this);
             }
         });
-        binding.buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter = new CheckPhonePresenter(CheckPhoneActivity.this);
-                presenter.CheckPhoneNumber(Objects.requireNonNull(binding.inputNumberPhone.getText()).toString());
-                showProgressDialog(true);
-            }
+        binding.layoutHeader.imageBack.setVisibility(View.GONE);
+        binding.buttonLogin.setOnClickListener(view1 -> {
+            presenter = new CheckPhonePresenter(CheckPhoneActivity.this);
+            presenter.CheckPhoneNumber(Objects.requireNonNull(binding.inputNumberPhone.getText()).toString());
+            showProgressDialog(true);
         });
-        binding.textCreateNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CheckPhoneActivity.this, CreateNewCustomerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+        binding.textCreateNew.setOnClickListener(view12 -> {
+            Intent intent = new Intent(CheckPhoneActivity.this, CreateNewCustomerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
-//        binding.layoutHeader..setText(getResources().getText(R.string.login));
+        binding.layoutHeader.textTitle.setText(getResources().getText(R.string.login));
 //        binding.layoutHeader.imageBack.setVisibility(View.GONE);
     }
 

@@ -45,4 +45,11 @@ public interface IUserModel {
 
         void onError(String error);
     }
+
+    void UpdateCustomer(NewCustomer info,IUpdateCustomerFinish listener);
+    interface IUpdateCustomerFinish{
+        void onSuccess(NewCustomer info);
+
+        void onError(String error);
+    }
 }
