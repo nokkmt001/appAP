@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -13,39 +14,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.main.MainActivity;
-import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.product.ProductContract;
 import com.tiha.anphat.ui.product.ProductPresenter;
+import com.tiha.anphat.ui.product.review.ReViewBookingActivity;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.TestConstants;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -71,6 +65,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     ProductInfo info;
     MainActivity activity;
     Double inventory = 0.0; // tồn kho
+    Boolean isBuyNow = false;
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -101,12 +96,10 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             }
         });
 
-        adapter.setClickListener(new BaseEventClick.OnClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                info = adapter.getItem(position);
-                presenter.GetProductInventory("CTY", info.getProduct_ID(), AppUtils.formatDateToString(Calendar.getInstance().getTime(), "dd/MM/yyyy"));
-            }
+        adapter.setClickListener((view1, position) -> {
+            info = adapter.getItem(position);
+            showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+                    inventory, info.getDescription());
         });
         Search();
 
@@ -116,7 +109,6 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -146,12 +138,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             }
         });
 
-        imageDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputSearch.setText("");
-            }
-        });
+        imageDelete.setOnClickListener(view -> inputSearch.setText(""));
     }
 
     @Override
@@ -181,17 +168,11 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     }
 
-    public void showError(final boolean isShow) {
-        textError.setVisibility(isShow ? View.VISIBLE : View.GONE);
-        rlv.setVisibility(isShow ? View.GONE : View.VISIBLE);
-    }
-
     @Override
     public void onGetListProductSuccess(List<ProductInfo> list, Integer total) {
         if (condition.getBegin() == 1) {
             adapter.clear();
         }
-
         adapter.addAll(list);
         showProgressDialog(false);
     }
@@ -215,12 +196,19 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     @Override
     public void onInsertCartSuccess(CartCondition info) {
 //        activity.onLoadCartListener();
-
         Intent intent = new Intent();
         intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
         intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
         intent.putExtra("ItemGioHang", info);
         getActivity().sendBroadcast(intent);
+        if (isBuyNow){
+            Intent intent1 = new Intent(getContext(), ReViewBookingActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ItemCart",info);
+            intent1.putExtras(bundle);
+            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent1);
+        }
     }
 
     @Override
@@ -230,16 +218,10 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onGetProductInventorySuccess(Double result) {
-        if (result != null) inventory = result;
-        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                inventory, info.getDescription());
     }
 
     @Override
     public void onGetProductInventoryError(String error) {
-//        showMessage(error);
-        showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                0.0, info.getDescription());
     }
 
     @Override
@@ -265,92 +247,72 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
         BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         dialog.show();
-        final RelativeLayout layoutCountBuy = bind(view, R.id.layoutCountBuy);
         final ImageView imageMain = bind(view, R.id.imageView);
         final ImageView imageClose = bind(view, R.id.imageClose);
-        imageClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
+        imageClose.setOnClickListener(view14 -> dialog.cancel());
         TextView tvTitle = bind(view, R.id.textName);
         TextView tvPrice = bind(view, R.id.textPrice);
         TextView tvDeception = bind(view, R.id.textDeception);
         final TextView tvCountBuy = bind(view, R.id.textCountBuy);
         Button btAddCart = bind(view, R.id.btnAddCart);
-        Button btnBuyNow = bind(view, R.id.btnBuy);
-        Button btnEmpty = bind(view, R.id.btnEmpty);
+        Button btnBuyNow = bind(view, R.id.btnBuyNow);
         ImageView imgAdd = bind(view, R.id.imageAdd);
         ImageView imgMinus = bind(view, R.id.imageMinus);
         count = 1;
-        tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+        tvCountBuy.setText(count.toString());
         tvTitle.setText(title);
         tvPrice.setText(price);
         tvDeception.setText(description);
-        if (number != 0) {
-            layoutCountBuy.setVisibility(View.VISIBLE);
-        } else {
-            layoutCountBuy.setVisibility(View.GONE);
-        }
+
         final Date date = new Date(System.currentTimeMillis());
-        imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!count.toString().equals(AppUtils.formatNumber("NO").format(number))) {
-                    count = count + 1;
-                }
-                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
-            }
+        imgAdd.setOnClickListener(view12 -> {
+                count = count + 1;
+            tvCountBuy.setText(count.toString());
         });
-        imgMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (count != 1) {
-                    count = count - 1;
-                }
-                tvCountBuy.setText(count + "/" + AppUtils.formatNumber("NO").format(number));
+        imgMinus.setOnClickListener(view13 -> {
+            if (count != 1) {
+                count = count - 1;
             }
+            tvCountBuy.setText(count.toString());
         });
-        if (number <= 0.0) {
-            btnEmpty.setVisibility(View.VISIBLE);
-            btAddCart.setVisibility(View.GONE);
-            btnBuyNow.setVisibility(View.GONE);
-        } else {
-        btnEmpty.setVisibility(View.GONE);
         btAddCart.setVisibility(View.VISIBLE);
         btnBuyNow.setVisibility(View.VISIBLE);
-        }
-        btAddCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CartCondition condition = new CartCondition();
-                condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
-                condition.setSoLuong(count);
-                condition.setProductID(info.getProduct_ID());
-                condition.setGhiChu("");
-                condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-                condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-                presenter.InsertCart(condition);
-            }
+        btAddCart.setOnClickListener(view1 -> {
+            isBuyNow = false;
+            CartCondition condition = new CartCondition();
+            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+            condition.setSoLuong(count);
+            condition.setProductID(info.getProduct_ID());
+            condition.setGhiChu("");
+            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+            presenter.InsertCart(condition);
         });
-        if (imageBitMap != null) {
-            Glide.with(getActivity()).asBitmap()
-                    .load(AppUtils.formatStringToBitMap(imageBitMap))
-                    .apply(new RequestOptions().override(10, 10))
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
-                                Transition<? super Bitmap> transition) {
-                            imageMain.setImageBitmap(resource);
-                        }
+        btnBuyNow.setOnClickListener(v -> {
+            isBuyNow = true;
+            CartCondition condition = new CartCondition();
+            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+            condition.setSoLuong(count);
+            condition.setProductID(info.getProduct_ID());
+            condition.setGhiChu("");
+            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+            presenter.InsertCart(condition);
+        });
+        String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
 
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                        }
-                    });
-        } else {
-            imageMain.setImageResource(R.drawable.img_no_image);
-        }
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                imageMain.setImageBitmap(bitmap);
+            }
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            }
+        };
+        Picasso.with(getContext()).load(url).into(target);
     }
 }

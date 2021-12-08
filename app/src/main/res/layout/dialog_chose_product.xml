@@ -147,7 +147,7 @@
                     android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnBuy"
+                    android:id="@+id/btnBuyNow"
                     style="@style/AppTheme.Button.Red"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -155,17 +155,6 @@
                     android:layout_weight="1"
                     android:text="@string/buy"
                     android:visibility="visible" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnEmpty"
-                    style="@style/AppTheme.Button.Light"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_2"
-                    android:layout_marginEnd="@dimen/dp_2"
-                    android:text="@string/title_empty_product"
-                    android:textColor="@color/colorLine"
-                    android:visibility="gone" />
 
             </LinearLayout>
 

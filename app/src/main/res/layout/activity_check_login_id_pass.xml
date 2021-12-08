@@ -87,6 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:enabled="false"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_5"
             android:text="@string/forget_pass"

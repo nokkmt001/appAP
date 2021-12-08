@@ -3,10 +3,14 @@ package com.tiha.anphat.utils;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -19,7 +23,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -33,6 +39,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
@@ -42,7 +49,9 @@ import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 import com.tiha.anphat.R;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.sms.contact.ContactModel;
 
 import org.json.JSONArray;
@@ -70,6 +79,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static com.tiha.anphat.utils.AppController.Chanel_id;
 
 public class AppUtils {
 
@@ -199,7 +211,7 @@ public class AppUtils {
         return matcher.matches();
     }
 
-    public static boolean validateNumberPhone(String number){
+    public static boolean validateNumberPhone(String number) {
         Pattern pattern;
         Matcher matcher;
         final String EMAIL_PATTERN = "^[0-9]{10,13}$";
@@ -398,6 +410,7 @@ public class AppUtils {
         }
         return strMD5Pass.substring(1);
     }
+
     // convert from bitmap to byte array
     public static byte[] BitMapToByte(Bitmap bitmap, Bitmap.CompressFormat format) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -578,7 +591,8 @@ public class AppUtils {
         if (gpsLocation != null && networkLoacation != null) {
 
             //smaller the number more accurate result will
-            if (gpsLocation.getAccuracy() > networkLoacation.getAccuracy()) return finalLoc = networkLoacation;
+            if (gpsLocation.getAccuracy() > networkLoacation.getAccuracy())
+                return finalLoc = networkLoacation;
             else return finalLoc = gpsLocation;
         } else {
             if (gpsLocation != null) {
@@ -618,7 +632,7 @@ public class AppUtils {
         return p1;
     }
 
-    public static String getAddress(LatLng latLng,Context context) {
+    public static String getAddress(LatLng latLng, Context context) {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(context, Locale.getDefault());
@@ -638,5 +652,30 @@ public class AppUtils {
             e.printStackTrace();
             return "No Address Found";
         }
+    }
+
+    public static void createNotification(Context context, String body) {
+//        PendingIntent pi = PendingIntent.getActivity(context,0,intent, PendingIntent.FLAG_ONE_SHOT);
+        //String Chanel_id = "Default";
+        PendingIntent pi = PendingIntent.getActivity(
+                context.getApplicationContext(),
+                0,
+                new Intent(), // add this
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Chanel_id);
+        builder.setSmallIcon(R.mipmap.ic_launcher_1_round)
+                .setContentTitle(context.getString(R.string.title_pin))
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(alarmSound)
+                .setContentIntent(pi);
+
+        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(Chanel_id, "FCM_CHANNEL_ID", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+        }
+        manager.notify(0, builder.build());
     }
 }

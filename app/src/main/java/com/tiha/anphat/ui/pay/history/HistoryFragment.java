@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.pay.history;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -15,6 +16,7 @@ import com.tiha.anphat.data.network.booking.IBookingModel;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.pay.history.vote.VoteEmployeeActivity;
+import com.tiha.anphat.utils.PublicVariables;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -46,6 +48,7 @@ public class HistoryFragment extends BaseFragment implements HistoryBookingContr
                         public void onSuccess(BookingInfo info) {
                             showProgressDialog(false);
                             if (info.getMaTrangThai().equals("HOANTHANH")) {
+                                PublicVariables.infoBooking = info;
                                 startVote();
                             }else {
                                 showMessage(getString(R.string.error_booking));

@@ -49,44 +49,33 @@ public class CartActivity extends BaseActivity implements CartContract.View {
         binding.rylCart.setAdapter(adapter);
         onAdapterClick();
         showNoResult(false);
-        binding.buttonOK.setOnClickListener(new View.OnClickListener() {
+        binding.buttonOK.setOnClickListener(view1 -> alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (listAllData.size() != 0) {
-                            presenter.InsertOrder(listAllData);
-                        }
-                    }
-                });
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (listAllData.size() != 0) {
+                    presenter.InsertOrder(listAllData);
+                }
             }
-        });
+        }));
     }
 
     private void onLoadDataHeader(){
         binding.textTitle.setText(getString(R.string.cart));
-        binding.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                intent.putExtras(bundle);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        binding.imageBack.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            finish();
         });
 
-        binding.imageOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.imageOrder.setOnClickListener(view -> {
 //                if (!TextUtils.isEmpty(preference.getBooking())) {
-                    Intent intent = new Intent(CartActivity.this, BookingActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra("SOCT","CTY211101001");
-                    startActivity(intent);
+                Intent intent = new Intent(CartActivity.this, BookingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("SOCT","CTY211101001");
+                startActivity(intent);
 //                }
-            }
         });
     }
 
@@ -109,8 +98,12 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onGetListAllCartSuccess(List<CartInfo> list) {
+        if (list.size() == 0) {
+            showNoResult(true);
+            return;
+        }
         priceTotal = 0.0;
-        listAllData = list;
+        listAllData   = list;
         adapter.clear();
         adapter.addAll(list);
         if (list != null) {
@@ -120,10 +113,6 @@ public class CartActivity extends BaseActivity implements CartContract.View {
             setPrice(priceTotal);
         } else {
             setPrice(0.0);
-        }
-        assert list != null;
-        if (list.size() == 0) {
-            showNoResult(true);
         }
     }
 
@@ -182,33 +171,30 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     }
 
     public void onAdapterClick() {
-        adapter.setClickListener(new BaseEventClick.OnClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                CartInfo info = adapter.getItem(position);
-                Integer count = info.getSoLuong();
-                switch (view.getId()) {
-                    case R.id.imageAdd:
-                        count = count + 1;
-                        info.setSoLuong(count);
-                        adapter.remoteItem(position);
+        adapter.setClickListener((view, position) -> {
+            CartInfo info = adapter.getItem(position);
+            Integer count = info.getSoLuong();
+            switch (view.getId()) {
+                case R.id.imageAdd:
+                    count = count + 1;
+                    info.setSoLuong(count);
+                    adapter.remoteItem(position);
+                    adapter.add(info, position);
+                    UpdateCart(info);
+                    break;
+                case R.id.imageMinus:
+                    count = count - 1;
+                    info.setSoLuong(count);
+                    adapter.remoteItem(position);
+                    if (count == 0) {
+                        DeleteCart(info.getID());
+                    } else {
                         adapter.add(info, position);
                         UpdateCart(info);
-                        break;
-                    case R.id.imageMinus:
-                        count = count - 1;
-                        info.setSoLuong(count);
-                        adapter.remoteItem(position);
-                        if (count == 0) {
-                            DeleteCart(info.getID());
-                        } else {
-                            adapter.add(info, position);
-                            UpdateCart(info);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    break;
             }
         });
     }

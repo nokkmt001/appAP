@@ -15,9 +15,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ReasonEvaluate;
 import com.tiha.anphat.data.entities.condition.EvaluateCondition;
+import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.databinding.ActivityVoteBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
@@ -37,6 +39,7 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
     AddImageAdapter addImageAdapter;
     String[] permissionsRequired = {Manifest.permission.CAMERA};
     List<String> listImageString = new ArrayList<>();
+    BookingInfo infoItem = null;
 
     @Override
     public ActivityVoteBinding getViewBinding() {
@@ -59,17 +62,19 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
             if (adapter.getListChoose().size() == 0) {
                 showMessage("Bạn chưa chọn đề xuất đánh giá");
             } else {
+                if (infoItem == null) return;
                 String gg = "";
                 showProgressDialog(true);
                 EvaluateCondition condition = new EvaluateCondition();
                 condition.setSoSao(5);
-                condition.setEmployeeID("TIHA");
+                condition.setSoCT(infoItem.getSoCt());
+                condition.setEmployeeID(infoItem.getMSNguoigiao());
                 condition.setBinhLuan(binding.inputComment.getText().toString());
                 condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
                 for (String string : listImageString) {
                     gg = string;
                 }
-                if (gg.length()>0){
+                if (gg.length() > 0) {
                     condition.setHinhAnh(gg);
                 }
                 presenter.InsertVote(condition);
@@ -100,7 +105,6 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
                     alertDialog("Xóa hình ảnh", "Bạn chắc chắn xóa hình ảnh này?", null, "ok", (dialogInterface, i) -> {
                         listImageString.remove(addImageAdapter.getItem(position));
                         addImageAdapter.removeItem(position);
-
                     });
                     break;
                 case R.id.imageAdd:
@@ -161,6 +165,7 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
 
     @Override
     protected void initData() {
+        infoItem = PublicVariables.infoBooking;
         presenter = new VotePresenter(this);
         presenter.GetListVote("5");
     }

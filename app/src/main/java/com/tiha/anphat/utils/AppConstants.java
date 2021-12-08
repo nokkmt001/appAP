@@ -59,6 +59,8 @@ public class AppConstants {
      */
     public static int MAX_SIZE_IMAGE = 500;
     public static long DELAY_FIND_DATA = 0;
+    public static long DELAY_FIND_DATA_SEARCH = 1000;
+
     //px
     public static int MAX_WIDTH_IMAGE = 1000;
     public static int MAX_HEIGHT_IMAGE = 1000;

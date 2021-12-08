@@ -20,10 +20,11 @@ public class EvaluateModel implements IEvaluateModel{
     public void InsertEvaluate(EvaluateCondition condition, final IInsertEvaluateFinish listener) {
         String URL = AppConstants.URL_INSERT_EVALUATE;
         Map<String, String> params = new HashMap<>();
+        params.put("SoCT", condition.getSoCT());
         params.put("EmployeeID", condition.getEmployeeID());
         params.put("SoSao", condition.getSoSao().toString());
         params.put("BinhLuan", condition.getBinhLuan());
-        params.put("HinhAnh", condition.getHinhAnh()); //string bitmap
+        params.put("HinhAnh", condition.getHinhAnh() == null? "": condition.getHinhAnh()); //string bitmap
         params.put("NguoiDungMobileID", PublicVariables.UserInfo.getNguoiDungMobileID().toString());
         params.put("ListLyDoDanhGiaSaoo", new Gson().toJson(condition.getListLyDoDanhGiaSaoo()));
         service = new APIService(URL);

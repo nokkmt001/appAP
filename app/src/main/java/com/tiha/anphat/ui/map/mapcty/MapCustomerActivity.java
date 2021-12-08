@@ -314,8 +314,7 @@ public class MapCustomerActivity extends BaseActivity implements OnMapReadyCallb
                                 .icon(AppUtils.bitmapDescriptorFromVector(this, R.drawable.ic_home_blue))
                                 .title(item.getTenkho())
                                 .snippet(item.getDiachi())
-                                .position(new LatLng(latLng.latitude, latLng.longitude)))
-                                .showInfoWindow();
+                                .position(new LatLng(latLng.latitude, latLng.longitude)));
                     }
                 }
             }

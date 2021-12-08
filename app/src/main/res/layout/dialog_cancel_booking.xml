@@ -8,7 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/AppTheme.EditText"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
         android:singleLine="false"
+        android:hint="@string/error_cancel_booking"
         android:minLines="3"/>
 
 </RelativeLayout>

@@ -114,6 +114,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         }));
         binding.layoutUpdate.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UpdateActivity.class);

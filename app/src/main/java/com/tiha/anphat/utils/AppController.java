@@ -1,6 +1,9 @@
 package com.tiha.anphat.utils;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -10,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 public class AppController extends Application {
 
     private static final String TAG = AppController.class.getSimpleName();
+    public static final String Chanel_id ="FCM_CHANNEL_ID";
 
     private RequestQueue mRequestQueue;
 
@@ -19,6 +23,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        createNotificationChannel();
     }
 
     public static synchronized AppController getInstance() {
@@ -30,6 +35,19 @@ public class AppController extends Application {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
         return mRequestQueue;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    Chanel_id,
+                    "FCM_CHANNEL_ID",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {

@@ -39,8 +39,7 @@ public class BookingModel implements IBookingModel {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String jsonOrder = jsonObject.getJSONObject("PhieuXuat").toString();
-                    String jsonCall = jsonObject.getJSONObject("Data").toString();
-                    listener.onSuccess(new OrderInfo().getOrderInfo(jsonOrder), new CallInfo().getCallInfo(jsonCall));
+                    listener.onSuccess(new OrderInfo().getOrderInfo(jsonOrder), new CallInfo());
                 } catch (JSONException e) {
                     listener.onError(e.getMessage());
                 }

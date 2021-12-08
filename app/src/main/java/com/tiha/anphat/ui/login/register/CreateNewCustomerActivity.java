@@ -15,6 +15,7 @@ import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.databinding.ActivityCreateNewCustomerBinding;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.ui.login.inputotp.InputOtpActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
@@ -56,35 +57,27 @@ public class CreateNewCustomerActivity extends BaseActivity implements CreateNew
                 checkValidate();
             }
         };
-        binding.layoutHeaderCreate.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.layoutHeaderCreate.imageBack.setOnClickListener(view12 -> finish());
         binding.layoutHeaderCreate.textTitle.setText(R.string.create_user_title);
         binding.inputUserName.addTextChangedListener(imm);
         binding.inputSdt.addTextChangedListener(imm);
         binding.inputAddress.addTextChangedListener(imm);
         binding.inputPassword.addTextChangedListener(imm);
         binding.inputConfirm.addTextChangedListener(imm);
-        binding.buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.inputConfirm.getText().toString().equals(binding.inputPassword.getText().toString())) {
-                    NewCustomer item = new NewCustomer();
-                    item.setHoTen(Objects.requireNonNull(binding.inputUserName.getText()).toString());
-                    item.setSoDienThoai(Objects.requireNonNull(binding.inputSdt.getText()).toString());
-                    item.setDiaChi(Objects.requireNonNull(binding.inputAddress.getText()).toString());
-                    item.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd HH:mm:ss"));
-                    item.setPassword(Objects.requireNonNull(binding.inputPassword.getText()).toString());
-                    item.setNgayGio(AppUtils.formatDateToString(date, "yyyy-MM-dd HH:mm:ss"));
-                    presenter = new CreateNewPresenter(CreateNewCustomerActivity.this);
-                    presenter.InsertNewCustomer(item);
-                    showProgressDialog(true);
-                } else {
-                    showMessage("Vui lòng nhập đúng mật khẩu");
-                }
+        binding.buttonLogin.setOnClickListener(view1 -> {
+            if (binding.inputConfirm.getText().toString().equals(binding.inputPassword.getText().toString())) {
+                NewCustomer item = new NewCustomer();
+                item.setHoTen(Objects.requireNonNull(binding.inputUserName.getText()).toString());
+                item.setSoDienThoai(Objects.requireNonNull(binding.inputSdt.getText()).toString());
+                item.setDiaChi(Objects.requireNonNull(binding.inputAddress.getText()).toString());
+                item.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd HH:mm:ss"));
+                item.setPassword(Objects.requireNonNull(binding.inputPassword.getText()).toString());
+                item.setNgayGio(AppUtils.formatDateToString(date, "yyyy-MM-dd HH:mm:ss"));
+                presenter = new CreateNewPresenter(CreateNewCustomerActivity.this);
+                presenter.InsertNewCustomer(item);
+                showProgressDialog(true);
+            } else {
+                showMessage("Vui lòng nhập đúng mật khẩu");
             }
         });
     }
@@ -132,9 +125,13 @@ public class CreateNewCustomerActivity extends BaseActivity implements CreateNew
         preference.setUserID(userID);
         PublicVariables.UserInfo = info;
         showProgressDialog(false);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, InputOtpActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Object", info);
+        intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        AppUtils.createNotification(this,info.getMaPIN().toString());
     }
 
     @Override

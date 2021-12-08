@@ -6,10 +6,11 @@ import com.google.gson.reflect.TypeToken;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class BookingInfo { // get don hang
+public class BookingInfo implements Serializable { // get don hang
     private String SoCt;
     private String Ngay;
     private String MSK;

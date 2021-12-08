@@ -32,7 +32,7 @@ public class IntroducePresenter implements IntroduceContract.Presenter {
     }
 
     @Override
-    public void InsertIntroduce(Integer sdt) {
+    public void InsertIntroduce(String sdt) {
         model.InsertPresenter(sdt, new IPresenterUserModel.IInsertPresenterFinish() {
             @Override
             public void onSuccess(InsertPresenterInfo info) {

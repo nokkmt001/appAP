@@ -20,6 +20,6 @@ public interface IntroduceContract {
     interface Presenter {
         void GetListIntroduce();
 
-        void InsertIntroduce(Integer ID);
+        void InsertIntroduce(String ID);
     }
 }

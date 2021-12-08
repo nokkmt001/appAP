@@ -103,6 +103,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             startActivity(intent);
             finish();
         }
+        finish();
     }
 
     @Override

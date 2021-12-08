@@ -13,6 +13,7 @@ import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.inputotp.InputOtpActivity;
 import com.tiha.anphat.ui.login.register.CreateNewCustomerActivity;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.CommonUtils;
 
 import java.util.Objects;
 
@@ -82,6 +83,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        AppUtils.createNotification(this,info.getMaPIN().toString());
     }
 
     @Override

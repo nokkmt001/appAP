@@ -14,6 +14,7 @@ import com.tiha.anphat.databinding.ActivityOtpBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.tiha.anphat.utils.AppConstants;
+import com.tiha.anphat.utils.AppUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,6 +26,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     ResendOtpPresenter presenter;
     String textID;
     AppPreference preference;
+    String toMain = "";
 
     @Override
     protected int getLayoutId() {
@@ -55,35 +57,26 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
                     public void run() {
                         onCheckCode(editable.toString());
                     }
-                }, AppConstants.DELAY_FIND_DATA);
+                }, AppConstants.DELAY_FIND_DATA_SEARCH);
             }
         });
-        binding.buttonEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (textID.equals(info.getMaPIN().toString())) {
-                    Intent intent = new Intent(InputOtpActivity.this, CheckLoginByIDPassActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Object", info);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
+        binding.buttonEnd.setOnClickListener(view13 -> {
+            if (textID.equals(info.getMaPIN().toString())) {
+                Intent intent = new Intent(InputOtpActivity.this, CheckLoginByIDPassActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Object", info);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
-        binding.textResendOtp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (info != null) {
-                    presenter.ResendOtp(info.getNguoiDungMobileID());
-                }
+        binding.textResendOtp.setOnClickListener(view1 -> {
+            if (info != null) {
+                presenter.ResendOtp(info.getNguoiDungMobileID());
             }
         });
-        binding.layoutHeader.imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                preference.setOtp(false);
-                finish();
-            }
+        binding.layoutHeader.imageBack.setOnClickListener(view12 -> {
+            preference.setOtp(false);
+            finish();
         });
     }
 
@@ -99,22 +92,27 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
             bundle.putSerializable("Object", info);
             intent.putExtras(bundle);
             startActivity(intent);
+        } else {
+            showMessage("Mã pin sai");
         }
+
     }
 
     @Override
     protected void initData() {
         Bundle bundle = getIntent().getExtras();
         info = (NewCustomer) bundle.getSerializable("Object");
-        showInfo(info.getMaPIN().toString());
+        toMain = bundle.getString("Main");
     }
 
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
+    }
 
     @Override
     public void onResendOtpSuccess(NewCustomer info) {
         this.info = info;
+        AppUtils.createNotification(this,info.getMaPIN().toString());
     }
 
     @Override
