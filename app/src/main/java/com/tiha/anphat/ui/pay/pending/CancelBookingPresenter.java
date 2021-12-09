@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.pay.pending;
 
 import com.tiha.anphat.data.entities.condition.CancelOrderCondition;
+import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.data.network.booking.BookingModel;
 import com.tiha.anphat.data.network.booking.IBookingModel;
 
@@ -24,6 +25,21 @@ public class CancelBookingPresenter implements CancelBookingContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onCancelBookingError(error);
+            }
+        });
+    }
+
+    @Override
+    public void GetBooking(String soCT) {
+        model.GetBooking(soCT, new IBookingModel.IGetBookingFinish() {
+            @Override
+            public void onSuccess(BookingInfo info) {
+                view.GetBookingSuccess(info);
+            }
+
+            @Override
+            public void onError(String error) {
+                view.GetBookingError(error);
             }
         });
     }

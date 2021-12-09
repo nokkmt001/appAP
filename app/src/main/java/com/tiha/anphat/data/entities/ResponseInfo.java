@@ -20,15 +20,6 @@ public class ResponseInfo {
         return gson.fromJson(jsonString, type);
     }
 
-    public ArrayList<ResponseInfo> getListResponse(String jsonString) {
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                .create();
-        Type type = new TypeToken<ArrayList<ResponseInfo>>() {
-        }.getType();
-        return gson.fromJson(jsonString, type);
-    }
-
     public Integer getStatus() {
         return Status;
     }

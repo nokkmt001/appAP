@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,11 +26,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseFragment;
+import com.tiha.anphat.ui.booking.BookingActivity;
 import com.tiha.anphat.ui.product.ProductContract;
 import com.tiha.anphat.ui.product.ProductPresenter;
 import com.tiha.anphat.ui.product.review.ReViewBookingActivity;
@@ -66,6 +69,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
     MainActivity activity;
     Double inventory = 0.0; // tồn kho
     Boolean isBuyNow = false;
+    AppPreference preference;
 
     public DetailProductFragment(String textTitle) {
         title = textTitle;
@@ -143,6 +147,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     protected void initData() {
+        preference = new AppPreference(getContext());
         presenter = new ProductPresenter(this);
         condition.setBegin(PAGE_START);
         condition.setUserName("TIHA");
@@ -195,16 +200,16 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
     @Override
     public void onInsertCartSuccess(CartCondition info) {
-//        activity.onLoadCartListener();
+        Toast.makeText(getContext(), R.string.add_cart_success, Toast.LENGTH_LONG).show();
         Intent intent = new Intent();
         intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
         intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
         intent.putExtra("ItemGioHang", info);
         getActivity().sendBroadcast(intent);
-        if (isBuyNow){
-            Intent intent1 = new Intent(getContext(), ReViewBookingActivity.class);
+        if (isBuyNow) {
+            Intent intent1 = new Intent(getContext(), BookingActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("ItemCart",info);
+            bundle.putString("ID",info.getID().toString());
             intent1.putExtras(bundle);
             intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent1);
@@ -266,7 +271,7 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
 
         final Date date = new Date(System.currentTimeMillis());
         imgAdd.setOnClickListener(view12 -> {
-                count = count + 1;
+            count = count + 1;
             tvCountBuy.setText(count.toString());
         });
         imgMinus.setOnClickListener(view13 -> {
@@ -289,6 +294,10 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             presenter.InsertCart(condition);
         });
         btnBuyNow.setOnClickListener(v -> {
+            if (preference.getBooking()!=null &&preference.getBooking().length()>0){
+                showMessage(getString(R.string.error_dont_booking));
+                return;
+            }
             isBuyNow = true;
             CartCondition condition = new CartCondition();
             condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
@@ -306,9 +315,11 @@ public class DetailProductFragment extends BaseFragment implements ProductContra
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 imageMain.setImageBitmap(bitmap);
             }
+
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
             }
+
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
             }

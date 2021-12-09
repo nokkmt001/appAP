@@ -3,6 +3,7 @@ package com.tiha.anphat.ui.cart;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,8 +18,10 @@ import com.tiha.anphat.databinding.ActivityCartBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.booking.BookingActivity;
+import com.tiha.anphat.ui.product.review.ReViewBookingActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.PublicVariables;
+import com.tiha.anphat.utils.TestConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,31 +55,33 @@ public class CartActivity extends BaseActivity implements CartContract.View {
         binding.buttonOK.setOnClickListener(view1 -> alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (listAllData.size() != 0) {
-                    presenter.InsertOrder(listAllData);
+                if (preference.getBooking() == null) {
+                    showMessage(getString(R.string.error_dont_booking));
+                    return;
                 }
+                PublicVariables.listBooking = adapter.getAllData();
+                Intent intent = new Intent(CartActivity.this, BookingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         }));
     }
 
-    private void onLoadDataHeader(){
+    private void onLoadDataHeader() {
         binding.textTitle.setText(getString(R.string.cart));
         binding.imageBack.setOnClickListener(view -> {
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
-            finish();
-        });
 
-        binding.imageOrder.setOnClickListener(view -> {
-//                if (!TextUtils.isEmpty(preference.getBooking())) {
-                Intent intent = new Intent(CartActivity.this, BookingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("SOCT","CTY211101001");
-                startActivity(intent);
-//                }
+            Intent intent1 = new Intent();
+            intent1.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intent1.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
+            sendBroadcast(intent1);
+            this.finish();
         });
+        binding.imageOrder.setVisibility(View.GONE);
     }
 
     public void showNoResult(final boolean isShow) {
@@ -86,7 +91,6 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     protected void initData() {
-
         presenter = new CartPresenter(this);
         presenter.GetListCart(PublicVariables.UserInfo.getNguoiDungMobileID());
     }
@@ -103,7 +107,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
             return;
         }
         priceTotal = 0.0;
-        listAllData   = list;
+        listAllData = list;
         adapter.clear();
         adapter.addAll(list);
         if (list != null) {
@@ -152,7 +156,6 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     public void onGetProductInventorySuccess(Double result) { // ton kho
-
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.tiha.anphat.R;
@@ -36,7 +37,8 @@ public class HomeFragment extends BaseFragment implements BranchContract.View {
     TextView textView;
     List<DistanceCalculator> listCalculator = new ArrayList<>();
     Location gg = null;
-
+    CategoryAdapter adapterCategory;
+    RecyclerView rclCategory;
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_home;
@@ -44,35 +46,27 @@ public class HomeFragment extends BaseFragment implements BranchContract.View {
 
     @Override
     protected void initView(View view) {
-        textView = bind(view,R.id.textBranch);
-        textView.setOnClickListener(v -> {
-            if (listDataBranch.size() == 0) return;
-            PopupMenu menu = new PopupMenu(getContext(), textView);
-            for (KhoInfo item : listDataBranch) {
-                menu.getMenu().add(item.getTenkho());
-            }
-            menu.setOnMenuItemClickListener(item -> {
-                textView.setText(item.getTitle());
-                return true;
-            });
-            menu.show();
-        });
+        rclCategory = bind(view,R.id.rclCategory);
+        adapterCategory = new CategoryAdapter();
+        rclCategory.setAdapter(adapterCategory);
     }
 
     @Override
     protected void initData() {
         presenter = new BranchPresenter(this);
         listDataBranch = PublicVariables.listKho;
-        if (PublicVariables.listKho.size() == 0) {
-            presenter.GetListBranch();
-        } else {
-            setLocation();
-        }
+//        if (PublicVariables.listKho.size() == 0) {
+//            presenter.GetListBranch();
+//        } else {
+//            textView.setText(listDataBranch.get(0).getTenkho());
+//            setLocation();
+//        }
+        adapterCategory.clearData();
+        adapterCategory.addData(PublicVariables.listCategory);
     }
 
     private void setLocation() {
         try {
-
             double latitude = 0, longitude = 0;
             if (!CommonUtils.checkLocation(getContext())) {
                 buildAlertMessageNoGps();
@@ -105,14 +99,14 @@ public class HomeFragment extends BaseFragment implements BranchContract.View {
             }
             if (listCalculator.size() == 0) return;
             Collections.sort(listCalculator, (o1, o2) -> o1.calculator.compareTo(o2.calculator));
-            double gg = listCalculator.get(0).calculator;
+//            double gg = listCalculator.get(0).calculator;
             for (KhoInfo item : listDataBranch) {
                 if (item.getMSK().equals(listCalculator.get(0).MSK)) {
                     PublicVariables.khoInfoNear = item;
                 }
             }
 
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
 
         }
     }
@@ -144,3 +138,17 @@ public class HomeFragment extends BaseFragment implements BranchContract.View {
         alert.show();
     }
 }
+
+/*      textView = bind(view, R.id.textBranch);
+        textView.setOnClickListener(v -> {
+            if (listDataBranch.size() == 0) return;
+            PopupMenu menu = new PopupMenu(getContext(), textView);
+            for (KhoInfo item : listDataBranch) {
+                menu.getMenu().add(item.getTenkho());
+            }
+            menu.setOnMenuItemClickListener(item -> {
+                textView.setText(item.getTitle());
+                return true;
+            });
+            menu.show();
+        });*/

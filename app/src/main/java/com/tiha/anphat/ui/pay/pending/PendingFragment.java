@@ -1,8 +1,6 @@
 package com.tiha.anphat.ui.pay.pending;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.style.AlignmentSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,14 +12,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.HistoryBooking;
 import com.tiha.anphat.data.entities.condition.CancelOrderCondition;
 import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.data.entities.order.ChiTietDonInfo;
 import com.tiha.anphat.ui.base.BaseFragment;
-import com.tiha.anphat.ui.booking.BookingContract;
-import com.tiha.anphat.ui.booking.BookingPresenter;
-import com.tiha.anphat.ui.booking.ProductAdapter;
+import com.tiha.anphat.ui.booking.ProductAfterAdapter;
 import com.tiha.anphat.ui.pay.history.HistoryBookingContract;
 import com.tiha.anphat.ui.pay.history.HistoryBookingPresenter;
 import com.tiha.anphat.utils.PublicVariables;
@@ -29,11 +26,10 @@ import com.tiha.anphat.utils.PublicVariables;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PendingFragment extends BaseFragment implements BookingContract.View, HistoryBookingContract.View, CancelBookingContract.View {
-    BookingPresenter presenter;
+public class PendingFragment extends BaseFragment implements HistoryBookingContract.View, CancelBookingContract.View {
     CancelBookingPresenter presenterCancel;
     HistoryBookingPresenter presenterHistory;
-    ProductAdapter adapter;
+    ProductAfterAdapter adapter;
     RecyclerView rcl;
     TextView textAddress, textNameProduct;
     View viewFinish, viewPending, viewProgress, viewEnd, viewStart;
@@ -42,6 +38,7 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
     List<BookingInfo> listAllData = new ArrayList<>();
     ConstraintLayout layoutMain;
     TextView textNoBooking;
+    AppPreference preference;
 
     @Override
     protected int getLayoutID() {
@@ -53,7 +50,7 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
         showProgressDialog(true);
         presenterCancel = new CancelBookingPresenter(this);
         presenterHistory = new HistoryBookingPresenter(this);
-        adapter = new ProductAdapter(getActivity());
+        adapter = new ProductAfterAdapter(getActivity());
         rcl = bind(view, R.id.rcl);
         rcl.setAdapter(adapter);
         textNoBooking = bind(view, R.id.textNoBooking);
@@ -81,8 +78,9 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
                         CancelOrderCondition condition = new CancelOrderCondition();
                         condition.setLyDoHuy(gg);
                         condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
-                        condition.setSoDonHang("CTY211109001");
+                        condition.setSoDonHang(preference.getBooking());
                         presenterCancel.CancelBooking(condition);
+                        preference.setBooking(null);
                         dialog.cancel();
                     })
                     .setNegativeButton("HỦY", (dialog, which) -> dialog.cancel());
@@ -93,9 +91,14 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
 
     @Override
     protected void initData() {
-        presenter = new BookingPresenter(this);
-        presenterHistory.GetListHistoryBooking();
-
+        preference = new AppPreference(getContext());
+        if (preference.getBooking() != null) {
+            presenterCancel.GetBooking(preference.getBooking());
+        } else {
+            checkResult(true);
+            showProgressDialog(false);
+//            presenterHistory.GetListHistoryBooking();
+        }
     }
 
     @Override
@@ -150,7 +153,7 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
                 }
             }
         }
-        if (textNameProduct.getText().length()==0){
+        if (textNameProduct.getText().length() == 0) {
             checkResult(true);
         }
         showProgressDialog(false);
@@ -163,25 +166,24 @@ public class PendingFragment extends BaseFragment implements BookingContract.Vie
 
     @Override
     public void onCancelBookingSuccess() {
-
+        initData();
     }
 
     @Override
     public void onCancelBookingError(String error) {
-
     }
 
     @Override
     public void onGetListHistoryBookingSuccess(List<HistoryBooking> list) {
         if (list.size() == 0) {
-            showProgressDialog(false);
             checkResult(true);
             return;
         }
         checkResult(false);
         for (HistoryBooking item : list) {
-            presenter.GetBooking(item.getSoCt());
+            presenterCancel.GetBooking(item.getSoCt());
         }
+        showProgressDialog(false);
     }
 
     @Override

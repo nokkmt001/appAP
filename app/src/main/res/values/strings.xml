@@ -82,6 +82,7 @@
     <string name="title_warning_location">Vui lòng bật chức năng xác định vị trí để có trải nghiệm tốt nhất!</string>
     <string name="error_cancel_booking">Nhập lí do hủy</string>
     <string name="title_pin">Mã pin của bạn là</string>
+    <string name="error_dont_booking">Bạn cần hoàn tất đơn hàng trước đó!</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

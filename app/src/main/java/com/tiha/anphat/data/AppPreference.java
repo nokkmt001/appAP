@@ -77,11 +77,11 @@ public class AppPreference {
     }
 
     public String getBooking() {
-        return sharedPreferences.getString(PREF_BOOKING, "");
+        return sharedPreferences.getString(PREF_BOOKING, null);
     }
 
-    public void setBooking(String matKhau) {
-        sharedPreferences.edit().putString(PREF_BOOKING, matKhau).apply();
+    public void setBooking(String soCt) {
+        sharedPreferences.edit().putString(PREF_BOOKING, soCt).apply();
     }
 
 }

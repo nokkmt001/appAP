@@ -1,175 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/layoutHeader"
         layout="@layout/layout_header" />
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonOk"
         android:layout_below="@+id/layoutHeader">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
+            android:id="@+id/layoutTwo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
-                android:id="@+id/layoutOne"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageMain"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="@dimen/dp_20">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:id="@+id/layoutStatus"
-                    android:layout_height="wrap_content">
-
-                    <View
-                        android:id="@+id/status_start"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_marginStart="@dimen/dp_20"
-                        android:background="@drawable/shape_status_remaining"/>
-
-                    <View
-                        android:layout_width="wrap_content"
-                        android:layout_height="4dp"
-                        android:background="@color/Blue"
-                        android:layout_toEndOf="@+id/status_start"
-                        android:layout_toStartOf="@+id/status_progress"
-                        android:layout_centerVertical="true"/>
-
-                    <View
-                        android:id="@+id/status_progress"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/shape_status_current"/>
-
-                    <View
-                        android:layout_width="wrap_content"
-                        android:layout_height="4dp"
-                        android:background="@color/Blue"
-                        android:layout_toEndOf="@+id/status_progress"
-                        android:layout_toStartOf="@+id/status_end"
-                        android:layout_centerVertical="true"/>
-
-                    <View
-                        android:id="@+id/status_end"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="@dimen/dp_20"
-                        android:background="@drawable/shape_status_completed"/>
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/textBooking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/AppTheme.TextView"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:textColor="@color/Black"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_below="@+id/layoutStatus"
-                    android:text="Đã đặt"/>
-
-                <TextView
-                    android:id="@+id/textTransport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/AppTheme.TextView"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@color/Black"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_below="@+id/layoutStatus"
-                    android:text="Đang vận chuyển"/>
-
-                <TextView
-                    android:id="@+id/textFinish"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/AppTheme.TextView"
-                    android:textColor="@color/Black"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/dp_5"
-                    android:layout_below="@+id/layoutStatus"
-                    android:text="Hoàn thành"/>
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/viewOne"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorLine"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                app:layout_constraintTop_toBottomOf="@+id/layoutOne"/>
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5"
+                android:src="@drawable/ic_map_location_customer" />
 
             <LinearLayout
-                android:id="@+id/layoutTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_toEndOf="@+id/imageMain"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/viewOne">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/textAddress"
                     style="@style/AppTheme.TextView"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/AppTheme.TextView"
-                    android:fontFamily="@font/myriadpro_bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/AppTheme.TextView"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/viewTwo"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorLine"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTwo"/>
-            
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/viewTwo"/>
+        </RelativeLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/viewTwo"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTwo" />
 
-    </androidx.core.widget.NestedScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/buttonOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/dp_5"
+        android:text="@string/text_order"/>
 
 </RelativeLayout>

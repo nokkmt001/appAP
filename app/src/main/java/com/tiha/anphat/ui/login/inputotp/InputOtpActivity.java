@@ -11,10 +11,13 @@ import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.databinding.ActivityOtpBinding;
+import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
+import com.tiha.anphat.ui.splash.SplashActivity;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,11 +65,21 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         });
         binding.buttonEnd.setOnClickListener(view13 -> {
             if (textID.equals(info.getMaPIN().toString())) {
-                Intent intent = new Intent(InputOtpActivity.this, CheckLoginByIDPassActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Object", info);
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (toMain!=null&&toMain.length()>0){
+                    preference.setLogin(true);
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, CheckLoginByIDPassActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Object", info);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+                this.finish();
+
+            } else {
+                showMessage("Mã pin sai");
             }
         });
         binding.textResendOtp.setOnClickListener(view1 -> {
@@ -92,17 +105,18 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
             bundle.putSerializable("Object", info);
             intent.putExtras(bundle);
             startActivity(intent);
+            this.finish();
         } else {
             showMessage("Mã pin sai");
         }
-
     }
 
     @Override
     protected void initData() {
         Bundle bundle = getIntent().getExtras();
         info = (NewCustomer) bundle.getSerializable("Object");
-        toMain = bundle.getString("Main");
+        toMain = bundle.getString("FromCreate");
+
     }
 
     @Override

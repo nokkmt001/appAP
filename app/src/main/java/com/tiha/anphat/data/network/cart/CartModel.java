@@ -3,11 +3,16 @@ package com.tiha.anphat.data.network.cart;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.NewCustomer;
+import com.tiha.anphat.data.entities.ResponseInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -30,10 +35,20 @@ public class CartModel implements ICartModel {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new CartCondition().getCart(response));
-
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(new CartCondition().getCart(jsonList));
+                        } catch (JSONException e) { listener.onError(e.getMessage());
+                        }
+                    } else { listener.onError(responseInfo.getMessage());
+                    }
+                } else { listener.onError(AppConstants.Error_Unknown);
+                }
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
@@ -48,7 +63,17 @@ public class CartModel implements ICartModel {
         service.Delete(Request.Method.DELETE, new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess();
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            listener.onSuccess();
+                        } catch (Exception e) { listener.onError(e.getMessage());
+                        }
+                    } else { listener.onError(responseInfo.getMessage());
+                    }
+                } else { listener.onError(AppConstants.Error_Unknown);
+                }
             }
 
             @Override
@@ -73,8 +98,20 @@ public class CartModel implements ICartModel {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new CartCondition().getCart(response));
-
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(new CartCondition().getCart(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
+                }
             }
 
             @Override
@@ -91,13 +128,24 @@ public class CartModel implements ICartModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new CartInfo().getListCart(response));
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONArray("Data").toString();
+                            listener.onSuccess(new CartInfo().getListCart(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
+                }
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
-
             }
         });
     }

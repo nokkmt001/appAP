@@ -56,6 +56,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         notifyDataSetChanged();
     }
 
+    public List<CartInfo> getAllData(){
+        return listAllData;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

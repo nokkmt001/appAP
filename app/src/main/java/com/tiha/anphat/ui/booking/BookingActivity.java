@@ -1,42 +1,75 @@
 package com.tiha.anphat.ui.booking;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
+import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.order.BookingInfo;
+import com.tiha.anphat.data.entities.order.CallInfo;
+import com.tiha.anphat.data.entities.order.OrderInfo;
 import com.tiha.anphat.databinding.ActivityBookingBinding;
 import com.tiha.anphat.databinding.ActivityCartBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
+import com.tiha.anphat.ui.base.BaseTestActivity;
+import com.tiha.anphat.utils.PublicVariables;
 
-public class BookingActivity extends BaseActivity implements BookingContract.View {
-    BookingPresenter presenter;
+import java.util.List;
+
+@SuppressLint("SetTextI18n")
+public class BookingActivity extends BaseTestActivity<ActivityBookingBinding> implements BookingContract.View {
     ActivityBookingBinding binding;
+    BookingPresenter presenter;
     ProductAdapter adapter;
+    NewCustomer info;
+    List<CartInfo> list = null;
+    AppPreference preference;
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_booking;
+    public ActivityBookingBinding getViewBinding() {
+        return binding = ActivityBookingBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
-        binding = ActivityBookingBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+        preference = new AppPreference(this);
+        info = PublicVariables.UserInfo;
         adapter = new ProductAdapter(this);
-
         binding.rcl.setAdapter(adapter);
+        binding.textAddress.setText("Địa chỉ nhận hàng \n" + info.getHoTen() + " | " + info.getSoDienThoai() + "\n" +
+                info.getDiaChi());
+        binding.buttonOk.setOnClickListener(v -> {
+            if (preference.getBooking()==null){
+                presenter.InsertOrder(list);
+            } else {
+                showMessage(getString(R.string.error_dont_booking));
+            }
+        });
     }
 
     @Override
     protected void initData() {
-
-        Bundle bundle = getIntent().getExtras();
-
-        assert bundle != null;
-        String gg = bundle.getString("SOCT");
+        list = PublicVariables.listBooking;
+        if (list == null) return;
         presenter = new BookingPresenter(this);
-        presenter.GetBooking("CTY211101001");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle==null) {
+            adapter.clear();
+            adapter.addAll(list);
+            return;
+        } else {
+            String gg = bundle.getString("ID");
+            for (CartInfo info : list) {
+                if (gg.equals(info.getID().toString())) {
+                    adapter.clear();
+                    adapter.addData(info);
+                }
+            }
+        }
     }
 
     @Override
@@ -45,15 +78,13 @@ public class BookingActivity extends BaseActivity implements BookingContract.Vie
     }
 
     @Override
-    public void GetBookingSuccess(BookingInfo info) {
-        if (info!=null){
-            adapter.clear();
-            adapter.addAll(info.getListChiTietDonHang());
-        }
+    public void onInsertOrderSuccess(OrderInfo item, CallInfo info) {
+        showToast("Đặt hàng thành công");
+        finish();
     }
 
     @Override
-    public void GetBookingError(String error) {
+    public void onInsertOrderError(String error) {
         showMessage(error);
     }
 }

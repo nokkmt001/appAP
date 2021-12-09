@@ -1,16 +1,20 @@
 package com.tiha.anphat.ui.booking;
 
-import com.tiha.anphat.data.entities.order.BookingInfo;
+import com.tiha.anphat.data.entities.CartInfo;
+import com.tiha.anphat.data.entities.order.CallInfo;
+import com.tiha.anphat.data.entities.order.OrderInfo;
+
+import java.util.List;
 
 public interface BookingContract {
 
     interface View{
-        void GetBookingSuccess(BookingInfo info);
+        void onInsertOrderSuccess(OrderInfo item, CallInfo info);
 
-        void GetBookingError(String error);
+        void onInsertOrderError(String error);
     }
 
     interface Presenter{
-        void GetBooking(String soCT);
+        void InsertOrder(List<CartInfo> list);
     }
 }

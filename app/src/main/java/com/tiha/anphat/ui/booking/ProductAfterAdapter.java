@@ -31,17 +31,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
+public class ProductAfterAdapter extends RecyclerView.Adapter<ProductAfterAdapter.MyViewHolder> {
     ProductModel model;
     BaseEventClick.OnClickListener clickListener;
-    List<CartInfo> listAllData = new ArrayList<>();
+    List<ChiTietDonInfo> listAllData = new ArrayList<>();
     Context mContext;
 
     public void setClickListener(BaseEventClick.OnClickListener listener) {
         this.clickListener = listener;
     }
 
-    public ProductAdapter(Context context) {
+    public ProductAfterAdapter(Context context) {
         this.mContext = context;
         this.model = new ProductModel();
     }
@@ -51,16 +51,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         notifyDataSetChanged();
     }
 
-    public void addData(CartInfo info) {
-        listAllData.add(info);
-        notifyDataSetChanged();
-    }
-
-    public CartInfo getItem(int position) {
+    public ChiTietDonInfo getItem(int position) {
         return listAllData.get(position);
     }
 
-    public void addAll(List<CartInfo> list) {
+    public void addAll(List<ChiTietDonInfo> list) {
         listAllData.addAll(list);
         notifyDataSetChanged();
     }
@@ -75,11 +70,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-        CartInfo item = listAllData.get(position);
-        holder.textName.setText(item.getProductName());
-        holder.textCount.setText("Số lượng: "+item.getSoLuong());
-        holder.textMoney.setText("Tổng tiền: "+item.getDonGia().toString());
-        model.GetImageFromProductID(item.getProductID(), new IProductModel.IGetImageFromProductIDFinishListener() {
+        ChiTietDonInfo item = listAllData.get(position);
+        holder.textName.setText(item.getProduct_Name());
+        holder.textCount.setText("Số lượng: "+item.getSL());
+        holder.textMoney.setText("Tổng tiền: "+item.getDongia().toString());
+        model.GetImageFromProductID(item.getProduct_ID(), new IProductModel.IGetImageFromProductIDFinishListener() {
             @Override
             public void onSuccess(String imageBitmap) {
                 if (imageBitmap != null) {
@@ -124,12 +119,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             textCount = bind(view, R.id.textCount);
             textMoney = bind(view, R.id.textMoney);
             imageView = bind(view, R.id.imageMain);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onClick(view, getAdapterPosition());
-                    }
+            view.setOnClickListener(view1 -> {
+                if (clickListener != null) {
+                    clickListener.onClick(view1, getAdapterPosition());
                 }
             });
         }

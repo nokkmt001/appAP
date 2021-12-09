@@ -4,6 +4,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.HistoryBooking;
+import com.tiha.anphat.data.entities.ResponseInfo;
 import com.tiha.anphat.data.entities.condition.CancelOrderCondition;
 import com.tiha.anphat.data.entities.order.BookingInfo;
 import com.tiha.anphat.data.entities.order.CallInfo;
@@ -36,15 +37,21 @@ public class BookingModel implements IBookingModel {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String jsonOrder = jsonObject.getJSONObject("PhieuXuat").toString();
-                    listener.onSuccess(new OrderInfo().getOrderInfo(jsonOrder), new CallInfo());
-                } catch (JSONException e) {
-                    listener.onError(e.getMessage());
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("PhieuXuat").toString();
+                            listener.onSuccess(new OrderInfo().getOrderInfo(jsonList), new CallInfo());
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
                 }
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
@@ -59,9 +66,21 @@ public class BookingModel implements IBookingModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new BookingInfo().getBookingInfo(response));
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(new BookingInfo().getBookingInfo(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
+                }
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
@@ -76,9 +95,22 @@ public class BookingModel implements IBookingModel {
         service.DownloadJson(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                listener.onSuccess(new HistoryBooking().getListHistoryBooking(response));
-            }
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONArray("Data").toString();
+                            listener.onSuccess(new HistoryBooking().getListHistoryBooking(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
 
+                }
+            }
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));
@@ -97,10 +129,19 @@ public class BookingModel implements IBookingModel {
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {
-                try {
-                    listener.onSuccess(Boolean.valueOf(response));
-                } catch (Exception e) {
-                    listener.onError(e.getMessage());
+                ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+                if (responseInfo != null) {
+                    if (responseInfo.getStatus() == 0) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String jsonList = jsonObject.getJSONObject("Data").toString();
+                            listener.onSuccess(Boolean.valueOf(jsonList));
+                        } catch (JSONException e) {
+                            listener.onError(e.getMessage());
+                        }
+                    } else {
+                        listener.onError(responseInfo.getMessage());
+                    }
                 }
             }
 

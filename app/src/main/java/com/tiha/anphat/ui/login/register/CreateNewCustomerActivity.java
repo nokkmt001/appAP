@@ -109,7 +109,6 @@ public class CreateNewCustomerActivity extends BaseActivity implements CreateNew
         Gson gson = new Gson();
         String json = gson.toJson(info);
         preference.setUser(json);
-        preference.setLogin(true);
         AESUtils aesUtils = new AESUtils();
         String userID = "";
         try {
@@ -128,6 +127,7 @@ public class CreateNewCustomerActivity extends BaseActivity implements CreateNew
         Intent intent = new Intent(this, InputOtpActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("Object", info);
+        bundle.putString("FromCreate","gg");
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

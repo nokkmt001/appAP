@@ -5,12 +5,26 @@
     android:layout_height="match_parent"
     android:background="@color/White">
 
+    <include
+        android:id="@+id/layoutSearch"
+        layout="@layout/layout_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rclCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/layoutSearch"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
     <LinearLayout
         android:id="@+id/layoutBranch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_button_light_radius_2"
         android:layout_marginStart="@dimen/dp_10"
+        android:layout_below="@+id/rclCategory"
         android:layout_marginEnd="@dimen/dp_10"
         android:orientation="vertical">
 
@@ -25,6 +39,7 @@
             android:gravity="left|center"
             android:paddingStart="@dimen/dp_10"
             android:text="Text"
+            android:visibility="gone"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
 

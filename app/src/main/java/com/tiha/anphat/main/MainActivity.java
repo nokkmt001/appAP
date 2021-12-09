@@ -271,6 +271,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void onGetListAllCartSuccess(List<CartInfo> list) {
+        PublicVariables.listBooking = list;
         if (list != null && list.size() > 0) {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
             binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(list.size()));
@@ -337,7 +338,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             if (bundle == null) return;
             String eventName = bundle.getString("eventName");
             if (TestConstants.RECEIVE_ThayDoiGioHang.equals(eventName)) {
-                Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
                 presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
             }
         }

@@ -2,6 +2,7 @@ package com.tiha.anphat.utils;
 
 import android.os.CountDownTimer;
 
+import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.ProductInfo;
@@ -28,6 +29,8 @@ public class PublicVariables {
 
     public static BookingInfo infoBooking = null;
 
+    public static List<CartInfo> listBooking = null;
+
     public static void ClearData() {
         UserInfo = new NewCustomer();
         listCategory = new ArrayList<>();
@@ -35,6 +38,7 @@ public class PublicVariables {
         listImageVote = new ArrayList<>();
         listAllProDuct = new ArrayList<>();
         khoInfoNear = null;
+        listBooking = null;
     }
 
 

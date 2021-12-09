@@ -51,6 +51,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.entities.ResponseInfo;
+import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.sms.contact.ContactModel;
 
@@ -652,6 +654,41 @@ public class AppUtils {
             e.printStackTrace();
             return "No Address Found";
         }
+    }
+
+    public static String getResponse(String response) {
+        String data = "";
+        try {
+            ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+            if (responseInfo != null) {
+                if (responseInfo.getStatus() == 0) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        data = jsonObject.getJSONObject("Data").toString();
+                    } catch (JSONException e) {
+                        JSONObject jsonObject = new JSONObject(response);
+                        data = jsonObject.getJSONArray("Data").toString();
+                    } catch (Exception e){
+                        JSONObject jsonObject = new JSONObject(response);
+                        data = jsonObject.getJSONObject("Data").getJSONArray("list").toString();
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+        return data;
+    }
+
+    public static String getResponseError(String response) {
+        String error = "";
+        ResponseInfo responseInfo = new ResponseInfo().getResponse(response);
+        if (responseInfo != null) {
+            if (responseInfo.getStatus() != 0) {
+                error = responseInfo.getMessage();
+            } else error = null;
+        }
+        return error;
     }
 
     public static void createNotification(Context context, String body) {
