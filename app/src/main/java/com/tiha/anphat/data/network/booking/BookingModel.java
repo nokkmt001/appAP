@@ -42,14 +42,11 @@ public class BookingModel implements IBookingModel {
                     if (responseInfo.getStatus() == 0) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            String jsonList = jsonObject.getJSONObject("PhieuXuat").toString();
+                            String jsonList = jsonObject.getJSONObject("Data").getJSONObject("PhieuXuat").toString();
                             listener.onSuccess(new OrderInfo().getOrderInfo(jsonList), new CallInfo());
                         } catch (JSONException e) {
-                            listener.onError(e.getMessage());
-                        }
-                    } else {
-                        listener.onError(responseInfo.getMessage());
-                    }
+                            listener.onError(e.getMessage()); }
+                    } else { listener.onError(responseInfo.getMessage()); }
                 }
             }
             @Override

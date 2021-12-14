@@ -17,6 +17,7 @@ import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.login.forgetpass.ForgetPassActivity;
+import com.tiha.anphat.ui.login.inputotp.InputOtpActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
@@ -59,9 +60,9 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         binding.inputID.addTextChangedListener(imm);
         binding.inputPassword.addTextChangedListener(imm);
         binding.buttonLogin.setOnClickListener(view12 -> {
+            showProgressDialog(true);
             presenter = new LoginIDPassPresenter(CheckLoginByIDPassActivity.this);
             presenter.CheckLoginByIDPass(info.getNguoiDungMobileID().toString(), Objects.requireNonNull(binding.inputPassword.getText()).toString());
-            showProgressDialog(true);
         });
         binding.textForgetPass.setOnClickListener(view1 -> {
             if (info==null) return;
@@ -73,6 +74,14 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
             startActivity(intent);
         });
         binding.imageLogo.setOnClickListener(view13 -> linkWed());
+        binding.textChangPhone.setOnClickListener(v -> {
+            preference.setOtp(false);
+            preference.setUser(null);
+            Intent intent = new Intent(CheckLoginByIDPassActivity.this, CheckPhoneActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void linkWed(){

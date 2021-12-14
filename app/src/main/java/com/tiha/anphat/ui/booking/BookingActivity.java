@@ -1,6 +1,7 @@
 package com.tiha.anphat.ui.booking;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class BookingActivity extends BaseTestActivity<ActivityBookingBinding> im
     NewCustomer info;
     List<CartInfo> list = null;
     AppPreference preference;
+    String gg = "";
+
     @Override
     public ActivityBookingBinding getViewBinding() {
         return binding = ActivityBookingBinding.inflate(getLayoutInflater());
@@ -36,6 +39,7 @@ public class BookingActivity extends BaseTestActivity<ActivityBookingBinding> im
 
     @Override
     protected void initView() {
+        showProgressDialog(true);
         preference = new AppPreference(this);
         info = PublicVariables.UserInfo;
         adapter = new ProductAdapter(this);
@@ -43,32 +47,33 @@ public class BookingActivity extends BaseTestActivity<ActivityBookingBinding> im
         binding.textAddress.setText("Địa chỉ nhận hàng \n" + info.getHoTen() + " | " + info.getSoDienThoai() + "\n" +
                 info.getDiaChi());
         binding.buttonOk.setOnClickListener(v -> {
-            if (preference.getBooking()==null){
+            if (preference.getBooking() == null) {
                 presenter.InsertOrder(list);
             } else {
                 showMessage(getString(R.string.error_dont_booking));
             }
         });
+        setHeader();
+
+    }
+
+    private void setHeader() {
+        binding.layoutHeader.imageBack.setOnClickListener(v -> finish());
+        binding.layoutHeader.textTitle.setText("Đặt hàng");
     }
 
     @Override
     protected void initData() {
         list = PublicVariables.listBooking;
-        if (list == null) return;
         presenter = new BookingPresenter(this);
         Bundle bundle = getIntent().getExtras();
-        if (bundle==null) {
+        if (bundle == null) {
             adapter.clear();
             adapter.addAll(list);
-            return;
+            showProgressDialog(false);
         } else {
-            String gg = bundle.getString("ID");
-            for (CartInfo info : list) {
-                if (gg.equals(info.getID().toString())) {
-                    adapter.clear();
-                    adapter.addData(info);
-                }
-            }
+            gg = bundle.getString("ID");
+            presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
         }
     }
 
@@ -80,11 +85,34 @@ public class BookingActivity extends BaseTestActivity<ActivityBookingBinding> im
     @Override
     public void onInsertOrderSuccess(OrderInfo item, CallInfo info) {
         showToast("Đặt hàng thành công");
+        preference.setBooking(item.getSoCt());
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     public void onInsertOrderError(String error) {
         showMessage(error);
+    }
+
+    @Override
+    public void onGetListAllCartSuccess(List<CartInfo> list) {
+        PublicVariables.listBooking = list;
+        showProgressDialog(false);
+        if (!gg.equals("")) {
+            for (CartInfo info : list) {
+                if (gg.equals(info.getID().toString())) {
+                    adapter.clear();
+                    adapter.addData(info);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onGetListAllCartError(String error) {
+        showMessage(error);
+        showProgressDialog(false);
     }
 }

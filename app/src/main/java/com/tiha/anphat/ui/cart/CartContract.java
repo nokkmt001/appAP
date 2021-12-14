@@ -10,7 +10,7 @@ import com.tiha.anphat.data.entities.order.OrderInfo;
 import java.util.List;
 
 public interface CartContract {
-    interface View{
+    interface View {
         void onGetListAllCartSuccess(List<CartInfo> list);
 
         void onGetListAllCartError(String error);
@@ -40,7 +40,7 @@ public interface CartContract {
 //        void onInsertUserLocationError();
     }
 
-    interface Presenter{
+    interface Presenter {
         void GetListCart(Integer UserID);
 
         void UpdateCart(CartCondition condition);
@@ -49,7 +49,7 @@ public interface CartContract {
 
         void GetProductPriceByUser(ProductPriceCondition condition);
 
-        void GetProductInventory(String maKho,String productID, String date );
+        void GetProductInventory(String maKho, String productID, String date);
 
         void InsertOrder(List<CartInfo> list);
 

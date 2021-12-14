@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,7 +57,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
         notifyDataSetChanged();
     }
 
-    public List<CartInfo> getAllData(){
+    public List<CartInfo> getAllData() {
         return listAllData;
     }
 
@@ -94,20 +95,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.MyViewHolder> 
             imageAdd = bind(view, R.id.imageAdd);
             textCount = bind(view, R.id.textCount);
 
-            imageMinus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onClick(view, getAdapterPosition());
-                    }
+            imageMinus.setOnClickListener(view12 -> {
+                if (clickListener != null) {
+                    clickListener.onClick(view12, getAdapterPosition());
                 }
             });
-            imageAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onClick(view, getAdapterPosition());
-                    }
+            imageAdd.setOnClickListener(view1 -> {
+                if (clickListener != null) {
+                    clickListener.onClick(view1, getAdapterPosition());
                 }
             });
         }

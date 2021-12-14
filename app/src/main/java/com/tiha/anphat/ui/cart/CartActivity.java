@@ -1,9 +1,8 @@
 package com.tiha.anphat.ui.cart;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,9 +15,7 @@ import com.tiha.anphat.data.entities.order.CallInfo;
 import com.tiha.anphat.data.entities.order.OrderInfo;
 import com.tiha.anphat.databinding.ActivityCartBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
-import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.booking.BookingActivity;
-import com.tiha.anphat.ui.product.review.ReViewBookingActivity;
 import com.tiha.anphat.utils.AppUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.TestConstants;
@@ -42,28 +39,26 @@ public class CartActivity extends BaseActivity implements CartContract.View {
 
     @Override
     protected void initView() {
+        showProgressDialog(true);
         preference = new AppPreference(this);
         binding = ActivityCartBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         onLoadDataHeader();
-        adapter = new CartAdapter(CartActivity.this, new ArrayList<CartInfo>());
+        adapter = new CartAdapter(CartActivity.this, new ArrayList<>());
         binding.rylCart.setLayoutManager(new LinearLayoutManager(this));
         binding.rylCart.setAdapter(adapter);
         onAdapterClick();
         showNoResult(false);
-        binding.buttonOK.setOnClickListener(view1 -> alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (preference.getBooking() == null) {
-                    showMessage(getString(R.string.error_dont_booking));
-                    return;
-                }
-                PublicVariables.listBooking = adapter.getAllData();
-                Intent intent = new Intent(CartActivity.this, BookingActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+        binding.buttonOK.setOnClickListener(view1 -> alertDialog("", "Bạn chắc chắn muốn đặt hàng!", "Ok", null, (dialogInterface, i) -> {
+            if (preference.getBooking() != null) {
+                showMessage(getString(R.string.error_dont_booking));
+                return;
             }
+            PublicVariables.listBooking = adapter.getAllData();
+            Intent intent = new Intent(CartActivity.this, BookingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, 1);
         }));
     }
 
@@ -104,25 +99,24 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     public void onGetListAllCartSuccess(List<CartInfo> list) {
         if (list.size() == 0) {
             showNoResult(true);
+            showProgressDialog(false);
             return;
         }
         priceTotal = 0.0;
         listAllData = list;
         adapter.clear();
         adapter.addAll(list);
-        if (list != null) {
-            for (CartInfo item : list) {
-                priceTotal = priceTotal + Double.parseDouble(String.valueOf(item.getDonGia() * item.getSoLuong()));
-            }
-            setPrice(priceTotal);
-        } else {
-            setPrice(0.0);
+        for (CartInfo item : list) {
+            priceTotal = priceTotal + Double.parseDouble(String.valueOf(item.getDonGia() * item.getSoLuong()));
         }
+        setPrice(priceTotal);
+        showProgressDialog(false);
     }
 
     @Override
     public void onGetListAllCartError(String error) {
         showMessage(error);
+        showProgressDialog(false);
     }
 
     @Override
@@ -173,6 +167,7 @@ public class CartActivity extends BaseActivity implements CartContract.View {
         showMessage(error);
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void onAdapterClick() {
         adapter.setClickListener((view, position) -> {
             CartInfo info = adapter.getItem(position);
@@ -224,5 +219,17 @@ public class CartActivity extends BaseActivity implements CartContract.View {
     public void setPrice(Double price) {
         binding.textCountTem.setText(String.format("%s%s", AppUtils.formatNumber("NO").format(price), getString(R.string.vnd)));
         binding.textPriceFinal.setText(binding.textCountTem.getText().toString());
+    }
+
+    @Override
+    protected void onResult(int requestCode, int resultCode, Intent data) {
+        super.onResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            int ACTION_ADD = 1;
+            if (requestCode == ACTION_ADD) {
+                showProgressDialog(true);
+                initData();
+            }
+        }
     }
 }

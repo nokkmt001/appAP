@@ -23,7 +23,7 @@ public class AppPreference {
     }
 
     public String getUser(){
-        return sharedPreferences.getString(PREF_USER,"");
+        return sharedPreferences.getString(PREF_USER,null);
     }
 
     public void setUser(String user){

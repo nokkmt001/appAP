@@ -3,10 +3,8 @@ package com.tiha.anphat.ui.introduce;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.TableLayout;
-import android.widget.Toast;
 
-import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.IntroducePerInfo;
 import com.tiha.anphat.data.entities.presenteruser.InsertPresenterInfo;
 import com.tiha.anphat.databinding.FragmentIntroduceBinding;
@@ -33,14 +31,13 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
 
     @Override
     protected void initView() {
-        adapter = new IntroduceAdapter();
+        adapter = new IntroduceAdapter(this);
         bd.rcl.setAdapter(adapter);
         bd.etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (timer != null)
@@ -84,7 +81,7 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
     @Override
     public void onGetListIntroduceSuccess(List<IntroducePerInfo> list) {
         adapter.clearData();
-        adapter.addData(listAllData);
+        adapter.addData(list);
         showProgressDialog(false);
     }
 
@@ -96,8 +93,8 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
 
     @Override
     public void onInsertIntroduceSuccess(InsertPresenterInfo info) {
-        Toast.makeText(this,"Thêm người giới thiệu thành công", Toast.LENGTH_SHORT).show();
         showProgressDialog(false);
+        showToast(getString(R.string.title_add_presenter));
         initData();
         bd.etSearch.setText("");
     }

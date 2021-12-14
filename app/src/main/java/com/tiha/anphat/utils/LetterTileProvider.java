@@ -75,9 +75,10 @@ public class LetterTileProvider {
      *
      * @param context The {@link Context} to use
      */
+    int colorPrimary= 0;
     public LetterTileProvider(Context context) {
         final Resources res = context.getResources();
-
+        colorPrimary = context.getResources().getColor(R.color.colorPrimaryDark);
         mPaint.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         mPaint.setColor(Color.WHITE);
         mPaint.setTextAlign(Paint.Align.CENTER);
@@ -105,7 +106,8 @@ public class LetterTileProvider {
 
         final Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
 
-        final char firstChar = displayName.charAt(0);
+
+        final char firstChar =displayName.contains(" ") ? displayName.split(" ")[displayName.split(" ").length -1].charAt(0) : displayName.charAt(0);
 
         final Canvas c = mCanvas;
         c.setBitmap(bitmap);
@@ -206,7 +208,7 @@ public class LetterTileProvider {
         // this should guarantee the same key always maps to the same color
         final int color = Math.abs(key.hashCode()) % NUM_OF_TILE_COLORS;
         try {
-            return mColors.getColor(color, Color.BLUE);
+            return colorPrimary;//mColors.getColor(color, Color.BLACK);
         } finally {
             // bug with recycler view
             //mColors.recycle();

@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/textMainMain"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/Black"
-        android:text="1"/>
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewNewsFeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <com.tiha.anphat.utils.AutoScrollRecyclerView
+            android:id="@+id/rclImage"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:src="@drawable/img_no_image" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextView"
+            android:textStyle="bold"
+            android:text="@string/title_gas" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextView"
+            android:text="@string/detail_gas" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNewsFeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

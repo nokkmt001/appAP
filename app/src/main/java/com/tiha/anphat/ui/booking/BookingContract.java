@@ -12,9 +12,16 @@ public interface BookingContract {
         void onInsertOrderSuccess(OrderInfo item, CallInfo info);
 
         void onInsertOrderError(String error);
+
+        void onGetListAllCartSuccess(List<CartInfo> list);
+
+        void onGetListAllCartError(String error);
     }
 
     interface Presenter{
         void InsertOrder(List<CartInfo> list);
+
+        void GetListAllCart(Integer UserID);
+
     }
 }

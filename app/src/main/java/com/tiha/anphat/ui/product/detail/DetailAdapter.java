@@ -1,9 +1,9 @@
 package com.tiha.anphat.ui.product.detail;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,53 +11,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.bumptech.glide.signature.ObjectKey;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.ProductInfo;
-import com.tiha.anphat.data.network.product.IProductModel;
 import com.tiha.anphat.data.network.product.ProductModel;
 import com.tiha.anphat.ui.base.BaseEventClick;
-import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> implements LoadImageContract.View {
     List<ProductInfo> listAllData;
     Context mContext;
     BaseEventClick.OnClickListener clickListener;
-    String category = "";
+    String category;
     LoadImagePresenter presenter;
     String biMap = null;
     ProductModel model;
-    Boolean isLive = false;
-    List<ProductInfo> listChooseData = new ArrayList<>();
 
     public DetailAdapter(Context context, List<ProductInfo> list, String category) {
         this.listAllData = list;
@@ -97,6 +70,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         final ProductInfo info = listAllData.get(position);
@@ -104,54 +78,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         holder.tvTitle.setText(info.getProduct_Name() == null ? "" : info.getProduct_Name());
         holder.tvCodeProduct.setText(info.getProduct_ID()==null?"":"Mã sản phẩm: "+info.getProduct_ID());
         holder.tvCategory.setText(info.getCategory_ID()==null?"":"Loại hàng: "+info.getCategory_ID());
-//        model.GetImageFromProductID(info.getProduct_ID(), new IProductModel.IGetImageFromProductIDFinishListener() {
-//            @Override
-//            public void onSuccess(String imageBitmap) {
-//                if (imageBitmap != null) {
-//                    info.setImageBitMap(imageBitmap);
-////                    ProductInfo ininfo = info;
-////                    listAllData.remove(position);
-////                    listAllData.add(position,ininfo);
-//                    Glide.with(mContext).asBitmap()
-//                            .load(AppUtils.formatStringToBitMap(imageBitmap))
-//                            .apply(new RequestOptions().override(10, 10))
-//                            .into(new CustomTarget<Bitmap>() {
-//                                @Override
-//                                public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
-//                                        Transition<? super Bitmap> transition) {
-//                                    holder.imageView.setImageBitmap(resource);
-//                                }
-//
-//                                @Override
-//                                public void onLoadCleared(@Nullable Drawable placeholder) {
-//                                }
-//                            });
-//                } else {
-//                    holder.imageView.setImageResource(R.drawable.img_no_image);
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String error) {
-//                holder.imageView.setImageResource(R.drawable.img_no_image);
-//            }
-//        });
         String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
-
-//        Glide.with(mContext)
-//                .load(url)
-//                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
-//                .apply(new RequestOptions()
-//                        .placeholder(R.drawable.img_no_image).error(R.drawable.img_no_image))
-//                .into(new CustomTarget<Drawable>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-//                        holder.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
-//                    }
-//                    @Override
-//                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                    }
-//                });
 
         Target target = new Target() {
             @Override
@@ -194,12 +121,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             tvTitle = bind(view, R.id.tvTitle);
             tvPrice = bind(view, R.id.textPrice);
             imageView = bind(view, R.id.imageView);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (clickListener != null) {
-                        clickListener.onClick(view, getAdapterPosition());
-                    }
+            view.setOnClickListener(view1 -> {
+                if (clickListener != null) {
+                    clickListener.onClick(view1, getAdapterPosition());
                 }
             });
         }

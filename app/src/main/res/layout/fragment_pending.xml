@@ -231,7 +231,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Bạn chưa có đơn hàng nào"
+        android:text="@string/title_no_booking"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"

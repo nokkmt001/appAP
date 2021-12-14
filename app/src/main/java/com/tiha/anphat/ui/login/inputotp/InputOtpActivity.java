@@ -14,20 +14,14 @@ import com.tiha.anphat.databinding.ActivityOtpBinding;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
-import com.tiha.anphat.ui.splash.SplashActivity;
-import com.tiha.anphat.utils.AppConstants;
+import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.utils.AppUtils;
-import com.tiha.anphat.utils.PublicVariables;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class InputOtpActivity extends BaseActivity implements ResendOtpContract.View {
     ActivityOtpBinding binding;
-    private Timer timer;
     NewCustomer info;
     ResendOtpPresenter presenter;
-    String textID;
+    String textID = "";
     AppPreference preference;
     String toMain = "";
 
@@ -43,6 +37,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         binding = ActivityOtpBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        AppUtils.enableButton(false,binding.buttonEnd,this);
         binding.etOtp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -51,21 +46,16 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
-
             @Override
             public void afterTextChanged(final Editable editable) {
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        onCheckCode(editable.toString());
-                    }
-                }, AppConstants.DELAY_FIND_DATA_SEARCH);
+                checkEnableButton(editable.toString());
+                onCheckCode(editable.toString());
             }
         });
+
         binding.buttonEnd.setOnClickListener(view13 -> {
             if (textID.equals(info.getMaPIN().toString())) {
-                if (toMain!=null&&toMain.length()>0){
+                if (toMain != null && toMain.length() > 0) {
                     preference.setLogin(true);
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
@@ -77,7 +67,6 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
                     startActivity(intent);
                 }
                 this.finish();
-
             } else {
                 showMessage("Mã pin sai");
             }
@@ -91,6 +80,19 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
             preference.setOtp(false);
             finish();
         });
+
+        binding.textChangPhone.setOnClickListener(v -> {
+            preference.setOtp(false);
+            preference.setUser(null);
+            Intent intent = new Intent(InputOtpActivity.this, CheckPhoneActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void checkEnableButton(String gg){
+        AppUtils.enableButton(gg.length() == 4,binding.buttonEnd,this);
     }
 
     private void onCheckCode(String gg) {
@@ -106,8 +108,6 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
             intent.putExtras(bundle);
             startActivity(intent);
             this.finish();
-        } else {
-            showMessage("Mã pin sai");
         }
     }
 
@@ -126,7 +126,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
     @Override
     public void onResendOtpSuccess(NewCustomer info) {
         this.info = info;
-        AppUtils.createNotification(this,info.getMaPIN().toString());
+        AppUtils.createNotification(this, info.getMaPIN().toString());
     }
 
     @Override

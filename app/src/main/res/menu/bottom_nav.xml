@@ -6,8 +6,8 @@
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/navigation_history"
-        android:title="@string/nav_title_product"
-        android:icon="@drawable/ic_gas_product"/>
+        android:title="@string/infomation"
+        android:icon="@drawable/ic_news"/>
 
     <item
         android:id="@+id/navigation_pay"

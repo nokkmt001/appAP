@@ -6,7 +6,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.databinding.ActivityCheckPhoneBinding;
 import com.tiha.anphat.ui.base.BaseActivity;
@@ -21,6 +23,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
     ActivityCheckPhoneBinding binding;
     CheckPhonePresenter presenter;
     NewCustomer info;
+    AppPreference preference;
 
     @Override
     protected int getLayoutId() {
@@ -29,6 +32,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
 
     @Override
     protected void initView() {
+        preference = new AppPreference(this);
         binding = ActivityCheckPhoneBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -76,6 +80,9 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
 
     @Override
     public void onCheckPhoneNumberSuccess(NewCustomer info) {
+        Gson gson = new Gson();
+        String json = gson.toJson(info);
+        preference.setUser(json);
         showProgressDialog(false);
         Intent intent = new Intent(this, InputOtpActivity.class);
         Bundle bundle = new Bundle();
@@ -83,7 +90,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        AppUtils.createNotification(this,info.getMaPIN().toString());
+        AppUtils.createNotification(this, info.getMaPIN().toString());
     }
 
     @Override
@@ -91,7 +98,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
         showProgressDialog(false);
         Intent intent = new Intent(this, CreateNewCustomerActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("Phone",binding.inputNumberPhone.getText().toString());
+        bundle.putString("Phone", binding.inputNumberPhone.getText().toString());
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

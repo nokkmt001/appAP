@@ -1,25 +1,22 @@
 package com.tiha.anphat.ui.pay.history;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.HistoryBooking;
 import com.tiha.anphat.data.entities.order.BookingInfo;
-import com.tiha.anphat.data.entities.order.ChiTietDonInfo;
 import com.tiha.anphat.data.network.booking.BookingModel;
 import com.tiha.anphat.data.network.booking.IBookingModel;
-import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.pay.history.vote.VoteEmployeeActivity;
 import com.tiha.anphat.utils.PublicVariables;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 
 public class HistoryFragment extends BaseFragment implements HistoryBookingContract.View {
@@ -27,6 +24,7 @@ public class HistoryFragment extends BaseFragment implements HistoryBookingContr
     HistoryBookingAdapter adapter;
     RecyclerView rcl;
     BookingModel model;
+    TextView textNoBooking;
 
     @Override
     protected int getLayoutID() {
@@ -35,9 +33,17 @@ public class HistoryFragment extends BaseFragment implements HistoryBookingContr
 
     @Override
     protected void initView(View view) {
+        textNoBooking = bind(view, R.id.textNoBooking);
         adapter = new HistoryBookingAdapter(new ArrayList());
         rcl = bind(view, R.id.rcl);
         rcl.setAdapter(adapter);
+        clickAdapter();
+
+        checkResult(false);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void clickAdapter(){
         adapter.setOnClick((view1, position) -> {
             HistoryBooking info = adapter.getItem(position);
             switch (view1.getId()) {
@@ -103,15 +109,27 @@ public class HistoryFragment extends BaseFragment implements HistoryBookingContr
     @Override
     public void onGetListHistoryBookingSuccess(List<HistoryBooking> list) {
         if (list.size() == 0) {
-            showNoResult();
+            checkResult(true);
         } else {
             adapter.clear();
             adapter.addAll(list);
         }
+        checkResult(false);
     }
 
     @Override
     public void onGetListHistoryBookingError(String error) {
         showMessage(error);
+        checkResult(true);
+    }
+
+    private void checkResult(Boolean isShow) {
+        if (isShow) {
+            rcl.setVisibility(View.GONE);
+            textNoBooking.setVisibility(View.VISIBLE);
+        } else {
+            rcl.setVisibility(View.VISIBLE);
+            textNoBooking.setVisibility(View.GONE);
+        }
     }
 }

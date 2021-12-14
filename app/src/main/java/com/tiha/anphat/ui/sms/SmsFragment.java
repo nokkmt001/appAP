@@ -43,7 +43,7 @@ public class SmsFragment extends BaseFragment {
         viewPager.setOffscreenPageLimit(tabCount);
         adapterPager = new PagerAdapter(getActivity(), getChildFragmentManager(), tabCount);
         adapterPager.addFragment(new FriendFragment(),getString(R.string.chat_title),0);
-        adapterPager.addFragment(new NewsFeedFragment(),getString(R.string.information),1);
+//        adapterPager.addFragment(new NewsFeedFragment(),getString(R.string.information),1);
         viewPager.setAdapter(adapterPager);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

@@ -27,6 +27,11 @@
     <string name="create_new_customer">Tạo tài khoản mới</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_gas">GIÁ GAS MỚI NHẤT THÁNG 12 GIẢM MẠNH: - 24.000Đ/12KG</string>
+    <string name="detail_gas">Lý giải giá gas tháng 12/2021 giảm, các công ty gas cho biết do giá gas thế giới tháng 12
+        công bố 772.5 USD/tấn, giảm 77.5 USD/tấn so với tháng 11. Hiện giá gas trong nước phụ thuộc vào diễn biến thế giới
+        do nguồn cung nội địa chỉ chủ động được khoảng 60% mức tiêu thụ.
+        Giá gas trong nước giảm do giá gas thế giới điều chỉnh giảm.</string>
     //Product
     <string name="promotion">KHUYẾN MÃI</string>
     <string name="accessory">PHỤ KIỆN</string>
@@ -83,6 +88,9 @@
     <string name="error_cancel_booking">Nhập lí do hủy</string>
     <string name="title_pin">Mã pin của bạn là</string>
     <string name="error_dont_booking">Bạn cần hoàn tất đơn hàng trước đó!</string>
+    <string name="infomation">Tin tức</string>
+    <string name="title_no_booking">Bạn chưa có đơn hàng nào</string>
+    <string name="title_add_presenter">Thêm người giới thiệu thành công</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

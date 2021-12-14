@@ -40,6 +40,7 @@ import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
 import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
+import com.tiha.anphat.ui.sms.newsfeed.NewsFeedFragment;
 import com.tiha.anphat.ui.update.UpdateActivity;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
@@ -101,7 +102,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         fmManager = getSupportFragmentManager();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-
         binding.layoutHeader.imageDrawer.setOnClickListener(view16 -> binding.drawerLayout.openDrawer(GravityCompat.START));
 
         binding.layoutLogout.setOnClickListener(view15 -> alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, (dialogInterface, i) -> {
@@ -110,6 +110,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             appPreference.setLogin(false);
             appPreference.setPassWord("");
             appPreference.setUserID("");
+            appPreference.setBooking(null);
+            appPreference.setUser(null);
+            appPreference.setOtp(false);
             PublicVariables.ClearData();
             Intent intent = new Intent(MainActivity.this, CheckPhoneActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -178,19 +181,15 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         case R.id.navigation_main:
                             setBottomNavigationView(fmMain, new HomeFragment(), "1");
                             return true;
-
                         case R.id.navigation_history:
-                            setBottomNavigationView(fmHistory, new ProductFragment(), "2");
+                            setBottomNavigationView(fmHistory, new NewsFeedFragment(), "2");
                             return true;
-
                         case R.id.navigation_sms:
                             setBottomNavigationView(fmSms, new SmsFragment(), "4");
                             return true;
-
                         case R.id.navigation_pay:
                             setBottomNavigationView(fmPay, new PayFragment(), "3");
                             return true;
-
                         case R.id.navigation_account:
                             setBottomNavigationView(fmAccount, new AccountFragment(), "5");
                             return true;
@@ -331,7 +330,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private class TestReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context arg0, Intent intent) {
             Bundle bundle = intent.getExtras();

@@ -71,6 +71,7 @@
         android:layout_height="wrap_content"
         style="@style/AppTheme.Button.Login"
         android:layout_alignParentBottom="true"
+        android:textColor="@color/White"
         android:text="@string/except"/>
 
 </RelativeLayout>

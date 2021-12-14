@@ -23,7 +23,6 @@ import com.tiha.anphat.ui.pay.history.HistoryBookingContract;
 import com.tiha.anphat.ui.pay.history.HistoryBookingPresenter;
 import com.tiha.anphat.utils.PublicVariables;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PendingFragment extends BaseFragment implements HistoryBookingContract.View, CancelBookingContract.View {
@@ -35,7 +34,6 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
     View viewFinish, viewPending, viewProgress, viewEnd, viewStart;
     Button buttonCancel;
     String gg = "";
-    List<BookingInfo> listAllData = new ArrayList<>();
     ConstraintLayout layoutMain;
     TextView textNoBooking;
     AppPreference preference;
@@ -97,7 +95,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
         } else {
             checkResult(true);
             showProgressDialog(false);
-//            presenterHistory.GetListHistoryBooking();
+            presenterHistory.GetListHistoryBooking();
         }
     }
 
@@ -107,52 +105,48 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
 
     @Override
     public void GetBookingSuccess(BookingInfo info) {
-        listAllData.add(info);
-        for (BookingInfo item : listAllData) {
-            if (!item.getMaTrangThai().equals("HOANTHANH")) {
-                String name = "";
-                switch (info.getMaTrangThai()) {
-                    case "DADAT":
-                        viewStart.setBackgroundResource(R.drawable.shape_status_completed);
-                        viewPending.setBackgroundResource(R.color.colorLine);
-                        viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
-                        viewFinish.setBackgroundResource(R.color.colorLine);
-                        viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
-                        buttonCancel.setVisibility(View.VISIBLE);
-                        break;
-                    case "DANGGIAOHANG":
-                        viewPending.setBackgroundResource(R.color.Blue);
-                        viewProgress.setBackgroundResource(R.drawable.shape_status_completed);
-                        viewFinish.setBackgroundResource(R.color.Blue);
-                        viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
-                        buttonCancel.setVisibility(View.GONE);
-                        break;
-                    case "HOANTHANH":
-                        viewPending.setBackgroundResource(R.color.colorLine);
-                        viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
-                        viewFinish.setBackgroundResource(R.color.Blue);
-                        viewEnd.setBackgroundResource(R.drawable.shape_status_completed);
-                        buttonCancel.setVisibility(View.GONE);
-                        break;
-                    default:
-                        break;
-                }
-                textAddress.setText(info.getDiachigiaohang());
-                if (info != null) {
-                    adapter.clear();
-                    adapter.addAll(info.getListChiTietDonHang());
-                }
+        if (!info.getMaTrangThai().equals("HOANTHANH")) {
+            String name = "";
+            switch (info.getMaTrangThai()) {
+                case "DADAT":
+                    viewStart.setBackgroundResource(R.drawable.shape_status_completed);
+                    viewPending.setBackgroundResource(R.color.colorLine);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewFinish.setBackgroundResource(R.color.colorLine);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
+                    buttonCancel.setVisibility(View.VISIBLE);
+                    break;
+                case "DANGGIAOHANG":
+                    viewPending.setBackgroundResource(R.color.Blue);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_completed);
+                    viewFinish.setBackgroundResource(R.color.Blue);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
+                    buttonCancel.setVisibility(View.GONE);
+                    break;
+                case "HOANTHANH":
+                    viewPending.setBackgroundResource(R.color.colorLine);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewFinish.setBackgroundResource(R.color.Blue);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_completed);
+                    buttonCancel.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
+            textAddress.setText(info.getDiachigiaohang());
+            adapter.clear();
+            adapter.addAll(info.getListChiTietDonHang());
 
-                if (info.getListChiTietDonHang().size() > 0) {
-                    for (ChiTietDonInfo itemI : info.getListChiTietDonHang()) {
-                        name += " " + itemI.getProduct_Name() + " X " + itemI.getSL() + " ,";
-                    }
-                }
-                if (name.length() > 0) {
-                    textNameProduct.setText(name.substring(0, name.length() - 1));
+            if (info.getListChiTietDonHang().size() > 0) {
+                for (ChiTietDonInfo itemI : info.getListChiTietDonHang()) {
+                    name += " " + itemI.getProduct_Name() + " X " + itemI.getSL() + " ,";
                 }
             }
+            if (name.length() > 0) {
+                textNameProduct.setText(name.substring(0, name.length() - 1));
+            }
         }
+
         if (textNameProduct.getText().length() == 0) {
             checkResult(true);
         }
