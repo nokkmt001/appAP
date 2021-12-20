@@ -28,7 +28,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.databinding.ViewDataBinding;
 import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
