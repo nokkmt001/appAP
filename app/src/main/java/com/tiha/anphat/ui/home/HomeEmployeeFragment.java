@@ -49,7 +49,7 @@ List<DistanceCalculator> listCalculator = new ArrayList<>();
     @Override
     protected void initData() {
         presenter = new BranchPresenter(this);
-        presenter.GetListBranch();
+//        presenter.GetListBranch();
     }
 
     private void setLocation(){

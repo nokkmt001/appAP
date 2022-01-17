@@ -77,6 +77,84 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/layoutEmployeeLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/image12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_detail" />
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_toEndOf="@+id/image12"
+                        android:text="Vị trí nhân viên"
+                        android:textSize="@dimen/textSize_16" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutEmployee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/image11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_detail" />
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_toEndOf="@+id/image11"
+                        android:text="Danh sách nhân viên"
+                        android:textSize="@dimen/textSize_16" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutSupplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_detail" />
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_toEndOf="@+id/image"
+                        android:text="Danh sách khách hàng"
+                        android:textSize="@dimen/textSize_16" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/layoutLogout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

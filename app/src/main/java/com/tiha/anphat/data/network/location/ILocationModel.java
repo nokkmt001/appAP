@@ -5,7 +5,7 @@ import com.tiha.anphat.data.entities.location.InsertLocationInfo;
 
 import java.util.List;
 
-public interface ILocation {
+public interface ILocationModel {
     void InsertUserLocation(InsertLocationInfo info,IInsertUserLocation listener);
     interface IInsertUserLocation{
         void onSuccess(InsertLocationInfo info);

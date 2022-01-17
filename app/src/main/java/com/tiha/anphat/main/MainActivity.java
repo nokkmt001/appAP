@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,26 +28,30 @@ import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CartInfo;
 import com.tiha.anphat.data.entities.CategoryInfo;
+import com.tiha.anphat.data.entities.ChiNhanhInfo;
+import com.tiha.anphat.data.entities.EmployeeInfo;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 import com.tiha.anphat.databinding.ActivityMainBinding;
 import com.tiha.anphat.ui.account.AccountFragment;
 import com.tiha.anphat.ui.base.BaseActivity;
 import com.tiha.anphat.ui.cart.CartActivity;
+import com.tiha.anphat.ui.employee.EmployeeActivity;
 import com.tiha.anphat.ui.home.HomeEmployeeFragment;
-import com.tiha.anphat.ui.home.HomeFragment;
-import com.tiha.anphat.ui.introduce.IntroduceActivity;
 import com.tiha.anphat.ui.login.LoginActivity;
-import com.tiha.anphat.ui.map.GPSTracker;
-import com.tiha.anphat.ui.pay.PayFragment;
+import com.tiha.anphat.ui.map.MapAdminActivity;
 import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
+import com.tiha.anphat.ui.supplier.SupplierActivity;
 import com.tiha.anphat.ui.update.UpdateActivity;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.TestConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
@@ -68,6 +72,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     RelativeLayout relativeLayout;
     public static final int FROM_MAIN = 0;
     TestReceiver testReceiver;
+    List<ChiNhanhInfo> listChiNhanh = new ArrayList<>();
+    String gg = "";
+    UserModel model;
 
     @Override
     protected int getLayoutId() {
@@ -77,15 +84,33 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Override
     protected void initData() {
         testReceiver = new TestReceiver();
+        listChiNhanh = PublicVariables.userLoginInfo.getListChiNhanh();
+        for (ChiNhanhInfo item : listChiNhanh) {
+            gg += item.ChiNhanhID + ",";
+        }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TestConstants.ACTION_MAIN_ACTIVITY);
         registerReceiver(testReceiver, intentFilter);
-
         presenter = new MainPresenter(this);
         presenter.GetListAllProduct();
 //        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
         presenter.GetListKho();
         presenter.GetCategory();
+        model = new UserModel();
+        if (gg.length() > 0) {
+            model.GetListEmployee(gg.substring(0, gg.length() - 1), new IUserModel.IGetListEmployeeFinish() {
+                @Override
+                public void onSuccess(List<EmployeeInfo> info) {
+                    PublicVariables.listEmployee = info;
+                }
+
+                @Override
+                public void onError(String error) {
+                    showMessage(error);
+                }
+            });
+
+        }
     }
 
     @Override
@@ -111,20 +136,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         binding.layoutHeader.imageDrawer.setOnClickListener(view16 -> binding.drawerLayout.openDrawer(GravityCompat.START));
 
-        binding.layoutLogout.setOnClickListener(view1 -> alertDialog("ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?", "ĐĂNG XUẤT", null, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                PublicVariables.ClearData();
-                AppPreference appPreference = new AppPreference(MainActivity.this);
-                appPreference.setLogin(false);
-                appPreference.setPassWord("");
-                appPreference.setUserName("");
-                PublicVariables.ClearData();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        }));
+        binding.layoutLogout.setOnClickListener(view1 -> alertDialog(
+                "ĐĂNG XUẤT", "Bạn có chắc muốn đăng xuất ứng dụng?",
+                "ĐĂNG XUẤT", null, (dialogInterface, i) -> {
+                    PublicVariables.ClearData();
+                    AppPreference appPreference = new AppPreference(MainActivity.this);
+                    appPreference.setLogin(false);
+                    appPreference.setPassWord("");
+                    appPreference.setUserName("");
+                    PublicVariables.ClearData();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }));
         binding.layoutUpdate.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -144,14 +168,30 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         binding.layout.main.setOnClickListener(view15 -> linkWed());
         binding.layoutHeader.textTitle.setText(getResources().getString(R.string.hotline));
         binding.layoutHeader.textTitle.setOnClickListener(view14 -> onCallHotline());
-
-        if (!CommonUtils.checkLocation(this)){
+        binding.layoutSupplier.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SupplierActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+        if (!CommonUtils.checkLocation(this)) {
             alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
                     (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
         }
+        binding.layoutEmployee.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EmployeeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        binding.layoutEmployeeLocation.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapAdminActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
     }
 
-    private void onCallHotline(){
+    private void onCallHotline() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
             return;
@@ -162,8 +202,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         startActivity(myIntent);
     }
 
-    private void linkWed(){
-        String url =  getResources().getString(R.string.url_ap);
+    private void linkWed() {
+        String url = getResources().getString(R.string.url_ap);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
@@ -174,7 +214,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnListener = new
             BottomNavigationView.OnNavigationItemSelectedListener() {
                 @SuppressLint("NonConstantResourceId")
                 @Override
@@ -208,16 +248,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             alertDialog("THOÁT ỨNG DỤNG", "Bạn có chắc muốn thoát ứng dụng?", "CÓ", null,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            moveTaskToBack(true);
-                            finishAffinity();
-                        }
+                    (dialogInterface, i) -> {
+                        moveTaskToBack(true);
+                        finishAffinity();
                     });
-
         }
-
     }
 
     public void setBottomNavigationView(Fragment fmMain, Fragment fragment, String tab) {
@@ -329,7 +364,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         try {
             if (testReceiver != null)
                 unregisterReceiver(testReceiver);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -340,13 +375,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
             Bundle bundle = intent.getExtras();
             if (bundle == null) return;
             String eventName = bundle.getString("eventName");
-            switch (eventName) {
-                case TestConstants.RECEIVE_ThayDoiGioHang:
-                    Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
-                    presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
-                    break;
-                default:
-                    break;
+            if (TestConstants.RECEIVE_ThayDoiGioHang.equals(eventName)) {
+                Toast.makeText(MainActivity.this, R.string.add_cart_success, Toast.LENGTH_LONG).show();
+                presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
             }
         }
     }

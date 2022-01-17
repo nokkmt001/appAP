@@ -134,6 +134,18 @@
     <string name="title_sales">Báo cáo doanh số</string>
     <string name="title_choose_employee">Chọn nhân viên</string>
     <string name="employee">Nhân viên</string>
+    <string name="error_no_choose_employee">Bạn chưa chọn kĩ thuật</string>
+
+    <string name="customerdetail_txt_hoten">Khách hàng:</string>
+    <string name="customerdetail_txt_sodienthoai">Số điện thoại:</string>
+    <string name="customerdetail_txt_email">Email:</string>
+    <string name="customerdetail_txt_diachi">Địa chỉ:</string>
+    <string name="customerdetail_txt_gioitinh">Giới tính:</string>
+    <string name="customerdetail_txt_sinhnhat">Sinh nhật:</string>
+    <string name="customerdetail_txt_trangthai">Trạng thái:</string>
+    <string name="customerdetail_txt_ngaytiepcan">Ngày tiếp cận:</string>
+    <string name="customerdetail_txt_solanchamsoc">Số lần chăm sóc:</string>
+    <string name="customerdetail_txt_ngaychamsocganday">Chăm sóc gần đây:</string>
 
     <string-array name="letter_tile_colors">
         <item>#f16364</item>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <include
+        android:id="@+id/layoutHeader"
+        layout="@layout/layout_header" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/textChiNhanh"
+        style="@style/AppTheme.EditText.NoEdit.DropDownList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        app:layout_constraintTop_toBottomOf="@+id/layoutHeader" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_employee"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/textChiNhanh" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

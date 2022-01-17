@@ -1,5 +1,6 @@
 package com.tiha.anphat.data.network.user;
 
+import com.tiha.anphat.data.entities.EmployeeInfo;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.UserLoginInfo;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
@@ -39,7 +40,7 @@ public interface IUserModel {
         void onError(String error);
     }
 
-    void GetListKhoByUser( IGetListKhoByUserFinish listener);
+    void GetListKhoByUser(IGetListKhoByUserFinish listener);
 
     interface IGetListKhoByUserFinish {
         void onSuccess(List<KhoInfo> list);
@@ -47,10 +48,21 @@ public interface IUserModel {
         void onError(String error);
     }
 
-    void CheckLogin(String userName, String pass,ICheckLoginSuccess listener);
-    interface ICheckLoginSuccess{
+    void CheckLogin(String userName, String pass, ICheckLoginSuccess listener);
+
+    interface ICheckLoginSuccess {
         void onSuccess(UserLoginInfo info);
 
         void onError(String error);
     }
+
+    void GetListEmployee(String chiNhanhID, IGetListEmployeeFinish listener);
+
+    interface IGetListEmployeeFinish {
+        void onSuccess(List<EmployeeInfo> info);
+
+        void onError(String error);
+    }
+
+
 }

@@ -11,7 +11,7 @@ import com.tiha.anphat.utils.AppUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Location implements ILocation {
+public class LocationModel implements ILocationModel {
     APIService service;
     @Override
     public void InsertUserLocation(InsertLocationInfo info,final IInsertUserLocation listener) {
@@ -53,7 +53,9 @@ public class Location implements ILocation {
         params.put("Phone",condition.Phone );
         params.put("OS", condition.OS);
         params.put("SoCT", condition.SoCT);
-        params.put("LoaiPhieu", condition.LoaiPhieu);
+        if (condition.LoaiPhieu!=null){
+            params.put("LoaiPhieu", condition.LoaiPhieu);
+        }
         params.put("StartTime", condition.StartTime);
         params.put("EndTime", condition.EndTime);
         service = new APIService(URL);
@@ -64,10 +66,8 @@ public class Location implements ILocation {
                     listener.onSuccess(new InsertLocationInfo().getListInsertLocationInfo(response));
                 }catch (Exception e){
                     listener.onError(e.getMessage());
-
                 }
             }
-
             @Override
             public void onError(VolleyError error) {
                 listener.onError(AppUtils.getMessageVolleyError(error));

@@ -1,6 +1,7 @@
 package com.tiha.anphat.data.network.user;
 
 import com.android.volley.VolleyError;
+import com.tiha.anphat.data.entities.EmployeeInfo;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.ResponseInfo;
 import com.tiha.anphat.data.entities.UserLoginInfo;
@@ -9,6 +10,7 @@ import com.tiha.anphat.data.network.api.APIService;
 import com.tiha.anphat.data.network.api.VolleyCallback;
 import com.tiha.anphat.utils.AppConstants;
 import com.tiha.anphat.utils.AppUtils;
+import com.tiha.anphat.utils.PublicVariables;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -187,5 +189,27 @@ public class UserModel implements IUserModel {
                 listener.onError(AppUtils.getMessageVolleyError(error));
             }
         },params);
+    }
+
+    @Override
+    public void GetListEmployee(String chiNhanhID, IGetListEmployeeFinish listener) {
+        String URL = MessageFormat.format(AppConstants.URL_GetListEmployee,  PublicVariables.userLoginInfo.UserName,chiNhanhID);
+        service = new APIService(URL);
+        service.DownloadJson(new VolleyCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    listener.onSuccess(new EmployeeInfo().getListEmployeeInfo(response));
+                } catch (Exception e) {
+                    listener.onError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error) {
+                listener.onError(AppUtils.getMessageVolleyError(error));
+            }
+        });
+
     }
 }

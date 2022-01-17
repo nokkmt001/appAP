@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 
 import com.tiha.anphat.data.entities.CategoryInfo;
+import com.tiha.anphat.data.entities.EmployeeInfo;
 import com.tiha.anphat.data.entities.NewCustomer;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.UserLoginInfo;
@@ -30,6 +31,8 @@ public class PublicVariables {
     public static List<CategoryInfo> listCategory = new ArrayList<>();
 
     public static ArrayList<String> listImageVote = new ArrayList<>();
+
+    public static List<EmployeeInfo> listEmployee = new ArrayList<>();
 
     public static void ClearData() {
         UserInfo = new NewCustomer();

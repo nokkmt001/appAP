@@ -55,6 +55,15 @@ public class AppConstants {
     public static final String URL_InsertPresenter = "api/NguoiGioiThieuMobile/InsertNguoiGioiThieuMobile?nguoiDungMobileID={0}&soDienThoaiGioiThieu={1}";
     public static final String URL_GetListPresenter = "api/NguoiGioiThieuMobile/GetListNguoiDaGioiThieu?nguoiDungMobileID={0}";
 
+    // supplier
+    public static final String URL_GetListSupplier = "api/Supplier/GetListSupplier";
+    public static final String URL_GetSupplier = "api/Supplier/GetSupplier?supplierID={0}";
+
+    public static final String URL_InsertSupplier = "api/Supplier/InsertSupplier";
+    public static final String URL_UpdateSupplier= "api/Supplier/UpdateSupplier";
+    public static final String URL_DeleteSupplier = "api/Supplier/DeleteSupplier?supplierID={0}&userName={1}";
+    // employee
+    public static final String URL_GetListEmployee = "api/Employee/GetListEmployee?userName={0}&listChiNhanh={1}";
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";
     /**
@@ -62,6 +71,8 @@ public class AppConstants {
      */
     public static int MAX_SIZE_IMAGE = 500;
     public static long DELAY_FIND_DATA = 0;
+    public static long DELAY_FIND_DATA_SEARCH = 1000;
+
     //px
     public static int MAX_WIDTH_IMAGE = 1000;
     public static int MAX_HEIGHT_IMAGE = 1000;

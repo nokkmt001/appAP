@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class UserLoginInfo {
     public String UserName;
@@ -21,6 +22,8 @@ public class UserLoginInfo {
     public String SecurityNo;
     public String BirthDate;
     public String Noiohiennay;
+    private List<ChiNhanhInfo> ListChiNhanh;
+
 
     public UserLoginInfo getUserLogin(String jsonString) {
         Gson gson = new GsonBuilder()
@@ -29,5 +32,13 @@ public class UserLoginInfo {
         Type type = new TypeToken<UserLoginInfo>() {
         }.getType();
         return gson.fromJson(jsonString, type);
+    }
+
+    public List<ChiNhanhInfo> getListChiNhanh() {
+        return ListChiNhanh;
+    }
+
+    public void setListChiNhanh(List<ChiNhanhInfo> listChiNhanh) {
+        ListChiNhanh = listChiNhanh;
     }
 }
