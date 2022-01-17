@@ -86,6 +86,55 @@
     <string name="title_warning_location">Vui lòng bật chức năng xác định vị trí để có trải nghiệm tốt nhất!</string>
     <string name="title_report_money">Báo cáo tiền mặt</string>
 
+    <string name="title_choose_category">Chọn loại hàng</string>
+    <string name="title_category_detail">Loại hàng</string>
+    <string name="warehouse">Kho</string>
+    <string name="title_choose_warehouse">Chọn kho</string>
+    <string name="from_date">Từ ngày</string>
+    <string name="to_date">Đến ngày</string>
+    <string name="choose_report">Chọn mẫu báo cáo</string>
+    <string name="title_report_main">Chi tiết báo cáo</string>
+
+    <string name="colNgay">Ngày</string>
+    <string name="colSoCT">Số phiếu</string>
+    <string name="colTenKhachHang">Tên khách hàng</string>
+    <string name="colDiaChi">Địa chỉ</string>
+    <string name="colDDBH">Nhân viên bán hàng</string>
+    <string name="colTenKho">Kho</string>
+    <string name="colDVT">ĐVT</string>
+    <string name="colSoLuong">Số lượng</string>
+    <string name="colDonGia">Đơn giá</string>
+    <string name="colThanhTien">Thành tiền</string>
+    <string name="colTongSoDong">Tổng số dòng</string>
+    <string name="totalTongKhachHang">Tổng khách hàng</string>
+    <string name="thongkecongno_edittext_hint_timkiem">Tìm kiếm khách hàng</string>
+    <string name="colPhaiThu">Phải thu</string>
+    <string name="colPhaiTra">Phải trả</string>
+    <string name="colNhomKhachHang">Nhóm khách hàng</string>
+    <string name="colMaKhachHang">Mã khách hàng</string>
+    <string name="colDauKy">Đầu kỳ</string>
+    <string name="colPSNhap">Nhập</string>
+    <string name="colPSXuat">Xuất</string>
+    <string name="colPSThu">Thu</string>
+    <string name="colPSChi">Chi</string>
+    <string name="colCuoiKy">Cuối kỳ</string>
+    <string name="colNoCuoiKy">Nợ cuối kỳ</string>
+    <string name="colSoPhieu">Số phiếu</string>
+    <string name="colQuy">Quý</string>
+    <string name="colLyDo">Lý do</string>
+    <string name="colVeKhoan">Về khoản</string>
+    <string name="colSoTien">Số tiền</string>
+    <string name="colNguoiChiTien">Người chi tiền</string>
+    <string name="colNguoiNhanTien">Người nhận tiền</string>
+    <string name="totalTongSoDong">Tổng số dòng</string>
+
+    <string name="title_nav_report">Báo cáo</string>
+    <string name="title_report_revenue">Báo cáo thu chi</string>
+    <string name="report_title_reserve_fund">Báo cáo tồn quỹ</string>
+    <string name="title_sales">Báo cáo doanh số</string>
+    <string name="title_choose_employee">Chọn nhân viên</string>
+    <string name="employee">Nhân viên</string>
+
     <string-array name="letter_tile_colors">
         <item>#f16364</item>
         <item>#67bf74</item>
