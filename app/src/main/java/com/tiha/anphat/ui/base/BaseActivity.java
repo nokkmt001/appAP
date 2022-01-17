@@ -2,10 +2,15 @@ package com.tiha.anphat.ui.base;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -19,19 +24,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
-import com.tiha.anphat.utils.CommonUtils;
+import com.tiha.anphat.utils.ImageFilePath;
+import com.tiha.anphat.utils.ImageUtils;
 import com.tiha.anphat.utils.NetworkUtils;
 
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+import static com.tiha.anphat.utils.ImageUtils.getOutputMediaFileUri;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     Dialog progressDialog;
@@ -40,28 +51,50 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     String[] permissionsMain = {};
     private SpeechRecognizer speechRecognizer;
     int count = 0;
+    String imageStoragePath = "";
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_GALLERY = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getResources().getString(R.string.error_msg_no_internet);
-            CommonUtils.showMessageError(this, error);
+            showMessage(error);
         }
-        setContentView(getLayoutResourceId());
-        onInit();
-        onLoadData();
-
+        setContentView(getLayoutId());
+        initView();
+        initData();
     }
 
-    protected abstract int getLayoutResourceId();
+    protected abstract int getLayoutId();
 
-    protected abstract void onInit();
+    protected abstract void initView();
 
-    protected abstract void onLoadData();
+    protected abstract void initData();
+
+    public <T extends View> T bind(int id) {
+        return findViewById(id);
+    }
 
     protected void showToast(String mToastMsg) {
         Toast.makeText(this, mToastMsg, Toast.LENGTH_LONG).show();
+    }
+
+    protected void alertDialog(String title, String message, String btnPos, String btnNeutral, DialogInterface.OnClickListener ocListener) {
+        AlertDialog.Builder db = new AlertDialog.Builder(this);
+        db.setTitle(title);
+        db.setMessage(message);
+        db.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        if (btnPos != null) db.setPositiveButton(btnPos, ocListener);
+        if (btnNeutral != null) db.setNeutralButton(btnNeutral, ocListener);
+//        db.setIcon(android.R.drawable.ic_dialog_alert);
+        db.show();
     }
 
     protected void hideKeyboard() {
@@ -101,10 +134,42 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void showMessage(String title, String body) {
+    protected void showMessage(String error) {
+        error = error.isEmpty() ? getString(R.string.error_msg_unknown) : error;
+        if (!NetworkUtils.isNetworkConnected(this)) {
+            error = getString(R.string.error_msg_no_internet);
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title)
-                .setMessage(body)
+        builder.setTitle(getString(R.string.title_error_msg))
+                .setMessage(error)
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    protected void showInfo(String error) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_info_msg))
+                .setMessage(error)
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void showNoResult() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông tin")
+                .setMessage(getResources().getString(R.string.noresult_msg))
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
@@ -118,32 +183,32 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        onResult(requestCode, resultCode, data);
+        onResultFile(requestCode, resultCode, data);
+    }
+
+    protected void onResult(int requestCode, int resultCode, Intent data) {
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_MULTIPLE_PERMISSIONS:
-                //Kiem tra tat ca quyen can cap
-                boolean allgranted = false;
-                for (int grantResult : grantResults) {
-                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        allgranted = true;
-                    } else {
-                        allgranted = false;
-                        break;
-                    }
+        if (requestCode == REQUEST_MULTIPLE_PERMISSIONS) {//Kiem tra tat ca quyen can cap
+            boolean allgranted = false;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    allgranted = true;
+                } else {
+                    allgranted = false;
+                    break;
                 }
+            }
 
-                for (String ii : permissionsMain) {
-                    if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this, ii)) {
-                        showMessagePermissions();
-                    }
+            for (String ii : permissionsMain) {
+                if (!allgranted && ActivityCompat.shouldShowRequestPermissionRationale(this, ii)) {
+                    showMessagePermissions();
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -165,7 +230,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
                 }).show();
     }
 
-    public void speedText(final EditText text, final ImageView imageView) {
+    protected void speedText(final EditText text, final ImageView imageView) {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         checkSelfPermission(new String[]{Manifest.permission.RECORD_AUDIO});
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -230,6 +295,108 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         });
     }
 
+    public void showChooseFile() {
+        final List<String> listChoose = new ArrayList<>();
+        listChoose.add("Chụp ảnh");
+        listChoose.add("Chọn ảnh");
 
+        final CharSequence[] items = listChoose.toArray(new CharSequence[0]);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thêm hình ảnh");
+        builder.setPositiveButton("Hủy bỏ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int position) {
+                switch (listChoose.get(position)) {
+                    case "Chụp ảnh":
+                        cameraIntent();
+                        break;
+                    case "Chọn ảnh":
+                        galleryIntent();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        });
+        builder.show();
+    }
+
+    private void cameraIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = ImageUtils.getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        if (file != null) {
+            imageStoragePath = file.getAbsolutePath();
+        }
+
+        Uri fileUri = getOutputMediaFileUri(getApplicationContext(), file);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_GALLERY);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    protected void onResultFile(int requestCode, int resultCode, @Nullable Intent intent) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CAMERA:
+                    File file = new File(imageStoragePath);
+                    ImageUtils.refreshGallery(getApplicationContext(), imageStoragePath);
+                    Bitmap bitmap = ImageUtils.optimizeBitmap(8, imageStoragePath, this);
+                    ResultImageBitMap(bitmap);
+                    break;
+                case REQUEST_GALLERY:
+                    onSelectFromGalleryResult(intent);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void onSelectFromGalleryResult(Intent data) {
+        if (data == null) return;
+        if (data.getClipData() != null) {
+            ClipData mClipData = data.getClipData();
+//            InsertMultiPicture(mClipData.)
+            for (int i = 0; i < mClipData.getItemCount(); i++) {
+                ClipData.Item item = mClipData.getItemAt(i);
+                InsertPictureFromGallery(item.getUri());
+            }
+        } else if (data.getData() != null) {
+            InsertPictureFromGallery(data.getData());
+        }
+    }
+
+    public void ResultImageBitMap(Bitmap bitmap) {
+    }
+
+    public void ResultGallery(List<Bitmap> list) {
+    }
+
+    public void InsertMultiPicture(List<Uri> list) {
+
+    }
+
+    public void InsertPictureFromGallery(Uri uriPicture) {
+        String filePath = ImageFilePath.getPath(this, uriPicture);
+        File file = new File(filePath);
+        Bitmap bitmap = ImageUtils.optimizeBitmap(8, filePath, this);
+        ResultImageBitMap(bitmap);
+    }
 }
 

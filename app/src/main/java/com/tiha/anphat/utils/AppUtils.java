@@ -1,24 +1,47 @@
 package com.tiha.anphat.utils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
+
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.android.gms.maps.model.LatLng;
 import com.tiha.anphat.R;
+import com.tiha.anphat.ui.sms.contact.ContactModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +60,10 @@ import java.text.Normalizer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +74,69 @@ public class AppUtils {
 
     private AppUtils() {
         // This class is not publicly instantiable
+    }
+
+    public static Date ChooseDateTime(final Context context,final EditText text) {
+        final Calendar currentDate = Calendar.getInstance();
+        final Calendar date= Calendar.getInstance();
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+                new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        date.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        date.set(Calendar.MINUTE, minute);
+                        Log.v(TAG, "The choose one " + date.getTime());
+                        text.setText(formatDateToString(date.getTime(),"dd/MM/yyyy HH:mm:ss"));
+                    }
+                }, currentDate.get(Calendar.HOUR_OF_DAY), currentDate.get(Calendar.MINUTE), false).show();
+            }
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+        return date.getTime();
+    }
+
+    public static List<ContactModel> getContacts(Context ctx) {
+        List<ContactModel> list = new ArrayList<>();
+        ContentResolver contentResolver = ctx.getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor cursorInfo = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(),
+                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id)));
+
+                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id));
+                    Uri pURI = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+
+                    Bitmap photo = null;
+                    if (inputStream != null) {
+                        photo = BitmapFactory.decodeStream(inputStream);
+                    }
+                    while (cursorInfo.moveToNext()) {
+                        ContactModel info = new ContactModel();
+                        info.id = id;
+                        info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        info.mobileNumber = cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        info.photo = photo;
+                        info.photoURI= pURI;
+                        list.add(info);
+                    }
+
+                    cursorInfo.close();
+                }
+            }
+            cursor.close();
+        }
+        return list;
+    }
+
+    public static Bitmap getBitMapFromImage(Context ctx){
+        return null;
     }
 
 //    public static void openPlayStoreForApp(Context context) {
@@ -71,14 +160,14 @@ public class AppUtils {
     }
 
     @SuppressLint("ResourceAsColor")
-    public static void enableButton(final boolean isShow, Button button){
+    public static void enableButton(final boolean isShow, Button button,Context context){
         if (isShow){
             button.setEnabled(true);
-            button.setTextColor(R.color.White);
+            button.setTextColor(context.getResources().getColor(R.color.White));
             button.setBackgroundResource(R.drawable.bg_button_dark);
         } else {
             button.setEnabled(false);
-            button.setTextColor(R.color.text_disable);
+            button.setTextColor(context.getResources().getColor(R.color.text_disable));
             button.setBackgroundResource(R.drawable.bg_button_light);
         }
     }
@@ -217,7 +306,7 @@ public class AppUtils {
     }
 
     public static String formatDateToDateRequestSQL(String dateRequest, String format) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         Date formatted = null;
         try {
             formatted = simpleDateFormat.parse(dateRequest);
@@ -497,5 +586,82 @@ public class AppUtils {
         } catch (NumberFormatException e) {
         }
         return doubleResult;
+    }
+
+    public static Location getLocationWithCheckNetworkAndGPS(Context mContext) {
+        LocationManager lm = (LocationManager)
+                mContext.getSystemService(Context.LOCATION_SERVICE);
+        assert lm != null;
+        Boolean isGpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        Boolean isNetworkLocationEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Location networkLoacation = null, gpsLocation = null, finalLoc = null;
+        if (isGpsEnabled)
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return null;
+            }
+        gpsLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (isNetworkLocationEnabled)
+            networkLoacation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        if (gpsLocation != null && networkLoacation != null) {
+
+            //smaller the number more accurate result will
+            if (gpsLocation.getAccuracy() > networkLoacation.getAccuracy())
+                return finalLoc = networkLoacation;
+            else
+                return finalLoc = gpsLocation;
+
+        } else {
+
+            if (gpsLocation != null) {
+                return finalLoc = gpsLocation;
+            } else if (networkLoacation != null) {
+                return finalLoc = networkLoacation;
+            }
+        }
+        return finalLoc;
+    }
+
+    public static LatLng getLocationFromAddress(String strAddress, Context context) {
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return p1;
+    }
+
+    public static String getAddress(LatLng latLng,Context context) {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            if (addresses.size() == 0) {
+                return "No Address Found";
+            }
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName();
+            return address;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "No Address Found";
+        }
     }
 }

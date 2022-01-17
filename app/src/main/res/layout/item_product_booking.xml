@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_5">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageMain"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100"
+        android:src="@drawable/img_no_image"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/imageMain"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextView"
+            android:layout_marginStart="@dimen/dp_5"
+             />
+
+        <TextView
+            android:id="@+id/textCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextView"
+            android:layout_marginStart="@dimen/dp_5" />
+
+        <TextView
+            android:id="@+id/textMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.TextView"
+            android:textColor="@color/Red"
+            android:layout_marginStart="@dimen/dp_5" />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

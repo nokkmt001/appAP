@@ -10,12 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
+import com.tiha.anphat.data.entities.UserLoginInfo;
 import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
-import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.ui.login.checkidpass.CheckLoginByIDPassActivity;
+import com.tiha.anphat.ui.login.LoginActivity;
 import com.tiha.anphat.utils.NetworkUtils;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.aes.AESUtils;
@@ -33,7 +32,6 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         appPreference = new AppPreference(this);
         presenter = new SplashPresenter(SplashActivity.this, SplashActivity.this);
         presenter.CheckStatusLogin();
-
     }
 
     @Override
@@ -43,11 +41,11 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                         String userID = "", passWord = "";
                         AESUtils aesUtils = new AESUtils();
                         try {
-                            userID = aesUtils.decrypt(appPreference.getUserID());
+                            userID = aesUtils.decrypt(appPreference.getUserName());
                         } catch (Exception ignored) {
                         }
                         try {
@@ -64,33 +62,37 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(2000);
-                        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception ignored) {
-                    }
-                }
-            });
+                    Thread.sleep(1000);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
 
-        }
-        thread.start();
+
+                } catch(
+                Exception ignored)
+
+                {
+                }
+            }
+        });
+
     }
+        thread.start();
+}
 
     @Override
-    public void onLoginSuccess(NewCustomer info) {
-        if (info!=null) {
-            PublicVariables.UserInfo = info;
-            Gson gson = new Gson();
-            String json = gson.toJson(info);
-            appPreference.setUser(json);
+    public void onLoginSuccess(UserLoginInfo info) {
+        if (info != null) {
+            PublicVariables.userLoginInfo = info;
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-            finish();
         }
+        finish();
     }
 
     @Override
@@ -107,7 +109,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             msg.arg1 = 1;
             handler.sendMessage(msg);
         }
-        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
@@ -139,15 +141,13 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                                 PublicVariables.ClearData();
                                 AppPreference appPreference = new AppPreference(SplashActivity.this);
                                 appPreference.setLogin(false);
-//                                appPreference.setTenDangNhap("");
                                 appPreference.setPassWord("");
-                                appPreference.setUserID("");
+                                appPreference.setUserName("");
 
                                 Intent intent = getBaseContext().getPackageManager().
                                         getLaunchIntentForPackage(getBaseContext().getPackageName());
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
 
                                 startActivity(intent);
                                 SplashActivity.this.finish();

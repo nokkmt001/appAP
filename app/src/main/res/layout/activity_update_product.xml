@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/img_no_image" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/colorLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <RelativeLayout
+        android:id="@+id/layoutShow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <TextView
+            android:id="@+id/text1"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:text="Mã sản phẩm: " />
+
+        <TextView
+            android:id="@+id/textProductID"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/text1"
+            android:padding="@dimen/dp_5"
+            android:text=""
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/text2"
+            android:singleLine="true"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text2"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/textUnit"
+            android:text="Đơn vị tính: " />
+
+        <TextView
+            android:id="@+id/textUnit"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:padding="@dimen/dp_5"
+            android:layout_centerVertical="true"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutNameProduct"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutShow">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputNameProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên sản phẩm" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutProductID"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutNameProduct">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/price_sale" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutProductPrice"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutProductID">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputShip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ship_price"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutProductPrice">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/m_t"
+            android:text=""
+            android:inputType="textNoSuggestions|textMultiLine"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/butonSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin = "5dp"
+        android:text="Lưu"
+        style="@style/AppTheme.Button"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

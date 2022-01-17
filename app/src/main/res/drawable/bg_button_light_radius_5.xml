@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/dp_15" />
+            <!--<stroke android:width="1dip" android:color="#6eb7ec" />-->
+            <gradient
+                android:angle="-90"
+                android:endColor="@color/colorButton_background_light_selected"
+                android:startColor="@color/colorButton_background_light_selected" />
+            <!--<gradient  android:angle="-90"  android:startColor="#a11005" android:endColor="#d62608"  />-->
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/dp_15" />
+            <!--<stroke android:width="1dip" android:color="#6eb7ec" />-->
+            <gradient
+                android:angle="-90"
+                android:endColor="@color/colorButton_background_light_selected"
+                android:startColor="@color/colorButton_background_light_selected" />
+            <!--<gradient  android:angle="-90"  android:startColor="#a11005" android:endColor="#d62608"  />-->
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <!--Bo tron-->
+            <corners android:radius="@dimen/dp_15" />
+            <!--Vien-->
+            <!--<stroke android:width="1dip" android:color="#6eb7ec" />-->
+            <gradient
+                android:angle="-90"
+                android:endColor="@color/gray_1"
+                android:startColor="#F4F6F8" />
+        </shape>
+    </item>
+</selector>

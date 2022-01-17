@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="40dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/tvNgay"
+        style="@style/AppTheme.TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvSoCT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSoCT"
+        style="@style/AppTheme.TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colSoPhieu"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvQuy"
+        app:layout_constraintStart_toEndOf="@id/tvNgay"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQuy"
+        style="@style/AppTheme.TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colQuy"
+        android:textColor="@color/colorTilteColumn"
+        android:textSize="@dimen/subtitle_textsize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvLyDo"
+        app:layout_constraintStart_toEndOf="@id/tvSoCT"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLyDo"
+        style="@style/AppTheme.TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colLyDo"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvTenKhachHang"
+        app:layout_constraintStart_toEndOf="@id/tvQuy"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTenKhachHang"
+        style="@style/AppTheme.TextView"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colTenKhachHang"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvVeKhoan"
+        app:layout_constraintStart_toEndOf="@id/tvLyDo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvVeKhoan"
+        style="@style/AppTheme.TextView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colVeKhoan"
+        android:textColor="@color/colorTilteColumn"
+        android:textSize="@dimen/subtitle_textsize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvSoTien"
+        app:layout_constraintStart_toEndOf="@id/tvTenKhachHang"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSoTien"
+        style="@style/AppTheme.TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/colSoTien"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvNguoiChiTien"
+        app:layout_constraintStart_toEndOf="@id/tvVeKhoan"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNguoiChiTien"
+        style="@style/AppTheme.TextView"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/colNguoiChiTien"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvNguoiNhanTien"
+        app:layout_constraintStart_toEndOf="@id/tvSoTien"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvNguoiNhanTien"
+        style="@style/AppTheme.TextView"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/colNguoiNhanTien"
+        android:textColor="@color/colorTilteColumn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvNguoiChiTien"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

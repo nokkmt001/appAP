@@ -3,13 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include android:id="@+id/layoutHeader"
-        layout="@layout/layout_header" />
-
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/layoutMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutHeader"
         android:orientation="vertical">
 
         <LinearLayout

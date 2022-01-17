@@ -14,12 +14,12 @@ public class HomeFragment extends BaseFragment {
     ImageView imageDelete;
 
     @Override
-    protected int getLayoutId() {
+    protected int getLayoutID() {
         return R.layout.fragment_home;
     }
 
     @Override
-    protected void onInit(View view) {
+    protected void initView(View view) {
         imageDelete =view.findViewById(R.id.imageDelete);
         inputSearch = view.findViewById(R.id.inputSearch);
         inputSearch.addTextChangedListener(new TextWatcher() {
@@ -47,12 +47,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected void onLoadData() {
-
-    }
-
-    @Override
-    protected void configToolbar() {
+    protected void initData() {
 
     }
 

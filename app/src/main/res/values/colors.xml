@@ -3,7 +3,7 @@
     <color name="colorPrimary">#1569af</color>
     <color name="colorPrimaryDark">#2196f3</color>
     <color name="colorAccent">#ff8a50</color>
-    <color name="colorPrimaryLight">#ff7675</color>
+    <color name="colorPrimaryLight">@color/Red</color>
     <color name="colorSecondary">#f7ee27</color>
     <color name="colorPrimaryText">@color/colorPrimary</color>
     <color name="colorSecondaryText">@android:color/black</color>
@@ -25,9 +25,7 @@
     <color name="colorButton_border_lightborder_default">#C0C0C0</color>
 
     <!--button light border no change text color-->
-    <color name="colorButton_background_lightborder_no_change_textcolor_default">
-        @android:color/white
-    </color>
+    <color name="colorButton_background_lightborder_no_change_textcolor_default"/>
     <color name="colorButton_background_lightborder_no_change_textcolor_selected">#e6e6e6</color>
     <color name="colorButton_text_lightborder_no_change_textcolor_default">@color/colorPrimary
     </color>
@@ -112,7 +110,6 @@
     <color name="row_activated">#e0e0e0</color>
     <color name="colorBackgroundHeaderColumn">#eaeff3</color>
 
-
     <color name="dashboard_txt_doanhthu">@android:color/holo_green_dark</color>
     <color name="dashboard_txt_tongdonhang">#e4c62e</color>
     <color name="dashboard_txt_tongloinhuan">#2093cd</color>
@@ -187,4 +184,9 @@
     <color name="buttonvattuadmin">#1f2e61</color>
     <color name="buttoncvadmin">#084ea6</color>
     <color name="text_disable">#C4CDD5</color>
+
+    <color name="back_ground_main">#f6f6f6</color>
+
+    <color name="icon_main">#00ade5</color>
+
 </resources>

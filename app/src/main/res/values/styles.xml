@@ -1,11 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
     </style>
 
     <!--Base application theme no actionbar-->
@@ -18,7 +18,7 @@
         <item name="windowActionModeOverlay">true</item>
 
         <!--  For Custom Action Mode Background Color/Drawable -->
-        <item name="actionModeBackground">@color/colorPrimary</item>
+        <item name="actionModeBackground">@color/colorPrimaryDark</item>
         <!--<item name="actionModeCloseButtonStyle">@style/NoCloseButtonActionModeStyle</item>-->
     </style>
 
@@ -60,13 +60,26 @@
         <item name="android:textSize">@dimen/button_title_textsize</item>
         <item name="android:gravity">center</item>
         <item name="fontFamily">@font/myriadpro_bold</item>
-        <item name="android:padding">@dimen/button_padding</item>
+    </style>
+
+    <style name="AppTheme.Button.Login" parent="@android:style/Widget.Button">
+        <item name="android:textSize">@dimen/button_title_textsize</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">@dimen/dp_14</item>
+        <item name="android:layout_marginEnd">@dimen/dp_14</item>
+        <item name="android:layout_marginStart">@dimen/dp_14</item>
+        <item name="fontFamily">@font/myriadpro_bold</item>
     </style>
 
     <!--Base application button light-->
     <style name="AppTheme.Button.Light">
         <item name="android:textColor">@color/Black</item>
         <item name="android:background">@drawable/bg_button_light</item>
+    </style>
+
+    <style name="AppTheme.Button.Default">
+        <item name="android:textColor">@color/White</item>
+        <item name="android:background">@drawable/bg_button_default</item>
     </style>
     <!--Base application button light border-->
     <style name="AppTheme.Button.LightBorder">
@@ -92,6 +105,11 @@
         <item name="android:textColor">@drawable/textcolor_button_green</item>
         <item name="android:background">@drawable/bg_button_green</item>
     </style>
+
+    <style name="AppTheme.Button.Primary" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@drawable/textcolor_button_green</item>
+        <item name="android:background">@drawable/bg_button_default</item>
+    </style>
     <!--Base application button transparent-->
     <style name="AppTheme.Button.Transparent">
         <item name="android:background">@drawable/bg_button_transparent</item>
@@ -103,11 +121,25 @@
         <item name="android:background">@drawable/bg_image</item>
     </style>
 
+    <style name="AppTheme.Button.History" parent="@android:style/Widget.TextView">
+        <item name="android:background">@drawable/table_content_cell_radius_5_primary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <!--Base application textview-->
     <style name="AppTheme.TextView" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/title_textsize</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="fontFamily">@font/myriadpro_regular</item>
+        <item name="android:textIsSelectable">false</item>
+    </style>
+
+    <style name="AppTheme.TextView.Bold" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/title_textsize</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="fontFamily">@font/myriadpro_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="singleLine">true</item>
         <item name="android:textIsSelectable">false</item>
     </style>
 
@@ -140,6 +172,7 @@
         <item name="android:background">@drawable/bg_edittext_noedit</item>
         <item name="android:textCursorDrawable">@drawable/color_cursor_transparent</item>
         <item name="android:focusable">false</item>
+        <item name="android:textSize">@dimen/textSize_12</item>
         <item name="android:longClickable">false</item>
     </style>
 
@@ -154,12 +187,16 @@
     </style>
 
     <style name="BottomNavigationView">
-        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
-        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active
+        </item>
+        <item name="itemTextAppearanceInactive">
+            @style/TextAppearance.BottomNavigationView.Inactive
+        </item>
     </style>
 
-    <style name="TextAppearance"/>
-    <style name="TextAppearance.BottomNavigationView"/>
+    <style name="TextAppearance" />
+
+    <style name="TextAppearance.BottomNavigationView" />
 
     <!-- inactive tab icon style -->
     <style name="TextAppearance.BottomNavigationView.Inactive">

@@ -1,0 +1,125 @@
+package com.tiha.anphat.data.entities.product;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.tiha.anphat.data.entities.UserLoginInfo;
+
+import java.lang.reflect.Type;
+
+public class FullProductInfo {
+    public String Description;
+    public Integer GiaBanDLT;
+    public Integer GiaBanDLTP;
+    public String PHANTRAM = null;
+    public String Gioihan = null;
+    public Integer Donggoi;
+    public String dvt2;
+    public Integer BH;
+    public String SoNgayBH = null;
+    public Integer ThueSuat;
+    public String Ngaygio;
+    public String MaxDisc = null;
+    public String NuocSX = null;
+    public String HuehongNSX = null;
+    public String Ngaythaydoigia;
+    public String SoNgaycohang = null;
+    public Integer Cotinhhangton;
+    public String Dathangduban = null;
+    public String TeninHD;
+    public String MaTK;
+    public Integer Tinhtonkho;
+    public String GIATAM = null;
+    public String dvt3;
+    public String dai = null;
+    public String rong = null;
+    public Integer Giacothue;
+    public String FileAnh = null;
+    public String Diachifileanh = null;
+    public String Gioihantren = null;
+    public String Cothongbaohangve = null;
+    public String YCSerial = null;
+    public String ModifiedDate;
+    public String ModifiedBy;
+    public String Nguoigo = null;
+    public String Loaitien;
+    public String Donvitien;
+    public String Vitri;
+    public Integer SLNhieu;
+    public Integer InHD;
+    public String DonvitinhDongia;
+    public Integer TheoDoiVo;
+    public String DonGiaDVT2 = null;
+    public String TrongLuong = null;
+    public String KyHieu = null;
+    public String HeSoCong = null;
+    public String KLTinh = null;
+    public String BaoBi = null;
+    public String DonviBaoBi = null;
+    public String MaTK1;
+    public String MaTK2 = null;
+    public String MaTK3 = null;
+    public String MaTK4 = null;
+    public String Donggoi2 = null;
+    public String DVT4 = null;
+    public String ProductIDWeb = null;
+    public String NhaPhanPhoi = null;
+    public String Tinh = null;
+    public String MaKet = null;
+    public String TinhGiaVon = null;
+    public String MaVo;
+    public String KieuTheoDoi;
+    public String SetMau = null;
+    public String TimKiem;
+    public String NhaSanXuat = null;
+    public String Duyet = null;
+    public String NguoiDuyet = null;
+    public String MaThuongHieu;
+    public String TKVT = null;
+    public String TKGV = null;
+    public String TKDT = null;
+    public String TKHBTL = null;
+    public String TKCKHB = null;
+    public String HeSoVanChuyen = null;
+    public String DongGoi3 = null;
+    public String DongGoi4 = null;
+    public Integer GiaC21;
+    public Integer GiaC22;
+    public Integer GiaC23;
+    public Integer GiaC31;
+    public Integer GiaC32;
+    public Integer GiaC33;
+    public String BienDoGiamGia = null;
+    public String SoLuongYeuCau = null;
+    public String LoaiThue = null;
+    public Integer ChiPhiVanChuyen;
+    public String DvtYeuCau = null;
+    public String IDMauSac = null;
+    public String IDPhieuNhanMau = null;
+    public String MaHangNCC = null;
+    public String HangMau = null;
+    public String NoS = null;
+    public String Von_Cost2 = null;
+    public String Product_ID;
+    public String Product_Name;
+    public String SIZE1;
+    public String SIZE2;
+    public String Mau;
+    public String DonVitinh;
+    public Integer GiaMua;
+    public Integer GiaBanLe;
+    public String Category_ID;
+    public String Supplier_ID;
+    public Integer Action;
+    public String Loai;
+    public String MaVachID = null;
+
+    public FullProductInfo getFullProductInfo(String jsonString) {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .create();
+        Type type = new TypeToken<FullProductInfo>() {
+        }.getType();
+        return gson.fromJson(jsonString, type);
+    }
+}

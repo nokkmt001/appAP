@@ -206,7 +206,7 @@ public class LetterTileProvider {
         // this should guarantee the same key always maps to the same color
         final int color = Math.abs(key.hashCode()) % NUM_OF_TILE_COLORS;
         try {
-            return mColors.getColor(color, Color.BLACK);
+            return mColors.getColor(color, Color.BLUE);
         } finally {
             // bug with recycler view
             //mColors.recycle();

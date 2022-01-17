@@ -1,10 +1,12 @@
 package com.tiha.anphat.ui.splash;
 
 import android.content.Context;
+import android.view.View;
 
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.data.network.nguoidung.IUserModel;
-import com.tiha.anphat.data.network.nguoidung.UserModel;
+import com.tiha.anphat.data.entities.UserLoginInfo;
+import com.tiha.anphat.data.network.user.IUserModel;
+import com.tiha.anphat.data.network.user.UserModel;
 import com.tiha.anphat.data.preft.SplashModel;
 
 public class SplashPresenter implements SplashContract.Presenter {
@@ -27,10 +29,10 @@ public class SplashPresenter implements SplashContract.Presenter {
     }
 
     @Override
-    public void CheckLogin(String ID, String password) {
-        model.GetLoginByIDPassWord(ID, password, new IUserModel.IGetLoginByIDPassWord() {
+    public void CheckLogin(String userName, String password) {
+        model.CheckLogin(userName, password, new IUserModel.ICheckLoginSuccess() {
             @Override
-            public void onSuccess(NewCustomer info) {
+            public void onSuccess(UserLoginInfo info) {
                 splashView.onLoginSuccess(info);
             }
 

@@ -2,26 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_main"
-        android:title="Trang chủ"
+        android:title="@string/nav_title_main"
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/navigation_history"
-        android:title="Sản phẩm"
-        android:icon="@drawable/ic_history"/>
+        android:title="@string/nav_title_product"
+        android:icon="@drawable/ic_gas_product"/>
 
     <item
         android:id="@+id/navigation_pay"
-        android:title="Thanh toán"
-        android:icon="@drawable/ic_pay"/>
+        android:title="@string/transaction"
+        android:icon="@drawable/ic_history"/>
 
     <item
         android:id="@+id/navigation_sms"
-        android:title="Tin nhắn"
+        android:title="@string/nav_title_sms"
         android:icon="@drawable/ic_sms"/>
 
     <item
         android:id="@+id/navigation_account"
-        android:title="Tài khoản"
+        android:title="@string/account"
         android:icon="@drawable/ic_user"/>
 
 </menu>

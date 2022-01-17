@@ -71,7 +71,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
     MapPresenter mapPresenter;
 
     @Override
-    public void onInit() {
+    public void initView() {
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
 //        btnFindPath = findViewById(R.id.btnFindPath);
@@ -140,12 +140,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
 //    }
 
     @Override
-    protected int getLayoutResourceId() {
+    protected int getLayoutId() {
         return 0;
     }
 
     @Override
-    public void onLoadData() {
+    public void initData() {
         mapPresenter = new MapPresenter(this);
         Bundle bundle = this.getIntent().getExtras();
         try {
