@@ -4,10 +4,6 @@
         android:id="@+id/navigation_main"
         android:title="@string/nav_title_main"
         android:icon="@drawable/ic_home"/>
-    <item
-        android:id="@+id/navigation_history"
-        android:title="@string/infomation"
-        android:icon="@drawable/ic_news"/>
 
     <item
         android:id="@+id/navigation_pay"
@@ -15,7 +11,12 @@
         android:icon="@drawable/ic_history"/>
 
     <item
-        android:id="@+id/navigation_sms"
+        android:id="@+id/navigation_history"
+        android:title="@string/infomation"
+        android:icon="@drawable/ic_news"/>
+
+    <item
+        android:id="@+id/navigation_report"
         android:title="@string/nav_title_sms"
         android:icon="@drawable/ic_sms"/>
 

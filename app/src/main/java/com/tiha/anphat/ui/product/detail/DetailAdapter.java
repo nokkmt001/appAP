@@ -23,12 +23,11 @@ import com.tiha.anphat.utils.AppUtils;
 
 import java.util.List;
 
-public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> implements LoadImageContract.View {
+public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder>  {
     List<ProductInfo> listAllData;
     Context mContext;
     BaseEventClick.OnClickListener clickListener;
     String category;
-    LoadImagePresenter presenter;
     String biMap = null;
     ProductModel model;
 
@@ -36,7 +35,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         this.listAllData = list;
         this.mContext = context;
         this.category = category;
-        this.presenter = new LoadImagePresenter(this);
         this.model = new ProductModel();
     }
 
@@ -100,15 +98,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         return listAllData.size();
     }
 
-    @Override
-    public void onLoadImageSuccess(String bitMap) {
-        this.biMap = bitMap;
-    }
-
-    @Override
-    public void onLoadImageError(String error) {
-
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvPrice,tvCodeProduct,tvCategory;

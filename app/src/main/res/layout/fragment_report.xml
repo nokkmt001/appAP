@@ -1,6 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/layoutReserve"
+            style="@style/AppTheme.Button.Transparent"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/image_thongke"
+                android:layout_height="@dimen/image_thongke"
+                android:layout_margin="5dp"
+                android:src="@drawable/lnhuan_ckhau" />
+
+            <TextView
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@string/report_title_reserve_fund" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutReportRevenue"
+            style="@style/AppTheme.Button.Transparent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/image_thongke"
+                android:layout_height="@dimen/image_thongke"
+                android:layout_margin="5dp"
+                app:srcCompat="@drawable/ic_sales" />
+
+            <TextView
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@string/title_report_revenue" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutSales"
+            style="@style/AppTheme.Button.Transparent"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/image_thongke"
+                android:layout_height="@dimen/image_thongke"
+                android:layout_margin="5dp"
+                android:src="@drawable/config_2" />
+
+            <TextView
+                style="@style/AppTheme.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:text="@string/title_sales" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/AppTheme.Button.Transparent"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/image_thongke"
+                android:layout_height="@dimen/image_thongke"
+                android:layout_margin="5dp"
+                android:src="@drawable/baohanh_truy_van" />
+
+            <TextView
+                style="@style/AppTheme.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

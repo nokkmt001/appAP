@@ -1,28 +1,15 @@
 package com.tiha.anphat.ui.account;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.viewbinding.ViewBinding;
 
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.entities.NewCustomer;
-import com.tiha.anphat.databinding.FragmentAccountBinding;
-import com.tiha.anphat.main.MainActivity;
 import com.tiha.anphat.ui.base.BaseFragment;
-import com.tiha.anphat.ui.base.BaseTestAdapter;
-import com.tiha.anphat.ui.base.BaseTestFragment;
 import com.tiha.anphat.ui.map.mapcty.MapCustomerActivity;
 import com.tiha.anphat.utils.CommonUtils;
 import com.tiha.anphat.utils.PublicVariables;

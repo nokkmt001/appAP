@@ -24,8 +24,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @LayoutRes
     public abstract int getLayoutId();
 
-    public abstract void bind(View view);
-
     public abstract void setupViews(View itemView, T item, int position);
 
     public abstract void setupActions(View itemView, T item, int position);
@@ -44,7 +42,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
-            bind(holder.itemView);
             setupViews(holder.itemView, listData.get(position), position);
             setupActions(holder.itemView, listData.get(position), position);
         }

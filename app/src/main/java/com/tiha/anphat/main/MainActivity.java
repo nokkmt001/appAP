@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +37,6 @@ import com.tiha.anphat.ui.home.HomeFragment;
 import com.tiha.anphat.ui.introduce.IntroduceActivity;
 import com.tiha.anphat.ui.login.checkphone.CheckPhoneActivity;
 import com.tiha.anphat.ui.pay.PayFragment;
-import com.tiha.anphat.ui.product.ProductFragment;
 import com.tiha.anphat.ui.sms.SmsFragment;
 import com.tiha.anphat.ui.sms.newsfeed.NewsFeedFragment;
 import com.tiha.anphat.ui.update.UpdateActivity;
@@ -184,11 +182,11 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         case R.id.navigation_history:
                             setBottomNavigationView(fmHistory, new NewsFeedFragment(), "2");
                             return true;
-                        case R.id.navigation_sms:
-                            setBottomNavigationView(fmSms, new SmsFragment(), "4");
-                            return true;
                         case R.id.navigation_pay:
                             setBottomNavigationView(fmPay, new PayFragment(), "3");
+                            return true;
+                        case R.id.navigation_report:
+                            setBottomNavigationView(fmSms, new SmsFragment(), "4");
                             return true;
                         case R.id.navigation_account:
                             setBottomNavigationView(fmAccount, new AccountFragment(), "5");
@@ -210,9 +208,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                         moveTaskToBack(true);
                         finishAffinity();
                     });
-
         }
-
     }
 
     public void setBottomNavigationView(Fragment fmMain, Fragment fragment, String tab) {

@@ -17,11 +17,6 @@ public class FriendAdapter extends BaseAdapter<FriendInfo> {
     }
 
     @Override
-    public void bind(View view) {
-
-    }
-
-    @Override
     public void setupViews(View itemView, FriendInfo item, int position) {
 
     }

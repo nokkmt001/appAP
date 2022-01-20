@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/dp_1"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/colorLine"
+    app:cardBackgroundColor="@color/colorSpinner_background_default"
     app:cardCornerRadius="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,8 +15,8 @@
         android:padding="1dp">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/dp_70"
-            android:layout_height="@dimen/dp_60"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/White"
             app:cardCornerRadius="5dp"
             app:cardElevation="@dimen/cardview_elevation"
@@ -28,17 +29,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/image"
-                    android:layout_width="@dimen/dp_20"
-                    android:layout_height="@dimen/dp_20"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@drawable/sale_icon"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <!--                <androidx.appcompat.widget.AppCompatImageView-->
+                <!--                    android:id="@+id/image"-->
+                <!--                    android:layout_width="@dimen/dp_20"-->
+                <!--                    android:layout_height="@dimen/dp_20"-->
+                <!--                    android:layout_marginLeft="8dp"-->
+                <!--                    android:layout_marginTop="8dp"-->
+                <!--                    android:layout_marginRight="8dp"-->
+                <!--                    android:src="@drawable/sale_icon"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <TextView
                     android:id="@+id/textCategory"
@@ -54,7 +55,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/image" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

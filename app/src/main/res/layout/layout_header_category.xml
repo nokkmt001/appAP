@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:background="@color/colorPrimaryDark">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dp_5"
+        android:padding="@dimen/dp_10"
+        android:src="@drawable/ic_arrow_back"
+        android:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textTitle"
+        style="@style/AppTheme.TextView.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textSize="@dimen/textSize_16"
+        android:textColor="@color/White" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        style="@style/AppTheme.TextViewSize20"
+        android:textColor="@color/White"
+        android:padding="10dp"
+        android:text="@string/save"
+        tools:ignore="RelativeOverlap" />
+
+</RelativeLayout>

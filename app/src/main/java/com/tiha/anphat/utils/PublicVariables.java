@@ -31,6 +31,8 @@ public class PublicVariables {
 
     public static List<CartInfo> listBooking = null;
 
+    public static List<CategoryInfo> listShowCategory = new ArrayList<>();
+
     public static void ClearData() {
         UserInfo = new NewCustomer();
         listCategory = new ArrayList<>();

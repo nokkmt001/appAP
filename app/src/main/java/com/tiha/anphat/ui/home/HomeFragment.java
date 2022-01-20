@@ -1,68 +1,54 @@
 package com.tiha.anphat.ui.home;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tiha.anphat.R;
 import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CategoryInfo;
-import com.tiha.anphat.data.entities.DistanceCalculator;
 import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
 import com.tiha.anphat.ui.base.BaseFragment;
-import com.tiha.anphat.ui.base.BaseTestAdapter;
 import com.tiha.anphat.ui.booking.BookingActivity;
 import com.tiha.anphat.ui.home.branch.BranchContract;
 import com.tiha.anphat.ui.home.branch.BranchPresenter;
-import com.tiha.anphat.ui.map.GPSTracker;
+import com.tiha.anphat.ui.home.choose.FullCategoryActivity;
 import com.tiha.anphat.ui.product.detail.DetailAdapter;
+import com.tiha.anphat.ui.product.full.FullProductActivity;
+import com.tiha.anphat.ui.sms.newsfeed.LoadAdsAdapter;
 import com.tiha.anphat.utils.AppConstants;
-import com.tiha.anphat.utils.AppUtils;
-import com.tiha.anphat.utils.CommonUtils;
+import com.tiha.anphat.utils.AutoScrollRecyclerView;
 import com.tiha.anphat.utils.PublicVariables;
 import com.tiha.anphat.utils.TestConstants;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.app.Activity.RESULT_OK;
+
 public class HomeFragment extends BaseFragment implements BranchContract.View, HomeContract.View {
     BranchPresenter presenter;
     List<KhoInfo> listDataBranch = new ArrayList<>();
-    CategoryAdapter adapterCategory;
+    //    CategoryAdapter adapterCategory;
+    CategoryMainAdapter adapterCategory;
     RecyclerView rclCategory, rclMain;
     DetailAdapter adapter;
     HomePresenter presenterProduct;
@@ -80,6 +66,12 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     AppPreference preference;
     Boolean isBuyNow = false;
     ProductInfo info;
+    List<CategoryInfo> listAdd = new ArrayList<>();
+    LoadAdsAdapter adsAdapter;
+    AutoScrollRecyclerView rclImage;
+    LinearLayout layoutConfig;
+
+    final int SHOW = 1;
 
     @Override
     protected int getLayoutID() {
@@ -91,14 +83,18 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         rclCategory = bind(view, R.id.rclCategory);
         rclMain = bind(view, R.id.rclMain);
         imageDelete = bind(view, R.id.imageDelete);
+        rclImage = bind(view, R.id.rclImage);
+        layoutConfig = bind(view, R.id.layoutConfig);
 
         inputSearch = bind(view, R.id.inputSearch);
-        adapterCategory = new CategoryAdapter();
+//        adapterCategory = new CategoryAdapter();
+        adapterCategory = new CategoryMainAdapter();
+        rclCategory.setLayoutManager(new GridLayoutManager(getContext(), 4));
         rclCategory.setAdapter(adapterCategory);
         adapterCategory.setOnClickListener((view1, position) -> {
-            CategoryInfo info = adapterCategory.getItem(position);
-            category = info.getCategory_ID();
-            onLoadData();
+//            CategoryInfo info = adapterCategory.getItem(position);
+//            category = info.getCategory_ID();
+//            onLoadData();
         });
 
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
@@ -114,12 +110,31 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
             }
         });
         Search();
+        adsAdapter = new LoadAdsAdapter(getContext());
+        rclImage.setAdapter(adsAdapter);
+//        adapter.setClickListener((view1, position) -> {
+//            info = adapter.getItem(position);
+//            showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+//                    0.0, info.getDescription());
+//        });
 
-        adapter.setClickListener((view1, position) -> {
-            info = adapter.getItem(position);
-            showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                    0.0, info.getDescription());
+        addAds();
+        layoutConfig.setOnClickListener(v -> {
+            Intent intent =  new Intent(getContext(), FullCategoryActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, SHOW);
         });
+    }
+
+    private void addAds() {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add("jjjhhh");
+        }
+        adsAdapter.clear();
+        adsAdapter.addAll(list);
+        rclImage.startAutoScroll();
+        rclImage.setLoopEnabled(true);
     }
 
     public void Search() {
@@ -158,20 +173,50 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         presenter = new BranchPresenter(this);
         listDataBranch = PublicVariables.listKho;
         adapterCategory.clear();
-        adapterCategory.setSelect_position(0);
-        adapterCategory.addAll(PublicVariables.listCategory);
+        adapterCategory.setSelect_position(-1);
+        for (int i = 0; i < PublicVariables.listCategory.size(); i++) {
+            if (i < 8) {
+                CategoryInfo item = PublicVariables.listCategory.get(i);
+                item.setCheck(true);
+                listAdd.add(item);
+            }
 
-        condition.setBegin(PAGE_START);
-        condition.setUserName("TIHA");
-        category = PublicVariables.listCategory.get(0).getCategory_ID();
-        condition.setNhomLoaiHang(category);
-        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
-            condition.setEnd(100000);
-        } else {
-            condition.setEnd(PAGE_RECORD);
         }
-        condition.setTextSearch(inputSearch.getText().toString());
-        presenterProduct.GetListProduct(condition);
+        adapterCategory.addAll(listAdd);
+        PublicVariables.listShowCategory = listAdd;
+
+//        condition.setBegin(PAGE_START);
+//        condition.setUserName("TIHA");
+//        category = PublicVariables.listCategory.get(0).getCategory_ID();
+//        condition.setNhomLoaiHang(category);
+//        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
+//            condition.setEnd(100000);
+//        } else {
+//            condition.setEnd(PAGE_RECORD);
+//        }
+//        condition.setTextSearch(inputSearch.getText().toString());
+//        presenterProduct.GetListProduct(condition);
+        setAdapterCategory();
+
+    }
+
+    private void setAdapterCategory() {
+        adapterCategory.setOnClickListener((view, position) -> {
+            Intent intent;
+            CategoryInfo info = adapterCategory.getItem(position);
+            if (info.getCategory_ID().equals("MORE")) {
+                intent = new Intent(getContext(), FullCategoryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, SHOW);
+            } else {
+                intent = new Intent(getContext(), FullProductActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("ITEM", info.getCategory_ID());
+                intent.putExtras(bundle);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
     }
 
     private void onLoadData() {
@@ -223,7 +268,7 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     public void onGetListProductSuccess(List<ProductInfo> list, Integer total) {
         if (condition.getBegin() == 1) {
-            if (list.size()==0){
+            if (list.size() == 0) {
                 showNoResult();
             }
             adapter.clear();
@@ -263,89 +308,101 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
     Integer count = 1;
 
-    private void showBottomSheet(String imageBitMap, String title, String price, final Double number, String description) {
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
-        final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
-        dialog.setContentView(view);
-        View bottomSheet = view.findViewById(R.id.bottom_sheet);
-        assert bottomSheet != null;
-        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        dialog.show();
-        final ImageView imageMain = bind(view, R.id.imageView);
-        final ImageView imageClose = bind(view, R.id.imageClose);
-        imageClose.setOnClickListener(view14 -> dialog.cancel());
-        TextView tvTitle = bind(view, R.id.textName);
-        TextView tvPrice = bind(view, R.id.textPrice);
-        TextView tvDeception = bind(view, R.id.textDeception);
-        final TextView tvCountBuy = bind(view, R.id.textCountBuy);
-        Button btAddCart = bind(view, R.id.btnAddCart);
-        Button btnBuyNow = bind(view, R.id.btnBuyNow);
-        ImageView imgAdd = bind(view, R.id.imageAdd);
-        ImageView imgMinus = bind(view, R.id.imageMinus);
-        count = 1;
-        tvCountBuy.setText(count.toString());
-        tvTitle.setText(title);
-        tvPrice.setText(price);
-        tvDeception.setText(description);
+//    private void showBottomSheet(String imageBitMap, String title, String price, final Double number, String description) {
+//        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_chose_product, null);
+//        final BottomSheetDialog dialog = new BottomSheetDialog(getActivity());
+//        dialog.setContentView(view);
+//        View bottomSheet = view.findViewById(R.id.bottom_sheet);
+//        assert bottomSheet != null;
+//        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from(bottomSheet);
+//        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//        dialog.show();
+//        final ImageView imageMain = bind(view, R.id.imageView);
+//        final ImageView imageClose = bind(view, R.id.imageClose);
+//        imageClose.setOnClickListener(view14 -> dialog.cancel());
+//        TextView tvTitle = bind(view, R.id.textName);
+//        TextView tvPrice = bind(view, R.id.textPrice);
+//        TextView tvDeception = bind(view, R.id.textDeception);
+//        final TextView tvCountBuy = bind(view, R.id.textCountBuy);
+//        Button btAddCart = bind(view, R.id.btnAddCart);
+//        Button btnBuyNow = bind(view, R.id.btnBuyNow);
+//        ImageView imgAdd = bind(view, R.id.imageAdd);
+//        ImageView imgMinus = bind(view, R.id.imageMinus);
+//        count = 1;
+//        tvCountBuy.setText(count.toString());
+//        tvTitle.setText(title);
+//        tvPrice.setText(price);
+//        tvDeception.setText(description);
+//
+//        final Date date = new Date(System.currentTimeMillis());
+//        imgAdd.setOnClickListener(view12 -> {
+//            count = count + 1;
+//            tvCountBuy.setText(count.toString());
+//        });
+//        imgMinus.setOnClickListener(view13 -> {
+//            if (count != 1) {
+//                count = count - 1;
+//            }
+//            tvCountBuy.setText(count.toString());
+//        });
+//        btAddCart.setVisibility(View.VISIBLE);
+//        btnBuyNow.setVisibility(View.VISIBLE);
+//        btAddCart.setOnClickListener(view1 -> {
+//            isBuyNow = false;
+//            CartCondition condition = new CartCondition();
+//            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+//            condition.setSoLuong(count);
+//            condition.setProductID(info.getProduct_ID());
+//            condition.setGhiChu("");
+//            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//            presenterProduct.InsertCart(condition);
+//        });
+//        btnBuyNow.setOnClickListener(v -> {
+//            if (preference.getBooking() != null && preference.getBooking().length() > 0) {
+//                showMessage(getString(R.string.error_dont_booking));
+//                return;
+//            }
+//            isBuyNow = true;
+//            CartCondition condition = new CartCondition();
+//            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+//            condition.setSoLuong(count);
+//            condition.setProductID(info.getProduct_ID());
+//            condition.setGhiChu("");
+//            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//            presenterProduct.InsertCart(condition);
+//        });
+//        String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
+//
+//        Target target = new Target() {
+//            @Override
+//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                imageMain.setImageBitmap(bitmap);
+//            }
+//
+//            @Override
+//            public void onBitmapFailed(Drawable errorDrawable) {
+//            }
+//
+//            @Override
+//            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//            }
+//        };
+//        Picasso.with(getContext()).load(url).into(target);
+//    }
 
-        final Date date = new Date(System.currentTimeMillis());
-        imgAdd.setOnClickListener(view12 -> {
-            count = count + 1;
-            tvCountBuy.setText(count.toString());
-        });
-        imgMinus.setOnClickListener(view13 -> {
-            if (count != 1) {
-                count = count - 1;
-            }
-            tvCountBuy.setText(count.toString());
-        });
-        btAddCart.setVisibility(View.VISIBLE);
-        btnBuyNow.setVisibility(View.VISIBLE);
-        btAddCart.setOnClickListener(view1 -> {
-            isBuyNow = false;
-            CartCondition condition = new CartCondition();
-            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
-            condition.setSoLuong(count);
-            condition.setProductID(info.getProduct_ID());
-            condition.setGhiChu("");
-            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            presenterProduct.InsertCart(condition);
-        });
-        btnBuyNow.setOnClickListener(v -> {
-            if (preference.getBooking() != null && preference.getBooking().length() > 0) {
-                showMessage(getString(R.string.error_dont_booking));
-                return;
-            }
-            isBuyNow = true;
-            CartCondition condition = new CartCondition();
-            condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
-            condition.setSoLuong(count);
-            condition.setProductID(info.getProduct_ID());
-            condition.setGhiChu("");
-            condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            presenterProduct.InsertCart(condition);
-        });
-        String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
 
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                imageMain.setImageBitmap(bitmap);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SHOW) {
+                adapterCategory.clear();
+                adapterCategory.addAll(PublicVariables.listShowCategory);
             }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
-        };
-        Picasso.with(getContext()).load(url).into(target);
+        }
     }
 }
 

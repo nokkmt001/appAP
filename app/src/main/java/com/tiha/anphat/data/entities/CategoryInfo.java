@@ -21,6 +21,7 @@ public class CategoryInfo {
     private String NgayTonKhoToiDa = null;
     private String BienDoGiamGia = null;
     private String TimKiem;
+    private Boolean isCheck = false;
 
     public CategoryInfo getCart(String jsonString) {
         Gson gson = new GsonBuilder()
@@ -146,5 +147,13 @@ public class CategoryInfo {
 
     public void setTimKiem(String TimKiem) {
         this.TimKiem = TimKiem;
+    }
+
+    public Boolean getCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(Boolean check) {
+        isCheck = check;
     }
 }
