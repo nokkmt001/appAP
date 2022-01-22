@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     String category;
     String biMap = null;
     ProductModel model;
+    int select_position = -1;
+
+    public void setSelect_position(int select_position) {
+        this.select_position = select_position;
+    }
 
     public DetailAdapter(Context context, List<ProductInfo> list, String category) {
         this.listAllData = list;
@@ -91,6 +97,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             }
         };
         Picasso.with(mContext).load(url).into(target);
+        if (select_position == position){
+            holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_primary);
+        } else {
+            holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_white);
+        }
     }
 
     @Override
@@ -102,6 +113,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvPrice,tvCodeProduct,tvCategory;
         ImageView imageView;
+        RelativeLayout layoutColor;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
@@ -110,9 +122,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
             tvTitle = bind(view, R.id.tvTitle);
             tvPrice = bind(view, R.id.textPrice);
             imageView = bind(view, R.id.imageView);
+             layoutColor = bind(view, R.id.layoutColor);
             view.setOnClickListener(view1 -> {
                 if (clickListener != null) {
                     clickListener.onClick(view1, getAdapterPosition());
+                    select_position = getAdapterPosition();
+                    notifyDataSetChanged();
                 }
             });
         }

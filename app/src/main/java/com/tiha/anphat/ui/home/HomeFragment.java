@@ -24,12 +24,14 @@ import com.tiha.anphat.data.entities.ProductInfo;
 import com.tiha.anphat.data.entities.condition.CartCondition;
 import com.tiha.anphat.data.entities.condition.ProductCondition;
 import com.tiha.anphat.data.entities.kho.KhoInfo;
+import com.tiha.anphat.ui.base.BaseEventClick;
 import com.tiha.anphat.ui.base.BaseFragment;
 import com.tiha.anphat.ui.booking.BookingActivity;
 import com.tiha.anphat.ui.home.branch.BranchContract;
 import com.tiha.anphat.ui.home.branch.BranchPresenter;
 import com.tiha.anphat.ui.home.choose.FullCategoryActivity;
 import com.tiha.anphat.ui.product.detail.DetailAdapter;
+import com.tiha.anphat.ui.product.full.ChooseProductActivity;
 import com.tiha.anphat.ui.product.full.FullProductActivity;
 import com.tiha.anphat.ui.sms.newsfeed.LoadAdsAdapter;
 import com.tiha.anphat.utils.AppConstants;
@@ -66,11 +68,10 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     AppPreference preference;
     Boolean isBuyNow = false;
     ProductInfo info;
-    List<CategoryInfo> listAdd = new ArrayList<>();
+    List<CategoryInfo> listAdd;
     LoadAdsAdapter adsAdapter;
     AutoScrollRecyclerView rclImage;
     LinearLayout layoutConfig;
-
     final int SHOW = 1;
 
     @Override
@@ -120,9 +121,17 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
         addAds();
         layoutConfig.setOnClickListener(v -> {
-            Intent intent =  new Intent(getContext(), FullCategoryActivity.class);
+            Intent intent = new Intent(getContext(), FullCategoryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SHOW);
+        });
+        adapter.setClickListener((view12, position) -> {
+            Intent intent = new Intent(getContext(), ChooseProductActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ITEM",adapter.getItem(position));
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
     }
 
@@ -168,34 +177,47 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
     @Override
     protected void initData() {
-        preference = new AppPreference(getContext());
-        presenterProduct = new HomePresenter(this);
-        presenter = new BranchPresenter(this);
-        listDataBranch = PublicVariables.listKho;
-        adapterCategory.clear();
-        adapterCategory.setSelect_position(-1);
-        for (int i = 0; i < PublicVariables.listCategory.size(); i++) {
-            if (i < 8) {
-                CategoryInfo item = PublicVariables.listCategory.get(i);
-                item.setCheck(true);
-                listAdd.add(item);
+        try {
+            listAdd = new ArrayList<>();
+            preference = new AppPreference(getContext());
+            presenterProduct = new HomePresenter(this);
+            presenter = new BranchPresenter(this);
+            listDataBranch = PublicVariables.listKho;
+            adapterCategory.clear();
+            adapterCategory.setSelect_position(-1);
+
+            if (preference.getPrefCategory() != null) {
+                listAdd = new CategoryInfo().getListCategory(preference.getPrefCategory());
+            } else {
+                listAdd = new ArrayList<>();
+                for (int i = 0; i < PublicVariables.listCategory.size(); i++) {
+                    if (i < 8) {
+                        CategoryInfo item = PublicVariables.listCategory.get(i);
+                        item.setCheck(true);
+                        listAdd.add(item);
+                    }
+
+                }
             }
+            adapterCategory.addAll(listAdd);
+
+            PublicVariables.listShowCategory = listAdd;
+        } catch (Exception ignored) {
 
         }
-        adapterCategory.addAll(listAdd);
-        PublicVariables.listShowCategory = listAdd;
 
-//        condition.setBegin(PAGE_START);
-//        condition.setUserName("TIHA");
-//        category = PublicVariables.listCategory.get(0).getCategory_ID();
-//        condition.setNhomLoaiHang(category);
-//        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
-//            condition.setEnd(100000);
-//        } else {
-//            condition.setEnd(PAGE_RECORD);
-//        }
-//        condition.setTextSearch(inputSearch.getText().toString());
-//        presenterProduct.GetListProduct(condition);
+
+        condition.setBegin(PAGE_START);
+        condition.setUserName("TIHA");
+        category = PublicVariables.listCategory.get(0).getCategory_ID();
+        condition.setNhomLoaiHang("KHUYENMAI");
+        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
+            condition.setEnd(100000);
+        } else {
+            condition.setEnd(PAGE_RECORD);
+        }
+        condition.setTextSearch(inputSearch.getText().toString());
+        presenterProduct.GetListProduct(condition);
         setAdapterCategory();
 
     }

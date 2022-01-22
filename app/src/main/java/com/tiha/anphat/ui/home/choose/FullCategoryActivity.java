@@ -5,7 +5,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.gson.Gson;
 import com.tiha.anphat.R;
+import com.tiha.anphat.data.AppPreference;
 import com.tiha.anphat.data.entities.CategoryInfo;
 import com.tiha.anphat.databinding.ActivityCategoryFullBinding;
 import com.tiha.anphat.ui.base.BaseTestActivity;
@@ -21,6 +23,7 @@ public class FullCategoryActivity extends BaseTestActivity<ActivityCategoryFullB
     CategoryFullAdapter adapterFullCategory;
     CategoryAddAdapter addAdapterShow;
     List<CategoryInfo> listMain = new ArrayList<>();
+    AppPreference preference;
 
     @Override
     public ActivityCategoryFullBinding getViewBinding() {
@@ -41,8 +44,10 @@ public class FullCategoryActivity extends BaseTestActivity<ActivityCategoryFullB
         bd.rclFull.setAdapter(adapterFullCategory);
         bd.layoutHeader.textSave.setOnClickListener(v -> {
             PublicVariables.listShowCategory = addAdapterShow.getListAllData();
+            preference.setPrefCategory(new Gson().toJson(PublicVariables.listShowCategory));
             Intent intent = new Intent();
             setResult(RESULT_OK, intent);
+            finish();
         });
     }
 
@@ -76,6 +81,7 @@ public class FullCategoryActivity extends BaseTestActivity<ActivityCategoryFullB
 
     @Override
     protected void initData() {
+        preference = new AppPreference(this);
         addAdapterShow.clear();
         addAdapterShow.addAll(PublicVariables.listShowCategory);
 

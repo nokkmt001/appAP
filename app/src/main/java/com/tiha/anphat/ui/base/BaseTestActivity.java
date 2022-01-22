@@ -59,6 +59,8 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);

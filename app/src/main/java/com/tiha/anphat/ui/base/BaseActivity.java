@@ -58,6 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);

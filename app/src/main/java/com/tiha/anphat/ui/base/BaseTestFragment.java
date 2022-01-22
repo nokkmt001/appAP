@@ -44,6 +44,7 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         if (!NetworkUtils.isNetworkConnected(requireContext())) {
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);

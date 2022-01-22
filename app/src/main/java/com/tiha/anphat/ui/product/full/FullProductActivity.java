@@ -84,7 +84,9 @@ public class FullProductActivity extends BaseTestActivity<ActivityFullProductBin
         categoryID = bundle.getString("ITEM");
         inputSearch = bind(R.id.inputSearch);
         imageDelete = bind(R.id.imageDelete);
-        adapter = new DetailAdapter(this, new ArrayList<ProductInfo>(), title);
+        bd.layoutHederMain.imageBack.setOnClickListener(view -> finish());
+        bd.layoutHederMain.textTitle.setText("Sản phẩm");
+        adapter = new DetailAdapter(this, new ArrayList<>(), title);
         textError = bind(R.id.textError);
         bd.rlvProduct.setLayoutManager(new GridLayoutManager(this, 2));
         bd.rlvProduct.setAdapter(adapter);
@@ -101,8 +103,14 @@ public class FullProductActivity extends BaseTestActivity<ActivityFullProductBin
 
         adapter.setClickListener((view1, position) -> {
             info = adapter.getItem(position);
-            showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
-                    inventory, info.getDescription());
+            Intent intent = new Intent(this, ChooseProductActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Bundle bundle1 = new Bundle();
+            bundle1.putSerializable("ITEM",adapter.getItem(position));
+            intent.putExtras(bundle1);
+            startActivity(intent);
+//            showBottomSheet(info.getImageBitMap(), info.getProduct_Name(), AppUtils.formatNumber("N0").format(info.getGiaBanLe()),
+//                    inventory, info.getDescription());
         });
         Search();
     }
@@ -168,6 +176,9 @@ public class FullProductActivity extends BaseTestActivity<ActivityFullProductBin
     public void onGetListProductSuccess(List<ProductInfo> list, Integer total) {
         if (condition.getBegin() == 1) {
             adapter.clear();
+            if (list.size()==0){
+                showNoResult();
+            }
         }
         adapter.addAll(list);
         showProgressDialog(false);
