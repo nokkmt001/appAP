@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="@color/Black">
 
-    <com.tiha.anphat.utils.adapterimage.TouchImageView
+    <com.tiha.admin.anphat.utils.adapterimage.TouchImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

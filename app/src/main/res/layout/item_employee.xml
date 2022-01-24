@@ -1,98 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/dp_5">
 
     <LinearLayout
+        android:id="@+id/layoutMainProcess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_3"
-        android:orientation="vertical">
+        android:layout_margin="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/layoutMainProcess"
-            android:layout_width="match_parent"
+        <TextView
+            style="@style/AppTheme.TextView"
+            android:layout_width="@dimen/dp_120"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:orientation="horizontal">
+            android:text="Tên:" />
 
-            <TextView
-                style="@style/AppTheme.TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tên:" />
-
-            <TextView
-                android:id="@+id/textUserName"
-                style="@style/AppTheme.TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textStyle="bold"
-                android:layout_weight="3"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textUserName"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:orientation="horizontal">
+            android:text=""
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-            <TextView
-                style="@style/AppTheme.TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Số điện thoại:" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textSDT"
-                style="@style/AppTheme.TextView"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/Black"
-                android:textSize="14sp" />
+    <LinearLayout
+        android:id="@+id/layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/layoutMainProcess">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutAddress"
-            android:layout_width="match_parent"
+        <TextView
+            style="@style/AppTheme.TextView"
+            android:layout_width="@dimen/dp_120"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:orientation="horizontal"
-            tools:visibility="visible">
+            android:text="Số điện thoại:" />
 
-            <TextView
-                style="@style/AppTheme.TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Phòng ban:" />
+        <TextView
+            android:id="@+id/textSDT"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/Black"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/textPhongBan"
-                style="@style/AppTheme.TextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layoutAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/layout2"
+        tools:visibility="visible">
+
+        <TextView
+            style="@style/AppTheme.TextView"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="wrap_content"
+            android:text="Phòng ban:" />
+
+        <TextView
+            android:id="@+id/textPhongBan"
+            style="@style/AppTheme.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:background="@color/Black"
-        android:layout_height="0.5dp"/>
+        android:layout_marginTop="@dimen/dp_5"
+        app:layout_constraintTop_toBottomOf="@+id/layoutAddress" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

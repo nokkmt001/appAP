@@ -4,7 +4,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.tiha.anphat"
+        applicationId "com.tiha.admin.anphat"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1

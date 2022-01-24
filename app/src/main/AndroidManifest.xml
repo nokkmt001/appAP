@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tiha.anphat">
+    package="com.tiha.admin.anphat">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name=".utils.AppController"
+        android:name="com.tiha.admin.anphat.utils.AppController"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher_main_round"
@@ -36,7 +36,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name="com.tiha.admin.anphat.ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,54 +60,54 @@
         </provider>
 
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name="com.tiha.admin.anphat.ui.login.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.base.BaseActivity"
+            android:name="com.tiha.admin.anphat.ui.base.BaseActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".main.MainActivity"
+            android:name="com.tiha.admin.anphat.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.cart.CartActivity"
+            android:name="com.tiha.admin.anphat.ui.cart.CartActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.booking.BookingActivity"
+            android:name="com.tiha.admin.anphat.ui.booking.BookingActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.pay.history.vote.VoteEmployeeActivity"
+            android:name="com.tiha.admin.anphat.ui.pay.history.vote.VoteEmployeeActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.update.UpdateActivity"
+            android:name="com.tiha.admin.anphat.ui.update.UpdateActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.introduce.IntroduceActivity"
+            android:name="com.tiha.admin.anphat.ui.introduce.IntroduceActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".utils.adapterimage.ActivityImage"
+            android:name="com.tiha.admin.anphat.utils.adapterimage.ActivityImage"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.product.update.UpdateProductActivity"
+            android:name="com.tiha.admin.anphat.ui.product.update.UpdateProductActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.map.customer.MapCustomerActivity"
+            android:name="com.tiha.admin.anphat.ui.map.customer.MapCustomerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.supplier.SupplierActivity"
+            android:name="com.tiha.admin.anphat.ui.supplier.SupplierActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.employee.EmployeeActivity"
+            android:name="com.tiha.admin.anphat.ui.employee.EmployeeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.map.MapAdminActivity"
+            android:name="com.tiha.admin.anphat.ui.map.MapAdminActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.supplier.SupplierDetailActivity" />
+        <activity android:name="com.tiha.admin.anphat.ui.supplier.SupplierDetailActivity" />
     </application>
 
 </manifest>

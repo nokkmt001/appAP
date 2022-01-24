@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/Blue"
-    tools:context=".TextActivity">
+    tools:context="com.tiha.admin.anphat.TextActivity">
 
     <include android:id="@+id/layoutHeader"
         layout="@layout/layout_header"/>

@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.report.money.collect.CollectActivity">
+    tools:context="com.tiha.admin.anphat.ui.report.money.collect.CollectActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
