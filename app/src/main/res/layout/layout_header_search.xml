@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageDrawer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dp_5"
+        android:padding="@dimen/dp_10"
+        android:src="@drawable/ic_menu_24_black" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/textTitle"
+        style="@style/AppTheme.EditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_toStartOf="@+id/layoutCart"
+        android:layout_toEndOf="@+id/imageDrawer"
+        android:background="@drawable/table_content_cell_bg"
+        android:gravity="left"
+        android:hint="Tìm kiếm"
+        android:padding="@dimen/dp_5"
+        android:textColor="@color/Black" />
+
+    <include
+        android:id="@+id/layoutCart"
+        layout="@layout/layout_cart_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_toStartOf="@+id/layoutNotifications"
+        android:padding="@dimen/dp_10"
+        android:visibility="visible" />
+
+    <include
+        android:id="@+id/layoutNotifications"
+        layout="@layout/layout_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:padding="@dimen/dp_10"
+        android:visibility="visible" />
+
+</RelativeLayout>

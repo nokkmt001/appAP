@@ -5,26 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.MainActivity"
-    android:id="@+id/drawerLayout"
-    tools:openDrawer="start">
+    android:id="@+id/drawerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/layoutHeader"
-            layout="@layout/layout_header_main" />
-
-        <FrameLayout
-            android:id="@+id/frame_container"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?actionBarSize"
-            android:layout_marginBottom="?actionBarSize"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include
+                android:id="@+id/layoutHeader"
+                layout="@layout/layout_header_main" />
 
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/frame_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -32,14 +33,38 @@
             android:layout_above="@+id/bottomNavigationView"
             android:background="@color/colorLine" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:background="@color/White"
+            android:layout_marginBottom="@dimen/dp_25"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_phone_6015" />
+
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:id="@+id/bottomNavigationView"-->
+<!--            style="@style/BottomNavigationView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?actionBarSize"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:background="@color/White"-->
+<!--            app:itemIconSize="25dp"-->
+<!--            app:itemIconTint="@drawable/bottom_navigation_selector"-->
+<!--            app:itemTextColor="@drawable/bottom_navigation_selector"-->
+<!--            app:labelVisibilityMode="labeled"-->
+<!--            app:menu="@menu/bottom_nav" />-->
+
+        <com.tiha.anphatsu.utils.custom.CustomBottomNavigationView1
             android:id="@+id/bottomNavigationView"
             style="@style/BottomNavigationView"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/White"
-            app:itemIconSize="25dp"
             app:itemIconTint="@drawable/bottom_navigation_selector"
             app:itemTextColor="@drawable/bottom_navigation_selector"
             app:labelVisibilityMode="labeled"

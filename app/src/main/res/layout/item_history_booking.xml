@@ -14,12 +14,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageMain"
             android:layout_width="@dimen/dp_120"
             android:layout_height="@dimen/dp_120"
             android:layout_marginTop="@dimen/dp_10"
-            android:src="@drawable/img_no_image"
+            android:src="@drawable/gas_test"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,10 +37,7 @@
                 style="@style/AppTheme.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageMain"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_margin="@dimen/dp_2"/>
 
             <TextView
                 android:id="@+id/textAddress"
@@ -48,9 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageMain"
-                app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textPrice"
@@ -58,10 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_2"
-                android:textColor="@color/Red"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageMain"
-                app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+                android:textColor="@color/Red"/>
         </LinearLayout>
 
 

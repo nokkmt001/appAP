@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.tiha.anphat.utils.AutoScrollRecyclerView
+        <com.tiha.anphatsu.utils.AutoScrollRecyclerView
             android:id="@+id/rclImage"
             android:layout_width="match_parent"
             android:orientation="horizontal"
