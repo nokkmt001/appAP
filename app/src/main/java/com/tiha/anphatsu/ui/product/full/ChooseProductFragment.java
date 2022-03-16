@@ -205,18 +205,8 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
 
         Glide.with(this)
                 .load(url)
-                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
+                .error(R.drawable.img_no_image)
+                .into(imageView);
 
     }
 

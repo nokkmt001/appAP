@@ -8,13 +8,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -34,6 +31,7 @@ import com.tiha.anphatsu.data.entities.ProductInfo;
 import com.tiha.anphatsu.data.entities.condition.CartCondition;
 import com.tiha.anphatsu.data.entities.kho.KhoInfo;
 import com.tiha.anphatsu.databinding.ActivityMainBinding;
+import com.tiha.anphatsu.service.DownLoadService;
 import com.tiha.anphatsu.ui.account.AccountFragment;
 import com.tiha.anphatsu.ui.base.BaseActivity;
 import com.tiha.anphatsu.ui.cart.CartActivity;
@@ -41,6 +39,7 @@ import com.tiha.anphatsu.ui.home.CommonFM;
 import com.tiha.anphatsu.ui.home.HomeFragment;
 import com.tiha.anphatsu.ui.introduce.IntroduceActivity;
 import com.tiha.anphatsu.ui.login.checkphone.CheckPhoneActivity;
+import com.tiha.anphatsu.ui.notification.NotificationActivity;
 import com.tiha.anphatsu.ui.pay.PayFragment;
 import com.tiha.anphatsu.ui.sms.SmsFragment;
 import com.tiha.anphatsu.ui.sms.newsfeed.NewsFeedFragment;
@@ -75,6 +74,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     Fragment fmThree;
     Fragment fmFour;
     Fragment fmFive;
+
+    private Intent serviceIntent;
+
+    private ResponseReceiver receiver = new ResponseReceiver();
 
     @Override
     protected int getLayoutId() {
@@ -152,13 +155,22 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         binding.layout.main.setOnClickListener(view14 -> linkWed());
         binding.layoutHeader.textTitle.setText(R.string.hotline);
 
-        if (!CommonUtils.checkLocation(this)) {
+        /**if (!CommonUtils.checkLocation(this)) {
             alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
                     (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
-        }
+        }*/
+
+        binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+
+        this.serviceIntent = new Intent(this, DownLoadService.class);
+        startService(this.serviceIntent);
     }
 
     private void onCallHotline() {
@@ -234,22 +246,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         if (fmMain == null) {
             fmMain = fragment;
             if (fmActive != null) {
-                fmManager.beginTransaction().hide(fmActive).commit();
                 if (CommonFM.fragment != null) {
-                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(CommonFM.fragment).commit();
+                    fmManager.beginTransaction().hide(CommonFM.fragment).commit();
                     CommonFM.fragment = null;
-                    fmActive = fmMain;
-                    return;
-                } else {
-                    if (CommonFM.fragmentTwo != null) {
-                        fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(CommonFM.fragmentTwo).commit();
-                        CommonFM.fragmentTwo = null;
-                        fmActive = fmMain;
-                        return;
-                    } else {
-                        fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(fmActive).commit();
-                    }
                 }
+                if (CommonFM.fragmentTwo != null) {
+                    fmManager.beginTransaction().hide(CommonFM.fragmentTwo).commit();
+                    CommonFM.fragmentTwo = null;
+                }
+                if (CommonFM.fragmentThree != null) {
+                    fmManager.beginTransaction().hide(CommonFM.fragmentThree).commit();
+                    CommonFM.fragmentThree = null;
+                }
+                fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(fmActive).commit();
             } else {
                 if (CommonFM.fragmentTwo != null) {
                     fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(CommonFM.fragmentTwo).commit();
@@ -376,11 +385,60 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
             }
             String eventHome = bundle.getString("eventShow");
+            if (eventHome==null) {
+                return;
+            }
             if (eventHome.equals("kk")) {
                 binding.layoutHeader.layoutGGG.setVisibility(View.VISIBLE);
             } else {
                 binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
             }
         }
+    }
+    // Broadcast component
+    public class ResponseReceiver extends BroadcastReceiver {
+
+        // On broadcast received
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Check action name.
+            if(intent.getAction().equals(DownLoadService.ACTION_1)) {
+                int value = intent.getIntExtra(DownLoadService.PARAM_PERCENT, 0);
+
+                new ShowProgressBarTask().execute(value);
+            }
+        }
+    }
+
+    class ShowProgressBarTask extends AsyncTask<Integer, Integer, Integer> {
+
+        @Override
+        protected Integer doInBackground(Integer... args) {
+
+            return args[0];
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+
+//            progressBar.setProgress(result);
+//
+            binding.textMain.setText(result + " % Loaded");
+
+            if (result == 100) {
+                binding.textMain.setText("Completed");
+//                buttonStart.setEnabled(true);
+            }
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        registerReceiver(receiver, new IntentFilter(
+                DownLoadService.ACTION_1));
     }
 }

@@ -21,6 +21,8 @@ public class AccountFragment extends BaseFragment {
 
     TextView textName, textSdt;
 
+    private Boolean isClick = false;
+
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_account;
@@ -30,21 +32,27 @@ public class AccountFragment extends BaseFragment {
     protected void initView(View view) {
         TextView textMapCty = view.findViewById(R.id.textMapCty);
         textMapCty.setOnClickListener(v -> {
+            isClick = true;
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 checkSelfPermission(permissionsRequired);
                 return;
             }
-            if (!CommonUtils.checkLocation(getContext())) {
-                buildAlertMessageNoGps();
-            } else {
-                Intent intent = new Intent(getContext(), MapCustomerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+            showLocation();
+
         });
 
         textSdt = bind(view, R.id.textSdt);
         textName = bind(view, R.id.textName);
+    }
+
+    private void showLocation(){
+        if (!CommonUtils.checkLocation(getContext())) {
+            buildAlertMessageNoGps();
+        } else {
+            Intent intent = new Intent(getContext(), MapCustomerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -64,5 +72,14 @@ public class AccountFragment extends BaseFragment {
         alertDialog("VỊ TRÍ", "Để tiếp tục, vui lòng bật chức năng xác định vị trí.",
                 "OK", null, (dialog, which) ->
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isClick){
+            showLocation();
+
+        }
     }
 }

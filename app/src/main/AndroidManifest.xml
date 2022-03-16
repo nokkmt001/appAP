@@ -36,16 +36,16 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+
         <activity
             android:name=".ui.screens.ViewScreensActivity">
-
-
         </activity>
+
         <activity
             android:name=".ui.screens.ShareScreensActivity"
             android:screenOrientation="portrait">
-
         </activity>
+
         <activity
             android:name=".utils.adapterimage.ViewImageActivity"
             android:exported="false" />
@@ -140,6 +140,10 @@
         <activity
             android:name=".ui.home.DetailCategoryActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.notification.NotificationActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

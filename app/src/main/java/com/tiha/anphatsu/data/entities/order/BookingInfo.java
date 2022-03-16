@@ -9,31 +9,31 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class BookingInfo implements Serializable { // get don hang
-    private String SoCt;
-    private String Ngay;
-    private String MSK;
-    private String Supplier_ID;
-    private String PTTT;
-    private String DDBH = null;
-    private String TenDDBH = null;
-    private String Ghichu = null;
-    private String Nguoigo;
-    private String Tennguoimua;
-    private String Diachi = null;
-    private String TenDDnguoimua = null;
-    private String Diengiai = null;
-    private String Ngaygio;
-    private float Solanin;
-    private String MSDKTT;
-    private String MSNguoigiao = null;
-    private String TenNguoiGiao = null;
-    private String Diachigiaohang;
-    private String MaTrangThai;
-    private String TenTrangThai;
-    private String DTDD = null;
-    private String SoPhieuVietTay;
-    private String EMailPx = null;
-    private List<ChiTietDonInfo> ListChiTietDonHang;
+    public String SoCt;
+    public String Ngay;
+    public String MSK;
+    public String Supplier_ID;
+    public String PTTT;
+    public String DDBH = null;
+    public String TenDDBH = null;
+    public String Ghichu = null;
+    public String Nguoigo;
+    public String Tennguoimua;
+    public String Diachi = null;
+    public String TenDDnguoimua = null;
+    public String Diengiai = null;
+    public String Ngaygio;
+    public float Solanin;
+    public String MSDKTT;
+    public String MSNguoigiao = null;
+    public String TenNguoiGiao = null;
+    public String Diachigiaohang;
+    public String MaTrangThai;
+    public String TenTrangThai;
+    public String DTDD = null;
+    public String SoPhieuVietTay;
+    public String EMailPx = null;
+    public List<ChiTietDonInfo> ListChiTietDonHang;
 
     public BookingInfo getBookingInfo(String jsonString) {
         Gson gson = new GsonBuilder()

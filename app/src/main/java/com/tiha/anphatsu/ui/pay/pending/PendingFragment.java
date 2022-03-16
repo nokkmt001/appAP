@@ -30,14 +30,14 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
     HistoryBookingPresenter presenterHistory;
     ProductAfterAdapter adapter;
     RecyclerView rcl;
-    TextView textAddress, textNameProduct;
+    TextView textAddress, textNameProduct,textEmployee,textNoBooking;
     View viewFinish, viewPending, viewProgress, viewEnd, viewStart;
     Button buttonCancel;
     String gg = "";
     ConstraintLayout layoutMain;
-    TextView textNoBooking;
     AppPreference preference;
     BookingInfo itemMain = null;
+
     @Override
     protected int getLayoutID() {
         return R.layout.fragment_pending;
@@ -52,6 +52,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
         rcl = bind(view, R.id.rcl);
         rcl.setAdapter(adapter);
         textNoBooking = bind(view, R.id.textNoBooking);
+        textEmployee = bind(view,R.id.textEmployee);
         textNameProduct = bind(view, R.id.textNameProduct);
         textAddress = bind(view, R.id.textAddress);
         viewPending = bind(view, R.id.viewPending);
@@ -101,6 +102,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
 
     @Override
     public void onClick(View v) {
+
     }
 
     @Override
@@ -108,6 +110,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
         if (!info.getMaTrangThai().equals("HOANTHANH")) {
             String name = "";
             itemMain = info;
+            textEmployee.setText(info.TenNguoiGiao== null?"":info.TenNguoiGiao);
             switch (info.getMaTrangThai()) {
                 case "DADAT":
                     viewStart.setBackgroundResource(R.drawable.shape_status_completed);
@@ -120,7 +123,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
                 case "DANGGIAOHANG":
                     viewPending.setBackgroundResource(R.color.Blue);
                     viewProgress.setBackgroundResource(R.drawable.shape_status_completed);
-                    viewFinish.setBackgroundResource(R.color.Blue);
+                    viewFinish.setBackgroundResource(R.color.colorLine);
                     viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
                     buttonCancel.setVisibility(View.GONE);
                     break;

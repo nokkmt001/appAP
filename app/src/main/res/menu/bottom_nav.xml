@@ -13,6 +13,7 @@
     <item
         android:id="@+id/navigation_history"
         android:title=""
+        android:enabled="false"
         android:visible="true" />
 
     <item

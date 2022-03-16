@@ -4,8 +4,6 @@ import static com.tiha.anphatsu.utils.PublicVariables.listAllCategoryMain;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.bumptech.glide.signature.ObjectKey;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tiha.anphatsu.R;
 import com.tiha.anphatsu.data.entities.CategoryNew;
-import com.tiha.anphatsu.data.entities.ProductInfo;
 import com.tiha.anphatsu.data.entities.ProductNew;
 import com.tiha.anphatsu.data.network.product.ProductModel;
 import com.tiha.anphatsu.ui.base.BaseEventClick;
-import com.tiha.anphatsu.utils.AppConstants;
 import com.tiha.anphatsu.utils.AppUtils;
 import com.tiha.anphatsu.utils.PublicVariables;
 
@@ -39,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> implements Filterable {
-    List<ProductNew> listAllData;
+    List<ProductNew> listAllData = new ArrayList<>();
     Context mContext;
     BaseEventClick.OnClickListener clickListener;
     String category;
@@ -99,18 +89,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
         Glide.with(mContext)
                 .load(url)
-                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
-                    }
+                .error(R.drawable.img_no_image)
+                .into(holder.imageView);
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
         if (select_position == position){
             holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_primary);
         } else {

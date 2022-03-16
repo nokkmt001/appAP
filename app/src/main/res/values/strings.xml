@@ -141,6 +141,7 @@
     <string name="category_title_main">Danh mục sản phẩm</string>
     <string name="save">Lưu</string>
     <string name="title_all_category">Tất cả danh mục</string>
+    <string name="title_text_notification">Thông báo</string>
 
 
     <string-array name="letter_tile_colors">

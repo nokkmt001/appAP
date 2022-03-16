@@ -2,10 +2,10 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.MainActivity"
-    android:id="@+id/drawerLayout">
+    tools:context=".main.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,23 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <include
                 android:id="@+id/layoutHeader"
                 layout="@layout/layout_header_main" />
+
+            <TextView
+                android:id="@+id/textMain"
+                android:layout_width="wrap_content"
+                android:text="fdfd"
+                android:visibility="gone"
+                style="@style/AppTheme.TextView.Bold"
+                android:layout_height="wrap_content"/>
 
             <FrameLayout
                 android:id="@+id/frame_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_05"
-            android:layout_above="@+id/bottomNavigationView"
-            android:background="@color/colorLine" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageCall"
@@ -39,24 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:background="@color/White"
             android:layout_marginBottom="@dimen/dp_25"
+            android:background="@color/White"
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/ic_phone_6015" />
-
-<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--            android:id="@+id/bottomNavigationView"-->
-<!--            style="@style/BottomNavigationView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="?actionBarSize"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:background="@color/White"-->
-<!--            app:itemIconSize="25dp"-->
-<!--            app:itemIconTint="@drawable/bottom_navigation_selector"-->
-<!--            app:itemTextColor="@drawable/bottom_navigation_selector"-->
-<!--            app:labelVisibilityMode="labeled"-->
-<!--            app:menu="@menu/bottom_nav" />-->
 
         <com.tiha.anphatsu.utils.custom.CustomBottomNavigationView1
             android:id="@+id/bottomNavigationView"
@@ -73,10 +63,10 @@
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:id="@+id/navigation_drawer"
         android:background="@color/White"
         android:fitsSystemWindows="true"
         android:visibility="visible">
@@ -90,10 +80,10 @@
                 layout="@layout/nav_header_main" />
 
             <View
-                android:layout_below="@+id/layout"
                 android:layout_width="match_parent"
-                android:background="@color/colorPrimary"
-                android:layout_height="@dimen/dp_05"/>
+                android:layout_height="@dimen/dp_05"
+                android:layout_below="@+id/layout"
+                android:background="@color/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,25 +95,25 @@
                     android:id="@+id/layoutIntroduce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_5"
-                    android:layout_margin="@dimen/dp_5">
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
 
                     <ImageView
                         android:id="@+id/imageIntroduce"
                         android:layout_width="@dimen/dp_24"
                         android:layout_height="@dimen/dp_24"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/people"/>
+                        android:src="@drawable/people" />
 
                     <TextView
                         style="@style/AppTheme.TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="@dimen/textSize_16"
-                        android:layout_toEndOf="@+id/imageIntroduce"
                         android:layout_marginStart="@dimen/dp_5"
-                        android:text="Người giới thiệu"/>
+                        android:layout_toEndOf="@+id/imageIntroduce"
+                        android:text="Người giới thiệu"
+                        android:textSize="@dimen/textSize_16" />
 
                 </RelativeLayout>
 
@@ -131,25 +121,25 @@
                     android:id="@+id/layoutLogout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_5"
-                    android:layout_margin="@dimen/dp_5">
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
 
                     <ImageView
                         android:id="@+id/imageLogout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_log_out"/>
+                        android:src="@drawable/ic_log_out" />
 
                     <TextView
                         style="@style/AppTheme.TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="@dimen/textSize_16"
-                        android:layout_toEndOf="@+id/imageLogout"
                         android:layout_marginStart="@dimen/dp_5"
-                        android:text="Đăng xuất"/>
+                        android:layout_toEndOf="@+id/imageLogout"
+                        android:text="Đăng xuất"
+                        android:textSize="@dimen/textSize_16" />
 
                 </RelativeLayout>
 
@@ -157,25 +147,25 @@
                     android:id="@+id/layoutUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_5"
-                    android:layout_margin="@dimen/dp_5">
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
 
                     <ImageView
                         android:id="@+id/imageUpdate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_update_software"/>
+                        android:src="@drawable/ic_update_software" />
 
                     <TextView
                         style="@style/AppTheme.TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textSize="@dimen/textSize_16"
-                        android:layout_toEndOf="@+id/imageUpdate"
                         android:layout_marginStart="@dimen/dp_5"
-                        android:text="Cập nhật phần mềm"/>
+                        android:layout_toEndOf="@+id/imageUpdate"
+                        android:text="Cập nhật phần mềm"
+                        android:textSize="@dimen/textSize_16" />
 
                 </RelativeLayout>
 

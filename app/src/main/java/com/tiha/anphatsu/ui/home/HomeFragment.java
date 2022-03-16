@@ -27,6 +27,7 @@ import com.tiha.anphatsu.data.entities.kho.KhoInfo;
 import com.tiha.anphatsu.ui.base.BaseEventClick;
 import com.tiha.anphatsu.ui.base.BaseFragment;
 import com.tiha.anphatsu.ui.booking.BookingActivity;
+import com.tiha.anphatsu.ui.category.DetailCategoryFragment;
 import com.tiha.anphatsu.ui.home.branch.BranchContract;
 import com.tiha.anphatsu.ui.home.branch.BranchPresenter;
 import com.tiha.anphatsu.ui.home.choose.FullCategoryActivity;
@@ -102,12 +103,17 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         rclCategory.setAdapter(adapterCategory);
         adapterCategory.setOnClickListener((view1, position) -> {
             CategoryNew info = adapterCategory.getItem(position);
-            Intent intent = new Intent(getContext(), DetailCategoryActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("CATEGORY", info);
-            intent.putExtras(bundle);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+//            Intent intent = new Intent(getContext(), DetailCategoryActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("CATEGORY", info);
+//            intent.putExtras(bundle);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventShow","hh");
+            getContext().sendBroadcast(intentB);
+            StartDetailCategory(info);
         });
 
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
@@ -265,6 +271,16 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         CommonFM.fragmentTwo = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
                 .add(R.id.frame_container,nextFrag,"one")
+                .hide(CommonFM.fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void StartDetailCategory(CategoryNew info){
+        DetailCategoryFragment nextFrag= new DetailCategoryFragment(info);
+        CommonFM.fragmentThree = nextFrag;
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container,nextFrag,"three")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();
