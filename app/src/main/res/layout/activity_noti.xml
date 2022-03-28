@@ -28,14 +28,14 @@
 
             <TextView
                 android:id="@+id/textMainTitle"
-                style="@style/AppTheme.TextView"
+                style="@style/AppTheme.TextView.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginStart="@dimen/dp_10"
                 android:gravity="center"
                 android:text="Thông báo"
-                android:textStyle="bold" />
+                android:textColor="@color/White"
+                android:textSize="@dimen/textSize_16" />
 
         </RelativeLayout>
 
@@ -43,17 +43,17 @@
             android:id="@+id/ctlMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_below="@+id/appBarToolbar">
+            android:layout_below="@+id/appBarToolbar"
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNotification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="4dp"
                 android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:paddingBottom="4dp"
-                tools:listitem="@layout/item_noti"/>
+                tools:listitem="@layout/item_noti" />
 
         </LinearLayout>
 

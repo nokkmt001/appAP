@@ -7,60 +7,81 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
-    <RelativeLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/layoutHeader"
-                layout="@layout/layout_header_main" />
-
-            <TextView
-                android:id="@+id/textMain"
-                android:layout_width="wrap_content"
-                android:text="fdfd"
-                android:visibility="gone"
-                style="@style/AppTheme.TextView.Bold"
-                android:layout_height="wrap_content"/>
-
-            <FrameLayout
-                android:id="@+id/frame_container"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible" />
+                android:fitsSystemWindows="true"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        </LinearLayout>
+                <include
+                    android:id="@+id/layoutHeader"
+                    layout="@layout/layout_header_main"/>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <TextView
+            android:id="@+id/textMain"
+            style="@style/AppTheme.TextView.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fdfd"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?actionBarSize"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:visibility="visible" />
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/buttonBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:contentInsetStart="0dp"
+            app:fabCradleMargin="@dimen/dp_10"
+            app:fabCradleRoundedCornerRadius="@dimen/dp_10">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavigationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/White"
+                app:itemIconTint="@drawable/bottom_navigation_selector"
+                app:itemTextColor="@drawable/bottom_navigation_selector"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/bottom_nav" />
+
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageCall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="@dimen/dp_25"
-            android:background="@color/White"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_phone_6015" />
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_60"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_bg"
+            android:padding="@dimen/dp_10"
+            android:src="@drawable/gas_cylinder"
+            app:layout_anchor="@+id/buttonBar"
+            app:layout_anchorGravity="top|center" />
 
-        <com.tiha.anphatsu.utils.custom.CustomBottomNavigationView1
-            android:id="@+id/bottomNavigationView"
-            style="@style/BottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/White"
-            app:itemIconTint="@drawable/bottom_navigation_selector"
-            app:itemTextColor="@drawable/bottom_navigation_selector"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_nav" />
-
-    </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_drawer"

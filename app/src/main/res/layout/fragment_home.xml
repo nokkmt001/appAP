@@ -81,7 +81,7 @@
                 tools:itemCount="4"
                 tools:listitem="@layout/item_category_main" />
 
-            <com.tiha.anphatsu.utils.AutoScrollRecyclerView
+            <com.anphat.supplier.utils.AutoScrollRecyclerView
                 android:id="@+id/rclImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

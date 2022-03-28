@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.tiha.anphatsu"
+        applicationId "com.anphat.supplier"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 3
-        versionName "1.1.1"
+        versionCode 4
+        versionName "1.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,7 +55,6 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.12.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.google.android.gms:play-services:7.3.0'//map
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.squareup.okhttp3:okhttp:3.8.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofitVerion"
@@ -68,6 +68,8 @@ dependencies {
     // firebase
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation "com.google.android.gms:play-services-maps:$playServiceVersion"
+
 }
 repositories {
     mavenCentral()

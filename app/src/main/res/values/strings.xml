@@ -74,7 +74,7 @@
     <string name="add_cart_success">Thêm vào giỏ hàng thành công!</string>
     <string name="url_ap">https://www.gasanphat.com</string>
     <string name="hotline">Hotline 0819000203</string>
-    <string name="delivering">Đang giao</string>
+    <string name="delivering">Đơn mua</string>
     <string name="history">Lịch sử</string>
     <string name="send">Gửi</string>
     <string name="title_button_vote">Đánh giá</string>
@@ -159,4 +159,5 @@
         <item>#FFB57B</item>
         <item>#7ABFE7</item>
     </string-array>
+
 </resources>

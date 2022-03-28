@@ -24,6 +24,7 @@
             android:src="@drawable/ic_user_default" />
 
         <TextView
+            android:id="@+id/textNV"
             style="@style/AppTheme.TextViewSize16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

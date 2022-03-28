@@ -27,7 +27,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:textColor="@color/Black"/>
 
-    <com.tiha.anphatsu.utils.scroll.OtpEditText
+    <com.anphat.supplier.utils.scroll.OtpEditText
         android:id="@+id/etOtp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

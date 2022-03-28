@@ -41,17 +41,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
-                        <TextView
-                            android:id="@+id/textName"
-                            style="@style/AppTheme.TextViewSize20"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text=""
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/imageView"
                             android:layout_width="match_parent"
@@ -62,7 +51,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textName" />
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,6 +67,7 @@
                             android:layout_height="wrap_content"
                             android:layout_above="@+id/layoutButton"
                             android:layout_margin="@dimen/dp_5"
+                            app:layout_constraintBottom_toTopOf="@+id/layoutButton"
                             android:visibility="visible"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -98,7 +88,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:layout_margin="@dimen/dp_5"
+                                android:layout_marginStart="@dimen/dp_5"
+                                android:layout_marginTop="@dimen/dp_5"
+                                android:layout_marginEnd="@dimen/dp_5"
+                                android:layout_marginBottom="@dimen/dp_5"
                                 android:fontFamily="@font/myriadpro_bold"
                                 android:gravity="center"
                                 android:minWidth="@dimen/dp_50"
@@ -125,8 +118,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_5"
-                            android:orientation="horizontal"
-                            app:layout_constraintTop_toBottomOf="@+id/layoutCountBuy">
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/btnAddCart"
@@ -157,6 +150,14 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textName"
+                    style="@style/AppTheme.TextViewSize20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""/>
 
                 <TextView
                     style="@style/AppTheme.TextViewSize16"

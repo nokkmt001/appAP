@@ -24,7 +24,9 @@
         android:layout_marginEnd="@dimen/dp_5"
         android:layout_toStartOf="@+id/layoutCart"
         android:layout_toEndOf="@+id/imageDrawer"
+        android:drawableStart="@drawable/ic_phone_small"
         android:gravity="center"
+        android:singleLine="true"
         android:textColor="@color/White" />
 
     <include
