@@ -32,7 +32,7 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> im
 
     @Override
     protected void initView() {
-        adapter = new HistoryBookingAdapter(new ArrayList<>());
+        adapter = new HistoryBookingAdapter(new ArrayList<>(), getContext());
         binding.rcl.setAdapter(adapter);
         clickAdapter();
         checkResult(false);

@@ -59,7 +59,7 @@ public class ViewImage extends PagerAdapter {
 
         Glide.with(mContext).asBitmap()
                 .load(AppUtils.formatStringToBitMap(gg))
-                .apply(new RequestOptions().override(10, 10))
+                .override(500,500)
                 .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
                 .apply(new RequestOptions()
                         .placeholder(R.drawable.img_no_image).error(R.drawable.img_no_image))

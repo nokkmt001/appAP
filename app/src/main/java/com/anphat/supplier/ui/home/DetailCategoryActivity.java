@@ -2,6 +2,7 @@ package com.anphat.supplier.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -107,6 +108,7 @@ public class DetailCategoryActivity extends BaseTestActivity<ActivityDetailCateg
     public void onGetListProductSuccess(List<ProductNew> list) {
         DataFilterProduct.list = list;
         showProgressDialog(false);
+        AppPreference.saveProduct(list);
         adapter.clear();
         if (isEmpty){
             adapter.addAll(DataFilterProduct.getList(category.id));

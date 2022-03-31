@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.network.product.IProductModel;
 import com.bumptech.glide.Glide;
@@ -68,24 +69,19 @@ public class ProductAfterAdapter extends RecyclerView.Adapter<ProductAfterAdapte
         holder.textPrice.setText("Đơn giá:  " + item.dongia);
         holder.textDisCount.setText("Giảm giá:  " + item.GiatriDiscount);
         holder.textMoney.setText("Thành tiền:  " + (item.getSL() * item.getDongia()));
-        model.GetProductNew(item.getProduct_ID(), new IProductModel.IGetProductNewFinish() {
-            @Override
-            public void onSuccess(ProductNew info) {
+        List<ProductNew> list = AppPreference.getAllProduct();
+        if (list == null) return;
+        if (list.size()==0) return;
+        for (ProductNew info: list){
+            if (info.code.equals(item.getProduct_ID())){
                 url = "https://gasanphat.com/" + info.photo;
                 Glide.with(mContext)
                         .load(url)
                         .error(R.drawable.img_no_image)
+                        .override(500,500)
                         .into(holder.imageView);
             }
-
-            @Override
-            public void onError(String error) {
-                Glide.with(mContext)
-                        .load(url)
-                        .error(R.drawable.img_no_image)
-                        .into(holder.imageView);
-            }
-        });
+        }
 
     }
 

@@ -186,15 +186,15 @@ public class UserModel implements IUserModel {
 
     @Override
     public void UpdateCustomer(NewCustomer condition, IUpdateCustomerFinish listener) {
-        String URL = AppConstants.URL_INSERT_NEW_CUSTOMER;
+        String URL = AppConstants.URL_UPDATE_CUSTOMER;
         Map<String, String> params = new HashMap<>();
+        params.put("NguoiDungMobileID", condition.getNguoiDungMobileID().toString());
         params.put("HoTen", condition.getHoTen());
         params.put("SoDienThoai", condition.getSoDienThoai());
         params.put("DiaChi", condition.getDiaChi());
         params.put("NgayGio", condition.getNgayGio());
         params.put("MaPIN", condition.getMaPIN().toString());
         params.put("ModifiedDate", condition.getNgayGio());
-        params.put("Password", condition.getPassword());
         service = new APIService(URL);
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override

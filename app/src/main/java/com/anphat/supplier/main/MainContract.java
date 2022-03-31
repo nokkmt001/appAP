@@ -3,6 +3,7 @@ package com.anphat.supplier.main;
 import com.anphat.supplier.data.entities.CartInfo;
 import com.anphat.supplier.data.entities.CategoryInfo;
 import com.anphat.supplier.data.entities.ProductInfo;
+import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
@@ -51,6 +52,10 @@ public interface MainContract {
         void onSendBookingSuccess(CallInfo item);
 
         void onSendBookingError(String error);
+
+        void onGetListProductNewSuccess(List<ProductNew> list);
+
+        void onGetListProductNewError(String error);
     }
 
     interface Presenter {
@@ -73,5 +78,8 @@ public interface MainContract {
         void CheckDaHang();
 
         void sendBooking();
+
+        void GetListProductNew(String url);
+
     }
 }

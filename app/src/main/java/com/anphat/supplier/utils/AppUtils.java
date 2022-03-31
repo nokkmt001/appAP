@@ -23,6 +23,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -78,6 +79,7 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.anphat.supplier.utils.AppController.Chanel_id;
+import static org.webrtc.ContextUtils.getApplicationContext;
 
 public class AppUtils {
 
@@ -714,6 +716,10 @@ public class AppUtils {
                 context.getApplicationContext(),
                 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone ringtoneSound = RingtoneManager.getRingtone(context, alarmSound);
+        if (ringtoneSound != null) {
+            ringtoneSound.play();
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Chanel_id);
         builder.setSmallIcon(R.mipmap.ic_launcher_1_round)
                 .setContentTitle(title)
@@ -726,7 +732,7 @@ public class AppUtils {
             NotificationChannel channel = new NotificationChannel(Chanel_id, "FCM_CHANNEL_ID", NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
-        manager.notify(0, builder.build());
+        manager.notify(1, builder.build());
 
     }
 

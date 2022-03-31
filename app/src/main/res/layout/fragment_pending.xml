@@ -1,339 +1,338 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="?actionBarSize"
     android:background="@color/White">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutMain"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/layoutOne"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/buttonCancel"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
-                android:id="@+id/layoutOne"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/status_book"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:background="@drawable/shape_status_remaining"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/viewBooking"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/status_progress"
+                    android:layout_toEndOf="@+id/status_start"
+                    android:background="@color/Blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/status_start"
+                    app:layout_constraintStart_toEndOf="@+id/status_book"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/status_start"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="@drawable/shape_status_remaining"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/status_progress"
+                    app:layout_constraintStart_toEndOf="@+id/status_book"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/viewPending"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_centerVertical="true"
+                    android:background="@color/Blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/status_progress"
+                    app:layout_constraintStart_toEndOf="@+id/status_start"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/status_progress"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/shape_status_remaining"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/status_end"
+                    app:layout_constraintStart_toEndOf="@+id/status_start"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/viewFinish"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_centerVertical="true"
+                    android:background="@color/Blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/status_end"
+                    app:layout_constraintStart_toEndOf="@+id/status_progress"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/status_end"
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:background="@drawable/shape_status_remaining"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layoutStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="19dp">
-
-                    <View
-                        android:id="@+id/status_book"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_marginStart="@dimen/dp_10"
-                        android:background="@drawable/shape_status_remaining"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/viewBooking"
-                        android:layout_width="0dp"
-                        android:layout_height="4dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@+id/status_progress"
-                        android:layout_toEndOf="@+id/status_start"
-                        android:background="@color/Blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/status_start"
-                        app:layout_constraintStart_toEndOf="@+id/status_book"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/status_start"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_marginStart="@dimen/dp_20"
-                        android:background="@drawable/shape_status_remaining"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/status_progress"
-                        app:layout_constraintStart_toEndOf="@+id/status_book"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/viewPending"
-                        android:layout_width="0dp"
-                        android:layout_height="4dp"
-                        android:layout_centerVertical="true"
-                        android:background="@color/Blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/status_progress"
-                        app:layout_constraintStart_toEndOf="@+id/status_start"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/status_progress"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_centerInParent="true"
-                        android:background="@drawable/shape_status_remaining"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/status_end"
-                        app:layout_constraintStart_toEndOf="@+id/status_start"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/viewFinish"
-                        android:layout_width="0dp"
-                        android:layout_height="4dp"
-                        android:layout_centerVertical="true"
-                        android:background="@color/Blue"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/status_end"
-                        app:layout_constraintStart_toEndOf="@+id/status_progress"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/status_end"
-                        android:layout_width="@dimen/dp_20"
-                        android:layout_height="@dimen/dp_20"
-                        android:layout_marginEnd="@dimen/dp_10"
-                        android:background="@drawable/shape_status_remaining"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:layout_below="@+id/layoutStatus">
-
-                    <TextView
-                        android:id="@+id/textConfirm"
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Chờ xác nhận"
-                        android:textColor="@color/Black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textBooking"
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Đã đặt"
-                        android:textColor="@color/Black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textTransport"
-                        app:layout_constraintStart_toEndOf="@+id/textConfirm"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textTransport"
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Vận chuyển"
-                        android:textColor="@color/Black"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textFinish"
-                        app:layout_constraintStart_toEndOf="@+id/textBooking"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textFinish"
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Hoàn thành"
-                        android:textColor="@color/Black"
-                        android:gravity="right"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </RelativeLayout>
-
-            <View
-                android:id="@+id/viewOne"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:background="@color/colorLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutOne" />
-
-            <LinearLayout
-                android:id="@+id/layoutTwo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewOne">
+                android:layout_below="@+id/layoutStatus"
+                android:layout_marginTop="@dimen/dp_10">
 
                 <TextView
-                    android:id="@+id/textNameProduct"
+                    android:id="@+id/textConfirm"
                     style="@style/AppTheme.TextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_marginEnd="@dimen/dp_10" />
+                    android:gravity="left"
+                    android:text="Chờ xác nhận"
+                    android:textColor="@color/Black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textBooking"
+                    style="@style/AppTheme.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Đã đặt"
+                    android:textColor="@color/Black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textTransport"
+                    app:layout_constraintStart_toEndOf="@+id/textConfirm"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/viewTwo"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:background="@color/colorLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTwo" />
+                <TextView
+                    android:id="@+id/textTransport"
+                    style="@style/AppTheme.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Vận chuyển"
+                    android:textColor="@color/Black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textFinish"
+                    app:layout_constraintStart_toEndOf="@+id/textBooking"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textFinish"
+                    style="@style/AppTheme.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Hoàn thành"
+                    android:textColor="@color/Black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/viewOne"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutOne" />
+
+        <LinearLayout
+            android:id="@+id/layoutTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewOne">
 
             <TextView
-                style="@style/AppTheme.TextView.Bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:text="Địa điểm nhận"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textAddress"
+                android:id="@+id/textNameProduct"
                 style="@style/AppTheme.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:layout_marginBottom="@dimen/dp_5" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:background="@color/colorLine"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutTwo" />
-
-            <TextView
-                style="@style/AppTheme.TextView.Bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:text="Nhân viên giao hàng"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_10"
-                android:orientation="horizontal">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imgHinhAnh"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/img_noface_male"
-                    android:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/textEmployee"
-                    style="@style/AppTheme.TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:background="@color/colorLine" />
-
-            <TextView
-                style="@style/AppTheme.TextView.Bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:text="Tổng tiền"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textTotalPrice"
-                style="@style/AppTheme.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:textColor="@color/Red_red"
-                android:layout_marginBottom="@dimen/dp_5" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
+                android:layout_marginEnd="@dimen/dp_10" />
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/AppTheme.Button.Default"
-            android:layout_marginStart="@dimen/dp_5"
-            android:layout_marginEnd="@dimen/dp_5"
-            android:layout_marginBottom="10dp"
-            android:text="Hủy đơn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <View
+            android:id="@+id/viewTwo"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTwo" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            style="@style/AppTheme.TextView.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="Địa điểm nhận"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textAddress"
+            style="@style/AppTheme.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_5" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTwo" />
+
+        <TextView
+            style="@style/AppTheme.TextView.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="Nhân viên giao hàng"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgHinhAnh"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/img_noface_male"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textEmployee"
+                style="@style/AppTheme.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine" />
+
+        <TextView
+            style="@style/AppTheme.TextView.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:text="Tổng tiền"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textTotalPrice"
+            style="@style/AppTheme.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:textColor="@color/Red_red" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@color/colorLine" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewTwo" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonCancel"
+        style="@style/AppTheme.Button.Default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginBottom="?actionBarSize"
+        android:text="Hủy đơn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <TextView
         android:id="@+id/textNoBooking"
@@ -351,4 +350,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

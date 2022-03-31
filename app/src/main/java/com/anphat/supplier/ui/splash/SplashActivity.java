@@ -76,53 +76,47 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
     @Override
     public void onCheckStatusLoginSuccess(boolean isLogin) {
         if (isLogin) {
-            thread = new Thread(() -> {
+            try {
+                String userID = "", passWord = "";
+                AESUtils aesUtils = new AESUtils();
                 try {
-                    Thread.sleep(1000);
-                    String userID = "", passWord = "";
-                    AESUtils aesUtils = new AESUtils();
-                    try {
-                        userID = aesUtils.decrypt(appPreference.getUserID());
-                    } catch (Exception ignored) {
-                    }
-                    try {
-                        passWord = aesUtils.decrypt(appPreference.getPassWord());
-                    } catch (Exception ignored) {
-                    }
-                    presenter.CheckLogin(userID, passWord);
+                    userID = aesUtils.decrypt(appPreference.getUserID());
                 } catch (Exception ignored) {
                 }
-            });
-        } else {
-            thread = new Thread(() -> {
                 try {
-                    if (appPreference.isOtp()) {
-                        Thread.sleep(1000);
-                        if (appPreference.getUser() != null) {
-                            NewCustomer info = new NewCustomer().getNewCustomer(appPreference.getUser());
-                            Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Object", info);
-                            intent.putExtras(bundle);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
-                        }
+                    passWord = aesUtils.decrypt(appPreference.getPassWord());
+                } catch (Exception ignored) {
+                }
+                presenter.CheckLogin(userID, passWord);
+            } catch (Exception ignored) {
+            }
 
-                    } else {
-                        Thread.sleep(1000);
-                        Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+        } else {
+            try {
+                if (appPreference.isOtp()) {
+                    if (appPreference.getUser() != null) {
+                        NewCustomer info = new NewCustomer().getNewCustomer(appPreference.getUser());
+                        Intent intent = new Intent(SplashActivity.this, CheckLoginByIDPassActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Object", info);
+                        intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
                     }
 
-                } catch (Exception ignored) {
+                } else {
+                    Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
                 }
-            });
+
+            } catch (Exception ignored) {
+            }
+
 
         }
-        thread.start();
     }
 
     @Override
@@ -134,7 +128,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
             Gson gson = new Gson();
             String json = gson.toJson(info);
             appPreference.setUser(json);
-            appPreference.saveUser(info);
+            AppPreference.saveUser(info);
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         } else {

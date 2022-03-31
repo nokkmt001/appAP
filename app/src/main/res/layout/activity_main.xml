@@ -22,12 +22,11 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:expandedTitleMarginEnd="64dp"
-                app:expandedTitleMarginStart="48dp"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:expandedTitleMarginStart="48dp">
 
                 <include
                     android:id="@+id/layoutHeader"
-                    layout="@layout/layout_header_main"/>
+                    layout="@layout/layout_header_main" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -45,9 +44,8 @@
             android:id="@+id/frame_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?actionBarSize"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            android:visibility="visible" />
+            android:visibility="visible"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/buttonBar"
@@ -56,7 +54,8 @@
             android:layout_gravity="bottom"
             app:contentInsetStart="0dp"
             app:fabCradleMargin="@dimen/dp_10"
-            app:fabCradleRoundedCornerRadius="@dimen/dp_10">
+            app:fabCradleRoundedCornerRadius="@dimen/dp_10"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigationView"
@@ -66,6 +65,7 @@
                 app:itemIconTint="@drawable/bottom_navigation_selector"
                 app:itemTextColor="@drawable/bottom_navigation_selector"
                 app:labelVisibilityMode="labeled"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
                 app:menu="@menu/bottom_nav" />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
@@ -79,7 +79,8 @@
             android:padding="@dimen/dp_10"
             android:src="@drawable/gas_cylinder"
             app:layout_anchor="@+id/buttonBar"
-            app:layout_anchorGravity="top|center" />
+            app:layout_anchorGravity="top|center"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

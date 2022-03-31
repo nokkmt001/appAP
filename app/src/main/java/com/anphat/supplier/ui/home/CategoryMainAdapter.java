@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,11 +71,29 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryMainAdapte
     public void onBindViewHolder(@NonNull ItemRow holder, int position) {
         CategoryNew info = listAllData.get(position);
         holder.tvTitle.setText(info.title);
-        if (select_position == position){
+        switch (info.slug) {
+            case "bep":
+                holder.imageMain.setImageResource(R.drawable.ic_kitchen);
+                break;
+            case "may-hut-mui":
+                holder.imageMain.setImageResource(R.drawable.ic_house_kitchen);
+                break;
+            case "linh-kien-phu-kien":
+                holder.imageMain.setImageResource(R.drawable.ic_pan_pot);
+                break;
+            case "do-gia-dung":
+                holder.imageMain.setImageResource(R.drawable.ic_grocery_th);
+                break;
+            case "tap-hoa":
+                holder.imageMain.setImageResource(R.drawable.ic_shop);
+                break;
+            default:
+                break;
+        }
+        if (select_position == position) {
             holder.itemView.setBackgroundResource(R.drawable.table_content_cell_bg_default);
         } else {
-            holder.itemView.setBackgroundResource(R.drawable.table_content_cell_radius_5_white_1);
-
+            holder.itemView.setBackgroundResource(R.color.colorTransparent);
         }
     }
 
@@ -85,12 +104,13 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryMainAdapte
 
     public class ItemRow extends RecyclerView.ViewHolder {
         TextView tvTitle;
-
+        ImageView imageMain;
 
         @SuppressLint("NotifyDataSetChanged")
         public ItemRow(@NonNull View view) {
             super(view);
             tvTitle = bind(view, R.id.textMain);
+            imageMain = bind(view, R.id.imageMain);
             view.setOnClickListener(v -> {
                 if (onClickListener != null) {
                     onClickListener.onClick(v, getAdapterPosition());

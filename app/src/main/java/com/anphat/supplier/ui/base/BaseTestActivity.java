@@ -31,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.viewbinding.ViewBinding;
 
 import com.anphat.supplier.R;
+import com.anphat.supplier.utils.AppController;
 import com.anphat.supplier.utils.ImageFilePath;
 import com.anphat.supplier.utils.ImageUtils;
 import com.anphat.supplier.utils.NetworkUtils;
@@ -382,6 +383,8 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+        AppController.clearCache();
+
     }
 }
 

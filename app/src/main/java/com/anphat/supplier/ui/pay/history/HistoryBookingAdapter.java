@@ -1,23 +1,28 @@
 package com.anphat.supplier.ui.pay.history;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
+import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.HistoryBooking;
+import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.ChiTietDonInfo;
 import com.anphat.supplier.data.network.booking.BookingModel;
 import com.anphat.supplier.data.network.booking.IBookingModel;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,10 +34,13 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
     BaseEventClick.OnClickListener  onClick;
     BookingModel model;
     List<HistoryBooking> listAllData = new ArrayList<>();
+    String url = "";
+    Context mContext;
 
-    public HistoryBookingAdapter(List<HistoryBooking> list){
+    public HistoryBookingAdapter(List<HistoryBooking> list, Context context){
         this.model = new BookingModel();
         this.listAllData = list;
+        this.mContext = context;
     }
 
     public void clear() {
@@ -64,6 +72,7 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
         HistoryBooking item = listAllData.get(position);
         holder.textPrice.setText("Tổng tiền:  "+AppUtils.formatNumber("NO").format(item.getThanhTien()));
         holder.buttonBooking.setVisibility(View.GONE);
+        List<ProductNew> list = AppPreference.getAllProduct();
         model.GetBooking(item.SoPhieuVietTay, new IBookingModel.IGetBookingFinish() {
             @Override
             public void onSuccess(BookingInfo info) {
@@ -76,6 +85,16 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
 
                 holder.textNV.setText(info.TenNguoiGiao == null?"":"Nhân viên:  "+info.TenNguoiGiao);
                 for (ChiTietDonInfo item:info.getListChiTietDonHang()){
+                    for (ProductNew infoImage: list){
+                        if (infoImage.code.equals(item.getProduct_ID())){
+                            url = "https://gasanphat.com/" + infoImage.photo;
+                            Glide.with(mContext)
+                                    .load(url)
+                                    .error(R.drawable.img_no_image)
+                                    .override(500,500)
+                                    .into(holder.imageMain);
+                        }
+                    }
                     gg+=item.getProduct_Name() +" x "+item.getSL()+", ";
                 }
                 if (gg.length()>0){
@@ -101,6 +120,7 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
     public class ItemHolder extends RecyclerView.ViewHolder{
         TextView textTitle,textPrice, textTT,textAddress, textNV;
         Button buttonVote, buttonBooking;
+        ImageView imageMain;
         public ItemHolder(@NonNull View view) {
             super(view);
             textNV = bind(view,R.id.textNV);
@@ -110,7 +130,7 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
             textPrice = bind(view, R.id.textPrice);
             buttonVote = bind(view, R.id.buttonVote);
             buttonBooking = bind(view, R.id.buttonBooking);
-
+            imageMain = bind(view,R.id.imageMain);
             buttonVote.setOnClickListener(view1 -> {
                 if (onClick!=null){
                     onClick.onClick(view1,getAdapterPosition());

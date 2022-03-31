@@ -66,13 +66,13 @@
 
     <Button
         android:id="@+id/buttonLogin"
-        style="@style/AppTheme.Button"
+        style="@style/AppTheme.Button.Default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_15"
         android:layout_marginStart="@dimen/dp_14"
         android:layout_marginEnd="@dimen/dp_14"
+        android:layout_marginBottom="@dimen/dp_15"
         android:text="@string/login" />
 
 </RelativeLayout>

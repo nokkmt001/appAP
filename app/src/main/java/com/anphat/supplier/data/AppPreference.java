@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.anphat.supplier.data.entities.NewCustomer;
+import com.anphat.supplier.data.entities.ProductNew;
 import com.orhanobut.hawk.Hawk;
 import com.anphat.supplier.data.entities.CategoryNew;
 
@@ -23,6 +24,8 @@ public class AppPreference {
 
     public static final String PREF_CATEGORY_NEW = "category_new";
     public static final String PREF_NEW_USER = "new_user";
+    public static final String PREF_ALL_PRODUCT = "all_product";
+    public static final String PREF_PRODUCT_PROMOTION = "product_promotions";
 
 
     private SharedPreferences sharedPreferences;
@@ -114,11 +117,27 @@ public class AppPreference {
         }
     }
 
-    public void saveUser(NewCustomer info) {
+    public static void saveUser(NewCustomer info) {
         if (info == null) {
-            clearCategory();
+            clearUser();
         } else {
             Hawk.put(PREF_NEW_USER, info);
+        }
+    }
+
+    public static void saveProduct(List<ProductNew> list){
+        if (list == null) {
+            clearAllProduct();
+        } else {
+            Hawk.put(PREF_ALL_PRODUCT, list);
+        }
+    }
+
+    public static void saveProductPromotion(List<ProductNew> list){
+        if (list == null) {
+            clearProductPromotion();
+        } else {
+            Hawk.put(PREF_PRODUCT_PROMOTION, list);
         }
     }
 
@@ -132,17 +151,31 @@ public class AppPreference {
     public static NewCustomer getUserMain() {
         return Hawk.get(PREF_NEW_USER);
     }
+
+    public static List<ProductNew> getAllProduct(){
+        return Hawk.get(PREF_ALL_PRODUCT);
+    }
+    public static List<ProductNew> getProductPromotion(){
+        return Hawk.get(PREF_PRODUCT_PROMOTION);
+    }
+
     /**
      * Clear
      **/
 
-    public void clearCategory() {
+    public static void clearCategory() {
         Hawk.delete(PREF_CATEGORY_NEW);
     }
 
-    public void clearUser() {
+    public static void clearUser() {
         Hawk.delete(PREF_NEW_USER);
     }
 
+    public static void clearAllProduct(){
+        Hawk.delete(PREF_ALL_PRODUCT);
+    }
+    public static void clearProductPromotion(){
+        Hawk.delete(PREF_PRODUCT_PROMOTION);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.anphat.supplier.ui.product.full;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -160,8 +161,12 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
         textName.setText(title);
         textPrice.setText(AppUtils.formatNumber("NO").format(price));
         textDeception.setText(Html.fromHtml(description));
-        textContent.setText(Html.fromHtml(info.content));
+
+        String gg = info.content.replace("<li>\r\n\t<p>","<li>").replace("</p>\r\n\t</li>","</li>");
+        textContent.setText(Html.fromHtml(gg));
+        Log.d("CONTENTMAIN",info.content+"\n\n\n\n"+gg);
         count = 1;
+        Log.d("CONTENT",gg);
         final Date date = new Date(System.currentTimeMillis());
         imageAdd.setOnClickListener(view12 -> {
             count = count + 1;

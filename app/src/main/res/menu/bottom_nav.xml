@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/navigation_report"
-        android:title="@string/nav_title_sms"
+        android:title="@string/history"
         android:icon="@drawable/ic_sms"/>
 
     <item

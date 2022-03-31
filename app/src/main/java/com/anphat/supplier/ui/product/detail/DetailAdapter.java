@@ -24,12 +24,13 @@ import com.anphat.supplier.data.network.product.ProductModel;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHolder> implements Filterable {
-    List<ProductNew> listAllData = new ArrayList<>();
+    List<ProductNew> listAllData;
     Context mContext;
     BaseEventClick.OnClickListener clickListener;
     String category;
@@ -83,7 +84,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         final ProductNew info = listAllData.get(position);
         List<CategoryNew> list = listAllCategoryMain;
-        holder.tvPrice.setText("Giá: "+AppUtils.formatNumber("NO").format(info.price*(100-info.discount)/100));
+        holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price * (100 - info.discount) / 100));
         holder.tvTitle.setText(info.title);
         String url = "https://gasanphat.com/" + info.photo;
 
@@ -92,7 +93,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
                 .error(R.drawable.img_no_image)
                 .into(holder.imageView);
 
-        if (select_position == position){
+        if (select_position == position) {
             holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_primary);
         } else {
             holder.layoutColor.setBackgroundResource(R.drawable.table_content_cell_radius_5_white);
@@ -119,7 +120,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
                         String one = AppUtils.chuyenCoDauThanhKhongDau(userInfo.title.toLowerCase());
                         String two = AppUtils.chuyenCoDauThanhKhongDau(userInfo.code.toLowerCase());
                         String three = AppUtils.chuyenCoDauThanhKhongDau(charString.toLowerCase());
-                        if (one.contains(three)||two.contains(three)){
+                        if (one.contains(three) || two.contains(three)) {
                             filteredList.add(userInfo);
                         }
                     }
@@ -141,18 +142,18 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvPrice,tvCodeProduct,tvCategory;
+        TextView tvTitle, tvPrice, tvCodeProduct, tvCategory;
         ImageView imageView;
         RelativeLayout layoutColor;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
-            tvCategory = bind(view,R.id.tvCategory);
-            tvCodeProduct = bind(view,R.id.tvCodeProduct);
+            tvCategory = bind(view, R.id.tvCategory);
+            tvCodeProduct = bind(view, R.id.tvCodeProduct);
             tvTitle = bind(view, R.id.tvTitle);
             tvPrice = bind(view, R.id.textPrice);
             imageView = bind(view, R.id.imageView);
-             layoutColor = bind(view, R.id.layoutColor);
+            layoutColor = bind(view, R.id.layoutColor);
             view.setOnClickListener(view1 -> {
                 if (clickListener != null) {
                     clickListener.onClick(view1, getAdapterPosition());
@@ -165,6 +166,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
     public <T extends View> T bind(View view, int id) {
         return view.findViewById(id);
+
     }
 
 }

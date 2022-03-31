@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
@@ -73,7 +72,7 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
     public BaseEventClick.OnClickListener listener;
 
-    public void setClick(BaseEventClick.OnClickListener listener){
+    public void setClick(BaseEventClick.OnClickListener listener) {
         this.listener = listener;
     }
 
@@ -84,7 +83,6 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
     @Override
     protected void initView(View view) {
-        showProgressDialog(true);
         preference = new AppPreference(getActivity());
         rclCategory = bind(view, R.id.rclCategory);
         rclMain = bind(view, R.id.rclMain);
@@ -94,13 +92,13 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
         inputSearch = bind(view, R.id.inputSearch);
         adapterCategory = new CategoryMainAdapter();
-        rclCategory.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        rclCategory.setLayoutManager(new GridLayoutManager(getContext(), 3));
         rclCategory.setAdapter(adapterCategory);
         adapterCategory.setOnClickListener((view1, position) -> {
             CategoryNew info = adapterCategory.getItem(position);
             Intent intentB = new Intent();
             intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-            intentB.putExtra("eventName","hh");
+            intentB.putExtra("eventName", "hh");
             getContext().sendBroadcast(intentB);
             StartDetailCategory(info);
         });
@@ -112,16 +110,17 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         adsAdapter = new LoadAdsAdapter(getContext());
         rclImage.setAdapter(adsAdapter);
 
-        addAds();
+//        addAds();
         layoutConfig.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), FullCategoryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SHOW);
         });
+
         adapter.setClickListener((view12, position) -> {
             Intent intentB = new Intent();
             intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-            intentB.putExtra("eventName","hh");
+            intentB.putExtra("eventName", "hh");
             getContext().sendBroadcast(intentB);
             StartDetailFragment((int) adapter.getItem(position).id);
         });
@@ -169,6 +168,12 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     protected void initData() {
         presenterProduct = new HomePresenter(this);
+        if (AppPreference.getProductPromotion() == null){
+            presenterProduct.GetListProduct("api/promotions");
+        } else {
+            adapter.clear();
+            adapter.addAll(AppPreference.getProductPromotion());
+        }
 
         List<CategoryNew> list = new ArrayList<>();
         for (CategoryNew item : AppPreference.getCategory()) {
@@ -182,8 +187,6 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         }
         adapterCategory.clear();
         adapterCategory.addAll(list);
-
-        presenterProduct.GetListProduct("api/promotions");
 
     }
 
@@ -220,6 +223,8 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     public void onGetListProductSuccess(List<ProductNew> list) {
         PublicVariables.listKM = list;
+        AppPreference.saveProduct(list);
+        AppPreference.saveProductPromotion(list);
         adapter.clear();
         adapter.addAll(list);
         showProgressDialog(false);
@@ -228,7 +233,9 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     public void onGetListProductError(String error) {
         showMessage(error);
+        AppPreference.clearProductPromotion();
         showProgressDialog(false);
+
     }
 
     @Override
@@ -255,21 +262,21 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         showMessage(error);
     }
 
-    private void StartDetailFragment(Integer ID){
-        ChooseProductFragment nextFrag= new ChooseProductFragment(ID);
+    private void StartDetailFragment(Integer ID) {
+        ChooseProductFragment nextFrag = new ChooseProductFragment(ID);
         CommonFM.fragmentTwo = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container,nextFrag,"one")
+                .add(R.id.frame_container, nextFrag, "one")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();
     }
 
-    private void StartDetailCategory(CategoryNew info){
-        DetailCategoryFragment nextFrag= new DetailCategoryFragment(info);
+    private void StartDetailCategory(CategoryNew info) {
+        DetailCategoryFragment nextFrag = new DetailCategoryFragment(info);
         CommonFM.fragmentThree = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container,nextFrag,"three")
+                .add(R.id.frame_container, nextFrag, "three")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();

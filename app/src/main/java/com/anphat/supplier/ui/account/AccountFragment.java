@@ -1,10 +1,16 @@
 package com.anphat.supplier.ui.account;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.anphat.supplier.R;
@@ -20,6 +26,8 @@ public class AccountFragment extends BaseFragment {
             Manifest.permission.ACCESS_COARSE_LOCATION};
 
     TextView textName, textSdt;
+    RelativeLayout layoutDetail;
+    private static final int REQUESTUPDATE = 1;
 
     private Boolean isClick = false;
 
@@ -43,6 +51,12 @@ public class AccountFragment extends BaseFragment {
 
         textSdt = bind(view, R.id.textSdt);
         textName = bind(view, R.id.textName);
+        layoutDetail = bind(view,R.id.layoutDetail);
+        layoutDetail.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditAccountActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent,REQUESTUPDATE);
+        });
     }
 
     private void showLocation(){
@@ -79,6 +93,16 @@ public class AccountFragment extends BaseFragment {
         super.onResume();
         if (isClick){
             showLocation();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUESTUPDATE) {
+                initData();
+            }
         }
     }
 }

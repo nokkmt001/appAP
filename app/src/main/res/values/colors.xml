@@ -189,4 +189,6 @@
 
     <color name="icon_main">#00ade5</color>
 
+    <color name="color_gray_test">#e3e3e3</color>
+
 </resources>

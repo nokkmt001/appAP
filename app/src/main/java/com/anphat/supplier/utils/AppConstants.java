@@ -1,5 +1,7 @@
 package com.anphat.supplier.utils;
 
+import retrofit2.http.POST;
+
 public class AppConstants {
     /**
      * API
@@ -18,6 +20,7 @@ public class AppConstants {
     public static final String URL_INSERT_NEW_CUSTOMER = "api/NguoiDungMobile/InsertNguoiDungMobile";
     public static final String URL_LOGIN_BY_ID_PASS_WORD = "api/NguoiDungMobile/GetNguoiDungMobileByIDPassword";
     public static final String URL_RESEND_PIN = "api/NguoiDungMobile/GuiLaiMaPin?id={0}";
+    public static final String URL_UPDATE_CUSTOMER = "api/NguoiDungMobile/UpdateNguoiDungMobile";
     //cart
     public static final String URL_INSERT_CART = "api/GioHangMobile/InsertGioHang";
     public static final String URL_UPDATE_CART = "api/GioHangMobile/UpdateGioHang";
@@ -38,9 +41,9 @@ public class AppConstants {
     //booking
     public static final String URL_GetDonHang = "api/DonHangMobile/GetDonHang?cuocGoiID={0}"; // chi tiết đơn hàng + price
     public static final String URL_InsertDonHang = "api/DonHangMobile/InsertDonHang";
-    public static final String URL_CheckBooking = "api/DonHangMobile/GetDonHangGanNhat?nguoiDungMobileID={0}" ;
-    public static final String URL_CheckDaDat = "api/DonHangMobile/KiemTraSanPhamGasDaDatHang?nguoiDungMobileID={0}" ;
-    public static final String URL_SendRequestBooking = "api/DonHangMobile/GuiYeuCauDatHang" ;
+    public static final String URL_CheckBooking = "api/DonHangMobile/GetDonHangGanNhat?nguoiDungMobileID={0}";
+    public static final String URL_CheckDaDat = "api/DonHangMobile/KiemTraSanPhamGasDaDatHang?nguoiDungMobileID={0}";
+    public static final String URL_SendRequestBooking = "api/DonHangMobile/GuiYeuCauDatHang";
 
     // history
     public static final String URL_GetListHISTORYBOOKING = "api/DonHangMobile/GetListLichSuMuaHang?nguoiDungMobileID={0}";

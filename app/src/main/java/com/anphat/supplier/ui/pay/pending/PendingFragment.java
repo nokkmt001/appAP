@@ -23,7 +23,6 @@ import com.anphat.supplier.data.entities.HistoryBooking;
 import com.anphat.supplier.data.entities.condition.CancelOrderCondition;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.ChiTietDonInfo;
-import com.anphat.supplier.main.MainActivity;
 import com.anphat.supplier.ui.base.BaseFragment;
 import com.anphat.supplier.ui.booking.ProductAfterAdapter;
 import com.anphat.supplier.ui.pay.history.HistoryBookingContract;

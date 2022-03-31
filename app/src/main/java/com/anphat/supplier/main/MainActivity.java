@@ -20,9 +20,14 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.anphat.supplier.data.entities.CategoryNew;
+import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.CallInfo;
 import com.anphat.supplier.ui.base.BaseTestActivity;
+import com.anphat.supplier.ui.category.DetailCategoryFragment;
+import com.anphat.supplier.ui.pay.history.HistoryFragment;
+import com.anphat.supplier.ui.pay.pending.PendingFragment;
 import com.anphat.supplier.utils.AppUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.anphat.supplier.R;
@@ -48,6 +53,7 @@ import com.anphat.supplier.utils.CommonUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseTestActivity<ActivityMainBinding> implements MainContract.View {
@@ -57,8 +63,6 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
     String[] permissionsRequired = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CALL_PHONE
     };
@@ -77,16 +81,18 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         registerReceiver(testReceiver, intentFilter);
 
         presenter = new MainPresenter(this);
+        if (AppPreference.getAllProduct()==null){
+            presenter.GetListProductNew("api/products");
+        }
         presenter.checkBooking();
         presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
-        presenter.GetListKho();
+//        presenter.GetListKho();
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) return;
         String gg = bundle.getString("KEYMAIN");
         if (gg != null) {
             bottomNavigationView.setSelectedItemId(R.id.navigation_pay);
         }
-
     }
 
     @Override
@@ -158,12 +164,14 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
-
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
 //        this.serviceIntent = new Intent(this, DownLoadService.class);
 //        startService(this.serviceIntent);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+
     }
 
     private void onCallHotline() {
@@ -210,10 +218,10 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
                             setBottomNavigationView(fmHistory, new NewsFeedFragment(), "2");
                             return true;
                         case R.id.navigation_pay:
-                            setBottomNavigationView(fmPay, new PayFragment(), "3");
+                            setBottomNavigationView(fmPay, new PendingFragment(), "3");
                             return true;
                         case R.id.navigation_report:
-                            setBottomNavigationView(fmSms, new SmsFragment(), "4");
+                            setBottomNavigationView(fmSms, new HistoryFragment(), "4");
                             return true;
                         case R.id.navigation_account:
                             setBottomNavigationView(fmAccount, new AccountFragment(), "5");
@@ -339,8 +347,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
     @Override
     public void onGetCategorySuccess(List<CategoryInfo> list) {
         PublicVariables.listCategory = list;
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+
     }
 
     @Override
@@ -367,17 +374,35 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
     @Override
     public void onCheckDatHangError(String error) {
         showProgressDialog(false);
+        for (CategoryNew item : AppPreference.getCategory()) {
+            if (item.slug.equals("gas")) {
+                StartDetailCategory(item);
+                binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
     public void onSendBookingSuccess(CallInfo item) {
         showToast("Gửi yêu cầu thành công");
-        AppUtils.createSound(this,"Đặt hàng thành công","Vui lòng đợi phản hồi từ quản trị viên.");
+        AppUtils.createSound(this, "Đặt hàng thành công", "Vui lòng đợi phản hồi từ quản trị viên.");
         showProgressDialog(false);
     }
 
     @Override
     public void onSendBookingError(String error) {
+        showMessage(error);
+        showProgressDialog(false);
+    }
+
+    @Override
+    public void onGetListProductNewSuccess(List<ProductNew> list) {
+        AppPreference.saveProduct(list);
+        showProgressDialog(false);
+    }
+
+    @Override
+    public void onGetListProductNewError(String error) {
         showMessage(error);
         showProgressDialog(false);
     }
@@ -433,6 +458,16 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
                     break;
             }
         }
+    }
+
+    private void StartDetailCategory(CategoryNew info) {
+        DetailCategoryFragment nextFrag = new DetailCategoryFragment(info);
+        CommonFM.fragmentThree = nextFrag;
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container, nextFrag, "three")
+                .hide(CommonFM.fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 }

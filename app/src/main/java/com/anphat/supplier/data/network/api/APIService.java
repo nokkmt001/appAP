@@ -68,7 +68,6 @@ public class APIService {
     }
 
     public void DownloadJsonPOST(final VolleyCallback callback, final Map<String, String> params) {
-
         StringRequest stringRequest = new StringRequest
                 (Request.Method.POST, URL, callback::onSuccess, callback::onError) {
             @Override

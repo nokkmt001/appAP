@@ -19,7 +19,6 @@ import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.ui.base.BaseFragment;
-import com.anphat.supplier.ui.home.CategoryMainAdapter;
 import com.anphat.supplier.ui.home.CommonFM;
 import com.anphat.supplier.ui.home.DataFilterProduct;
 import com.anphat.supplier.ui.home.HomeContract;
@@ -41,7 +40,7 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
     CategoryNew category;
     List<CategoryInfo> listAllData;
     List<ProductNew> listProduct;
-    CategoryMainAdapter adapterCategory;
+    DetailCAdapter adapterCategory;
     Boolean isEmpty = false;
     RecyclerView rclMain, rclCategory;
     ImageView imageBack;
@@ -86,7 +85,7 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         rclMain.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rclMain.setAdapter(adapter);
 
-        adapterCategory = new CategoryMainAdapter();
+        adapterCategory = new DetailCAdapter();
         rclCategory.setAdapter(adapterCategory);
         adapterCategory.clear();
         adapterCategory.setOnClickListener((view1, position) -> {
@@ -154,10 +153,11 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         if (list.size() == 0) {
             isEmpty = true;
             return;
-
         }
+
         adapterCategory.clear();
         adapterCategory.addAll(list);
+        adapterCategory.setSelect_position(0);
 
     }
 
@@ -186,6 +186,7 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         }
         PublicVariables.listKM = listAll;
         adapter.addAll(listAll);
+
 
     }
 

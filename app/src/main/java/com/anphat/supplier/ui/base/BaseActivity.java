@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.anphat.supplier.R;
+import com.anphat.supplier.utils.AppController;
 import com.anphat.supplier.utils.ImageFilePath;
 import com.anphat.supplier.utils.ImageUtils;
 import com.anphat.supplier.utils.NetworkUtils;
@@ -398,6 +399,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         File file = new File(filePath);
         Bitmap bitmap = ImageUtils.optimizeBitmap(8, filePath, this);
         ResultImageBitMap(bitmap);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppController.clearCache();
     }
 }
 

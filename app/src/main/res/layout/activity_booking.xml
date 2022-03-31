@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/White">
 
     <include
         android:id="@+id/layoutHeader"
@@ -45,7 +46,6 @@
                     android:text="Địa chỉ nhận hàng"
                     android:textSize="@dimen/textSize_16" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -63,7 +63,11 @@
                     android:id="@+id/textAddress"
                     style="@style/AppTheme.TextView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:background="@drawable/bg_button_light_no_radius"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:padding="@dimen/dp_5" />
 
             </LinearLayout>
 
@@ -76,6 +80,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_10"
             android:background="@color/colorLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +99,14 @@
 
     <Button
         android:id="@+id/buttonOk"
+        style="@style/AppTheme.Button.Default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/dp_5"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
         android:text="@string/text_order" />
 
 </RelativeLayout>

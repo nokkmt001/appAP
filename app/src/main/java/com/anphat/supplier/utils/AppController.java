@@ -14,9 +14,9 @@ import com.orhanobut.hawk.Hawk;
 public class AppController extends Application {
 
     private static final String TAG = AppController.class.getSimpleName();
-    public static final String Chanel_id ="FCM_CHANNEL_ID";
+    public static final String Chanel_id = "FCM_CHANNEL_ID";
 
-    private RequestQueue mRequestQueue;
+    private static RequestQueue mRequestQueue;
 
     private static AppController mInstance;
 
@@ -66,6 +66,10 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public static void clearCache() {
+        mRequestQueue.getCache().clear();
     }
 
 }

@@ -15,7 +15,7 @@
         android:padding="1dp">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/dp_100"
+            android:layout_width="@dimen/dp_200"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/White"
             app:cardCornerRadius="5dp"
@@ -29,18 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
-                <!--                <androidx.appcompat.widget.AppCompatImageView-->
-                <!--                    android:id="@+id/image"-->
-                <!--                    android:layout_width="@dimen/dp_20"-->
-                <!--                    android:layout_height="@dimen/dp_20"-->
-                <!--                    android:layout_marginLeft="8dp"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:layout_marginRight="8dp"-->
-                <!--                    android:src="@drawable/sale_icon"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
                 <TextView
                     android:id="@+id/textCategory"
                     android:layout_width="wrap_content"
@@ -50,6 +38,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:textColor="@color/Red_red"
                     android:textSize="@dimen/textSize_12"
                     app:layout_constraintBottom_toBottomOf="parent"

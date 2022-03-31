@@ -1,12 +1,18 @@
 package com.anphat.supplier.main;
 
+import androidx.annotation.NonNull;
+
 import com.anphat.supplier.data.entities.CartInfo;
 import com.anphat.supplier.data.entities.CategoryInfo;
 import com.anphat.supplier.data.entities.ProductInfo;
+import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.CallInfo;
+import com.anphat.supplier.data.network.apiretrofit.API;
+import com.anphat.supplier.data.network.apiretrofit.ApiResponse;
+import com.anphat.supplier.data.network.apiretrofit.RetrofitTest;
 import com.anphat.supplier.data.network.booking.BookingModel;
 import com.anphat.supplier.data.network.booking.IBookingModel;
 import com.anphat.supplier.data.network.cart.CartModel;
@@ -18,12 +24,17 @@ import com.anphat.supplier.data.network.product.ProductModel;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainPresenter implements MainContract.Presenter {
     ProductModel modelProduct;
     MainContract.View view;
     CartModel modelCart;
     UserModel modelUser;
     BookingModel model;
+    API sv = RetrofitTest.createService(API.class);
 
     public MainPresenter(MainContract.View view) {
         this.modelProduct = new ProductModel();
@@ -129,7 +140,7 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onSuccess(List<CartInfo> info) {
                 if (info.size()==0){
-                    sendBooking();
+//                    sendBooking();
                 } else {
                     view.onCheckDaHangSuccess(info);
                 }
@@ -138,7 +149,7 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onCheckDatHangError(error);
-                sendBooking();
+//                sendBooking();
             }
         });
     }
@@ -154,6 +165,26 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onSendBookingError(error);
+            }
+        });
+    }
+
+    @Override
+    public void GetListProductNew(String url) {
+        sv.GetListProductNew(url).enqueue(new Callback<ApiResponse<ProductNew>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Response<ApiResponse<ProductNew>> response) {
+                try {
+                    ApiResponse<ProductNew> result = response.body();
+                    assert result != null;
+                    view.onGetListProductNewSuccess(result.data);
+                } catch (Exception e){
+                    view.onGetListProductNewError(e.getMessage());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Throwable t) {
+                view.onGetListProductNewError(t.getMessage());
             }
         });
     }

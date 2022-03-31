@@ -107,7 +107,7 @@ public class BookingModel implements IBookingModel {
                             JSONObject jsonObject = new JSONObject(response);
                             String jsonList = jsonObject.getJSONObject("Data").toString();
                             BookingInfo item = new BookingInfo().getBookingInfo(jsonList);
-                            if (!item.MaTrangThai.equals("HUY") && !item.MaTrangThai.equals("HOANTHANH")) {
+                            if (!item.MaTrangThai.equals("HUY")) {
                                 listener.onSuccess(item);
                             } else {
                                 listener.onError("cancel");

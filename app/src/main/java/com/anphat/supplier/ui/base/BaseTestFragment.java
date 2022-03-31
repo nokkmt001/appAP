@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewbinding.ViewBinding;
 
 import com.anphat.supplier.R;
+import com.anphat.supplier.utils.AppController;
 import com.anphat.supplier.utils.NetworkUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +52,7 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
     }
 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = getBinding(inflater,container,savedInstanceState);
+        binding = getBinding(inflater, container, savedInstanceState);
         return binding.getRoot();
     }
 
@@ -109,7 +110,7 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
         }
     }
 
-    public void showNoResult(){
+    public void showNoResult() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Thông tin")
                 .setMessage(getActivity().getResources().getString(R.string.noresult_msg))
@@ -238,19 +239,18 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
         new AlertDialog.Builder(getActivity())
                 .setTitle("QUYỀN ỨNG DỤNG")
                 .setMessage("Ứng dụng cần được cấp nhiều quyền hơn.")
-                .setPositiveButton("CẤP QUYỀN", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        ActivityCompat.requestPermissions(getActivity(), permissionsMain, REQUEST_MULTIPLE_PERMISSIONS);
-                    }
+                .setPositiveButton("CẤP QUYỀN", (dialog, which) -> {
+                    dialog.cancel();
+                    ActivityCompat.requestPermissions(getActivity(), permissionsMain, REQUEST_MULTIPLE_PERMISSIONS);
                 })
-                .setNegativeButton("HỦY", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
+                .setNegativeButton("HỦY", (dialog, which) -> dialog.cancel())
                 .show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppController.clearCache();
+
     }
 }
