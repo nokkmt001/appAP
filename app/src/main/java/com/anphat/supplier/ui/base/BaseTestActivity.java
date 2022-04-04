@@ -65,6 +65,7 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);
         }
+        hideKeyboard();
         binding = getViewBinding();
         setContentView(binding.getRoot());
         initView();

@@ -8,7 +8,8 @@
     android:id="@+id/layoutContainer"
     android:background="@color/White">
 
-    <include layout="@layout/layout_search"/>
+    <include layout="@layout/layout_search"
+        android:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -80,14 +81,25 @@
                 android:padding="@dimen/dp_5"
                 tools:listitem="@layout/item_category_main" />
 
-            <com.anphat.supplier.utils.AutoScrollRecyclerView
-                android:id="@+id/rclImage"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:visibility="gone"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:layout_height="wrap_content">
+
+                <com.anphat.supplier.utils.AutoScrollRecyclerView
+                    android:id="@+id/rclImage"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="H,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <LinearLayout
                 android:id="@+id/layoutBranch"
@@ -115,22 +127,95 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/myriadpro_boldit"
-                style="@style/AppTheme.TextViewSize16"
-                android:textStyle="bold"
-                android:layout_margin="@dimen/dp_5"
-                android:text="Khuyến mãi"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    style="@style/AppTheme.TextView"
+                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dp_5"
+                    android:text="Những ưu đãi khác từ an phát"/>
+
+                <TextView
+                    android:id="@+id/textMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    style="@style/AppTheme.TextView"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/textSize_12"
+                    android:gravity="right|center"
+                    android:textColor="@color/dark_44"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:layout_margin="@dimen/dp_5"
+                    android:text="Xem thêm"/>
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rclMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
-                android:visibility="visible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:orientation="horizontal"
+                app:spanCount="1"
+                tools:listitem="@layout/item_product"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    style="@style/AppTheme.TextViewSize16"
+                    android:textStyle="bold"
+                    android:gravity="left|center"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/dp_5"
+                    android:text="Tất cả sản phẩm"/>
+
+                <TextView
+                    android:id="@+id/textMoreAllProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    style="@style/AppTheme.TextView"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/textSize_12"
+                    android:gravity="right|center"
+                    android:textColor="@color/dark_44"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:layout_margin="@dimen/dp_5"
+                    android:text="Xem thêm"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rclAllProduct"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:spanCount="1"
+                tools:listitem="@layout/item_product"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
 
         </LinearLayout>
 

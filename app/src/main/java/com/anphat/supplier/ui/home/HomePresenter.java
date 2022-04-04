@@ -2,6 +2,7 @@ package com.anphat.supplier.ui.home;
 
 import androidx.annotation.NonNull;
 
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.data.network.apiretrofit.API;
@@ -60,6 +61,27 @@ public class HomePresenter implements HomeContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onInsertCartError(error);
+            }
+        });
+    }
+
+    @Override
+    public void GetListBanner(String url) {
+        sv.GetListBanner(url).enqueue(new Callback<ApiResponse<BannerInfo>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<BannerInfo>> call, @NonNull Response<ApiResponse<BannerInfo>> response) {
+                try {
+                    ApiResponse<BannerInfo> result = response.body();
+                    assert result != null;
+                    view.onGetListBannerSuccess(result.data);
+                } catch (Exception e){
+                    view.onGetListBannerError(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<BannerInfo>> call, @NonNull Throwable t) {
+                view.onGetListBannerError(t.getMessage());
             }
         });
     }

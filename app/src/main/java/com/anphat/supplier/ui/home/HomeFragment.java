@@ -2,13 +2,14 @@ package com.anphat.supplier.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,19 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.entities.CategoryInfo;
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
-import com.anphat.supplier.data.entities.ProductInfo;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
-import com.anphat.supplier.data.entities.condition.ProductCondition;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.ui.base.BaseFragment;
 import com.anphat.supplier.ui.booking.BookingActivity;
 import com.anphat.supplier.ui.category.DetailCategoryFragment;
 import com.anphat.supplier.ui.home.branch.BranchContract;
-import com.anphat.supplier.ui.home.branch.BranchPresenter;
 import com.anphat.supplier.ui.home.choose.FullCategoryActivity;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.full.ChooseProductFragment;
@@ -44,31 +42,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeFragment extends BaseFragment implements BranchContract.View, HomeContract.View {
-    BranchPresenter presenter;
     List<KhoInfo> listDataBranch = new ArrayList<>();
     CategoryMainAdapter adapterCategory;
-    RecyclerView rclCategory, rclMain;
-    DetailAdapter adapter;
+    RecyclerView rclCategory, rclMain, rclAllProduct;
+    DetailAdapter adapter, adapterAllProduct;
     HomePresenter presenterProduct;
-    ProductCondition condition = new ProductCondition();
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    private int TOTAL_PAGES = 1;
-    private static final int PAGE_START = 1;
-    private static int PAGE_RECORD = 20;
-    private int currentPage = PAGE_START;
     EditText inputSearch;
     ImageView imageDelete;
     private Timer timer;
-    String category = "";
     AppPreference preference;
     Boolean isBuyNow = false;
-    ProductInfo info;
-    List<CategoryInfo> listAdd;
     LoadAdsAdapter adsAdapter;
     AutoScrollRecyclerView rclImage;
     LinearLayout layoutConfig;
+    TextView textMore,textMoreAllProduct;
     final int SHOW = 1;
+
+    public boolean isAll = false;
 
     public BaseEventClick.OnClickListener listener;
 
@@ -86,10 +76,15 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         preference = new AppPreference(getActivity());
         rclCategory = bind(view, R.id.rclCategory);
         rclMain = bind(view, R.id.rclMain);
+        textMoreAllProduct = bind(view,R.id.textMoreAllProduct);
+
+        textMore = bind(view,R.id.textMore);
+        rclAllProduct = bind(view, R.id.rclAllProduct);
         imageDelete = bind(view, R.id.imageDelete);
         rclImage = bind(view, R.id.rclImage);
         layoutConfig = bind(view, R.id.layoutConfig);
-
+        adapterAllProduct = new DetailAdapter(getContext(), new ArrayList<>(), "");
+        adapterAllProduct.setAll(false);
         inputSearch = bind(view, R.id.inputSearch);
         adapterCategory = new CategoryMainAdapter();
         rclCategory.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -103,9 +98,13 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
             StartDetailCategory(info);
         });
 
+        rclAllProduct.setAdapter(adapterAllProduct);
+
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
+        adapter.setAll(false);
         rclMain.setAdapter(adapter);
-        rclMain.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+//        rclMain.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         Search();
         adsAdapter = new LoadAdsAdapter(getContext());
         rclImage.setAdapter(adsAdapter);
@@ -118,20 +117,31 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         });
 
         adapter.setClickListener((view12, position) -> {
+            StartDetailFragment((int) adapter.getItem(position).id);
             Intent intentB = new Intent();
             intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
             intentB.putExtra("eventName", "hh");
             getContext().sendBroadcast(intentB);
-            StartDetailFragment((int) adapter.getItem(position).id);
+        });
+        textMore.setOnClickListener(v -> {
+            if (AppPreference.getProductPromotion()==null) return;
+            StartFullProduct(AppPreference.getProductPromotion());
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventName", "hh");
+            getContext().sendBroadcast(intentB);
+        });
+        textMoreAllProduct.setOnClickListener(v -> {
+            if (AppPreference.getProductFull()==null) return;
+            StartFullProduct(AppPreference.getProductFull());
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventName", "hh");
+            getContext().sendBroadcast(intentB);
         });
     }
 
-    private void addAds() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add("jjjhhh");
-        }
-        adsAdapter.clear();
+    private void addAds(List<BannerInfo> list) {
         adsAdapter.addAll(list);
         rclImage.startAutoScroll();
         rclImage.setLoopEnabled(true);
@@ -152,13 +162,17 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
 
             @Override
             public void afterTextChanged(final Editable editable) {
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(() -> adapter.getFilter().filter(editable));
-                    }
-                }, AppConstants.DELAY_FIND_DATA_SEARCH);
+//                timer = new Timer();
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+                        new Handler().postDelayed(() -> {
+                            adapter.getFilter().filter(editable);
+                            adapterAllProduct.getFilter().filter(editable);
+                        },AppConstants.DELAY_FIND_DATA_SEARCH);
+//                        getActivity().runOnUiThread(() -> adapter.getFilter().filter(editable));
+//                    }
+//                }, AppConstants.DELAY_FIND_DATA_SEARCH);
             }
         });
 
@@ -168,7 +182,10 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     protected void initData() {
         presenterProduct = new HomePresenter(this);
-        if (AppPreference.getProductPromotion() == null){
+        presenterProduct.GetListBanner("api/slider");
+        presenterProduct.GetListBanner("api/banner");
+
+        if (AppPreference.getProductPromotion() == null) {
             presenterProduct.GetListProduct("api/promotions");
         } else {
             adapter.clear();
@@ -188,21 +205,15 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         adapterCategory.clear();
         adapterCategory.addAll(list);
 
-    }
-
-    private void onLoadData() {
-        condition.setBegin(PAGE_START);
-        condition.setUserName("TIHA");
-        condition.setNhomLoaiHang(category);
-        if (!TextUtils.isEmpty(inputSearch.getText().toString())) {
-            condition.setEnd(100000);
+        if (AppPreference.getProductFull()!=null){
+            adapterAllProduct.clear();
+            adapterAllProduct.addAll(AppPreference.getProductFull());
         } else {
-            condition.setEnd(PAGE_RECORD);
+            isAll = true;
+            presenterProduct.GetListProduct("api/products");
         }
-        condition.setTextSearch(inputSearch.getText().toString());
-        presenterProduct.GetListProduct("api/promotions");
-    }
 
+    }
 
     @Override
     public void onClick(View v) {
@@ -227,6 +238,10 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         AppPreference.saveProductPromotion(list);
         adapter.clear();
         adapter.addAll(list);
+        if (isAll){
+            adapterAllProduct.clear();
+            adapterAllProduct.addAll(list);
+        }
         showProgressDialog(false);
     }
 
@@ -262,6 +277,16 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         showMessage(error);
     }
 
+    @Override
+    public void onGetListBannerSuccess(List<BannerInfo> list) {
+        addAds(list);
+    }
+
+    @Override
+    public void onGetListBannerError(String error) {
+        showMessage(error);
+    }
+
     private void StartDetailFragment(Integer ID) {
         ChooseProductFragment nextFrag = new ChooseProductFragment(ID);
         CommonFM.fragmentTwo = nextFrag;
@@ -275,6 +300,16 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     private void StartDetailCategory(CategoryNew info) {
         DetailCategoryFragment nextFrag = new DetailCategoryFragment(info);
         CommonFM.fragmentThree = nextFrag;
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container, nextFrag, "three")
+                .hide(CommonFM.fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void StartFullProduct(List<ProductNew> list) {
+        ShowFragment nextFrag = new ShowFragment(list);
+        CommonFM.fragmentFour = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
                 .add(R.id.frame_container, nextFrag, "three")
                 .hide(CommonFM.fragment)

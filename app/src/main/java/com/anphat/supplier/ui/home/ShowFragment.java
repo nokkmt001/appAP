@@ -1,4 +1,4 @@
-package com.anphat.supplier.ui.category;
+package com.anphat.supplier.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,10 +20,7 @@ import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.ui.base.BaseFragment;
-import com.anphat.supplier.ui.home.CommonFM;
-import com.anphat.supplier.ui.home.DataFilterProduct;
-import com.anphat.supplier.ui.home.HomeContract;
-import com.anphat.supplier.ui.home.HomePresenter;
+import com.anphat.supplier.ui.category.DetailCAdapter;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.full.ChooseProductActivity;
 import com.anphat.supplier.utils.AppConstants;
@@ -35,7 +32,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class DetailCategoryFragment extends BaseFragment implements HomeContract.View {
+public class ShowFragment extends BaseFragment implements HomeContract.View {
     DetailAdapter adapter;
     HomePresenter presenterProduct;
     CategoryNew category;
@@ -49,9 +46,10 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
     EditText inputSearch;
     ImageView imageDelete;
     private Timer timer;
+    List<ProductNew> listData = new ArrayList<>();
 
-    public DetailCategoryFragment(CategoryNew category) {
-        this.category = category;
+    public ShowFragment(List<ProductNew> list) {
+        this.listData = list;
     }
 
     @Override
@@ -71,7 +69,7 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         imageBack = bind(view, R.id.imageBack);
         inputSearch = bind(view, R.id.inputSearch);
         imageDelete = bind(view, R.id.imageDelete);
-
+        rclCategory.setVisibility(View.GONE);
         listProduct = new ArrayList<>();
         showProgressDialog(true);
         imageBack.setOnClickListener(view1 -> {
@@ -89,11 +87,6 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
 
         adapterCategory = new DetailCAdapter();
         rclCategory.setAdapter(adapterCategory);
-        adapterCategory.clear();
-        adapterCategory.setOnClickListener((view1, position) -> {
-            CategoryNew item = adapterCategory.getItem(position);
-            onFilterProduct(item.id);
-        });
 
         adapter.setClickListener((view1, position) -> {
             Intent intent = new Intent(getContext(), ChooseProductActivity.class);
@@ -103,6 +96,8 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
             intent.putExtras(bundle);
             startActivity(intent);
         });
+
+        textTitle.setText("");
 
         Search();
     }
@@ -138,10 +133,13 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
     @Override
     protected void initData() {
         presenterProduct = new HomePresenter(this);
-        listAllData = new ArrayList<>();
-        onLoadCategory(category.id);
-        presenterProduct.GetListProduct("api/products");
-        textTitle.setText(category.title);
+//        listAllData = new ArrayList<>();
+//        onLoadCategory(category.id);
+//        presenterProduct.GetListProduct("api/products");
+//        textTitle.setText(category.title);
+
+        adapter.clear();adapter.addAll(listData);
+        showProgressDialog(false);
     }
 
     private void onLoadCategory(Float category) {

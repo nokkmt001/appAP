@@ -191,6 +191,32 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/layoutChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/imageChat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_sms" />
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_toEndOf="@+id/imageChat"
+                        android:text="Chat ngay"
+                        android:textSize="@dimen/textSize_16" />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
         </RelativeLayout>

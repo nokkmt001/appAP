@@ -4,12 +4,14 @@ import static com.anphat.supplier.utils.PublicVariables.listAllCategoryMain;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,6 +39,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     String biMap = null;
     ProductModel model;
     int select_position = -1;
+
+    public boolean isAll = false;
+
+    public void setAll(boolean all) {
+        isAll = all;
+    }
 
     public void setSelect_position(int select_position) {
         this.select_position = select_position;
@@ -75,7 +83,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+        View view = null;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+        if (isAll) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_all, parent, false);
+        }
         return new MyViewHolder(view);
     }
 
@@ -84,8 +96,15 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         final ProductNew info = listAllData.get(position);
         List<CategoryNew> list = listAllCategoryMain;
-        holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price * (100 - info.discount) / 100));
+        if (info.discount == 0) {
+            holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price));
+        } else {
+            holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price * (100 - info.discount) / 100));
+
+        }
         holder.tvTitle.setText(info.title);
+        holder.textPriceNo.setPaintFlags(holder.textPriceNo.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.textPriceNo.setText(info.price_original == 0 ? AppUtils.formatNumber("NO").format(info.price) : AppUtils.formatNumber("NO").format(info.price_original));
         String url = "https://gasanphat.com/" + info.photo;
 
         Glide.with(mContext)
@@ -142,15 +161,14 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvPrice, tvCodeProduct, tvCategory;
+        TextView tvTitle, tvPrice, textPriceNo;
         ImageView imageView;
-        RelativeLayout layoutColor;
+        LinearLayout layoutColor;
 
         public MyViewHolder(@NonNull View view) {
             super(view);
-            tvCategory = bind(view, R.id.tvCategory);
-            tvCodeProduct = bind(view, R.id.tvCodeProduct);
             tvTitle = bind(view, R.id.tvTitle);
+            textPriceNo = bind(view, R.id.textPriceNo);
             tvPrice = bind(view, R.id.textPrice);
             imageView = bind(view, R.id.imageView);
             layoutColor = bind(view, R.id.layoutColor);

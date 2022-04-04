@@ -64,6 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);
         }
+        hideKeyboard();
         setContentView(getLayoutId());
         initView();
         initData();

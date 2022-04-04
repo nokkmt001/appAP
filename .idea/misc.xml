@@ -7,10 +7,14 @@
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/ic_menu_24.xml" value="0.237" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/ic_menu_24_black.xml" value="0.237" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/ic_phone_6015.xml" value="0.2065" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/ic_sms.xml" value="0.3535" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/ic_update_software.xml" value="0.3535" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/table_content_cell_radius_5_primary.xml" value="0.2095" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/drawable/table_content_cell_radius_5_white.xml" value="0.2095" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_cart.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_category_full.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_check_phone.xml" value="0.35208333333333336" />
-        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_choose_product.xml" value="0.35208333333333336" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_choose_product.xml" value="0.17803529101922572" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_detail_category.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_full_product.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_main.xml" value="0.22" />
@@ -19,11 +23,14 @@
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_view_screens.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/activity_vote.xml" value="0.1712962962962963" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/dialog_progressbar_waiting.xml" value="0.35208333333333336" />
-        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/fragment_home.xml" value="0.35208333333333336" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_category.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_category_main.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_history_booking.xml" value="0.25384615384615383" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_image_full.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_product.xml" value="0.35208333333333336" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/item_product_all.xml" value="0.35208333333333336" />
+        <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/layout_cart_number.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/layout_header.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/layout_header_main.xml" value="0.35208333333333336" />
         <entry key="..\:/BUITANPHAT/new reponse github/appAP/app/src/main/res/layout/layout_header_search.xml" value="0.25" />

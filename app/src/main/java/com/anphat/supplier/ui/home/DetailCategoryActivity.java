@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 
 import com.anphat.supplier.data.AppPreference;
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.CategoryInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
@@ -42,6 +43,7 @@ public class DetailCategoryActivity extends BaseTestActivity<ActivityDetailCateg
         showProgressDialog(true);
         bd.layoutHeader.imageBack.setOnClickListener(view -> finish());
         adapter = new DetailAdapter(DetailCategoryActivity.this, new ArrayList<>(), "");
+        adapter.setAll(true);
         bd.rclMain.setLayoutManager(new GridLayoutManager(this, 2));
         bd.rclMain.setAdapter(adapter);
 
@@ -131,6 +133,16 @@ public class DetailCategoryActivity extends BaseTestActivity<ActivityDetailCateg
 
     @Override
     public void onInsertCartError(String error) {
+
+    }
+
+    @Override
+    public void onGetListBannerSuccess(List<BannerInfo> list) {
+
+    }
+
+    @Override
+    public void onGetListBannerError(String error) {
 
     }
 }

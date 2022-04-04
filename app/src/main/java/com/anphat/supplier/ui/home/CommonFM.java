@@ -16,6 +16,8 @@ public class CommonFM {
 
    public static DetailCategoryFragment fragmentThree  = null;
 
+   public static ShowFragment fragmentFour  = null;
+
    public static void setFragment(HomeFragment fg){
       fragment = fg;
    }

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="210dp"
+    android:layout_height="fill_parent"
     android:layout_margin="@dimen/dp_4"
     android:id="@+id/layoutColor"
     android:background="@drawable/table_content_cell_radius_5_white">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_2"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -38,32 +39,18 @@
                     android:layout_marginStart="@dimen/dp_5"
                     android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginEnd="@dimen/dp_5"
+                    android:inputType="textCapSentences|textNoSuggestions"
                     android:fontFamily="@font/myriadpro_bold"
                     android:gravity="center" />
 
                 <TextView
-                    android:id="@+id/tvCodeProduct"
+                    android:id="@+id/textPriceNo"
                     style="@style/AppTheme.TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_5"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_marginEnd="@dimen/dp_5"
-                    android:visibility="gone"
-                    android:fontFamily="@font/myriadpro_bold"
-                    android:gravity="center" />
-
-                <TextView
-                    android:id="@+id/tvCategory"
-                    style="@style/AppTheme.TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_5"
-                    android:layout_marginTop="@dimen/dp_5"
-                    android:layout_marginEnd="@dimen/dp_5"
-                    android:visibility="gone"
-                    android:fontFamily="@font/myriadpro_bold"
-                    android:gravity="center" />
+                    android:layout_margin="@dimen/dp_5"
+                    android:gravity="center"
+                    android:textColor="@color/Black" />
 
                 <TextView
                     android:id="@+id/textPrice"
@@ -80,4 +67,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

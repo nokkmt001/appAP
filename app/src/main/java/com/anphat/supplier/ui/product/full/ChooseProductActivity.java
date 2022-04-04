@@ -11,7 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
+import com.anphat.supplier.ui.base.BaseEventClick;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -37,7 +39,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProductBinding> implements HomeContract.View, DetailPrContract.View {
-    ActivityChooseProductBinding bd;
     AppPreference preference;
     Boolean isBuyNow = false;
     ProductNew info;
@@ -49,22 +50,22 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
 
     @Override
     public ActivityChooseProductBinding getViewBinding() {
-        return bd = ActivityChooseProductBinding.inflate(getLayoutInflater());
+        return ActivityChooseProductBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         presenterOne = new DetailProductPresenter(this);
-        adapter = new DetailAdapter(this,new ArrayList<>(),"");
-        bd.rclMain.setAdapter(adapter);
-        bd.rclMain.setLayoutManager(new GridLayoutManager(this, 2));
+        adapter = new DetailAdapter(this, new ArrayList<>(), "");
+        binding.rclMain.setAdapter(adapter);
+        binding.rclMain.setLayoutManager(new GridLayoutManager(this, 2));
 
-        bd.layoutHeader.textTitle.setText("Chi tiết sản phẩm");
-        bd.layoutHeader.imageBack.setOnClickListener(view -> finish());
+        binding.layoutHeader.textTitle.setText("Chi tiết sản phẩm");
+        binding.layoutHeader.imageBack.setOnClickListener(view -> finish());
 
         adapter.setClickListener((view, position) -> {
         });
-        bd.imageView.setOnClickListener(v -> {
+        binding.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(this, ViewImageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Bundle bundle = new Bundle();
@@ -72,32 +73,37 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
             intent.putExtras(bundle);
             startActivity(intent);
         });
+        adapter.setClickListener((view, position) -> {
+            info = adapter.getItem(position);
+            setView(info.title, info.price, 1.0, info.description);
+            binding.nestedScrollView.scrollTo(0, 0);
+        });
 
     }
 
     Integer count = 1;
 
     private void setView(String title, Double price, final Double number, String description) {
-        bd.textCountBuy.setText(count.toString());
-        bd.textName.setText(title);
-        bd.textPrice.setText(AppUtils.formatNumber("NO").format(price));
-        bd.textDeception.setText(Html.fromHtml(description));
-        bd.textContent.setText(Html.fromHtml(info.content));
+        binding.textCountBuy.setText(count.toString());
+        binding.textName.setText(title);
+        binding.textPrice.setText(AppUtils.formatNumber("NO").format(price));
+        binding.textDeception.setText(Html.fromHtml(description));
+        binding.textContent.setText(Html.fromHtml(info.content));
         count = 1;
         final Date date = new Date(System.currentTimeMillis());
-        bd.imageAdd.setOnClickListener(view12 -> {
+        binding.imageAdd.setOnClickListener(view12 -> {
             count = count + 1;
-            bd.textCountBuy.setText(count.toString());
+            binding.textCountBuy.setText(count.toString());
         });
-        bd.imageMinus.setOnClickListener(view13 -> {
+        binding.imageMinus.setOnClickListener(view13 -> {
             if (count != 1) {
                 count = count - 1;
             }
-            bd.textCountBuy.setText(count.toString());
+            binding.textCountBuy.setText(count.toString());
         });
-        bd.btnAddCart.setVisibility(View.VISIBLE);
-        bd.btnBuyNow.setVisibility(View.VISIBLE);
-        bd.btnAddCart.setOnClickListener(view1 -> {
+        binding.btnAddCart.setVisibility(View.VISIBLE);
+        binding.btnBuyNow.setVisibility(View.VISIBLE);
+        binding.btnAddCart.setOnClickListener(view1 -> {
             isBuyNow = false;
             CartCondition condition = new CartCondition();
             condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
@@ -108,7 +114,7 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
             condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
             presenterProduct.InsertCart(condition);
         });
-        bd.btnBuyNow.setOnClickListener(v -> {
+        binding.btnBuyNow.setOnClickListener(v -> {
             if (PublicVariables.itemBooking != null) {
                 showMessage(getString(R.string.error_dont_booking));
                 return;
@@ -131,7 +137,7 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
                 .into(new CustomTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        bd.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
+                        binding.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
                     }
 
                     @Override
@@ -196,9 +202,26 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
     }
 
     @Override
+    public void onGetListBannerSuccess(List<BannerInfo> list) {
+
+    }
+
+    @Override
+    public void onGetListBannerError(String error) {
+
+    }
+
+    @Override
     public void onGetProductSuccess(ProductNew info) {
         this.info = info;
-        setView(info.title,info.price,1.0,info.description);
+        setView(info.title, info.price, 1.0, info.description);
+        if (info.getProducts() != null) {
+            binding.textDetail.setVisibility(View.VISIBLE);
+            adapter.clear();
+            adapter.addAll(info.getProducts());
+        } else {
+            binding.textDetail.setVisibility(View.GONE);
+        }
     }
 
     @Override

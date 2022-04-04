@@ -1,5 +1,6 @@
 package com.anphat.supplier.data.network.apiretrofit;
 
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
 
@@ -18,5 +19,8 @@ public interface API {
 
    @GET("api/products/{id}")
    Call<ResponseData<ProductNew>> GetProduct(@Path("id") String id);
+
+   @GET()
+   Call<ApiResponse<BannerInfo>> GetListBanner(@Url String url);
 
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anphat.supplier.data.entities.BannerInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -22,11 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoadAdsAdapter extends RecyclerView.Adapter<LoadAdsAdapter.MyViewHolder> {
-    List<String> listAllData;
+    List<BannerInfo> listAllData;
     Context mContext;
 
     public LoadAdsAdapter(Context context){
         mContext = context;
+        clear();
     }
 
     public void clear() {
@@ -35,7 +37,7 @@ public class LoadAdsAdapter extends RecyclerView.Adapter<LoadAdsAdapter.MyViewHo
         notifyDataSetChanged();
     }
 
-    public void addAll(List<String> list) {
+    public void addAll(List<BannerInfo> list) {
         listAllData.addAll(list);
         notifyDataSetChanged();
     }
@@ -49,23 +51,13 @@ public class LoadAdsAdapter extends RecyclerView.Adapter<LoadAdsAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        String gg = listAllData.get(position);
-        String url = "https://i.ibb.co/RyDV8B4/images.jpg";
+        BannerInfo gg = listAllData.get(position);
+        String url = "https://www.gasanphat.com/" + gg.photo;
 
         Glide.with(mContext)
                 .load(url)
-                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
-                .into(new CustomTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        holder.imageView.setImageBitmap(AppUtils.drawableToBitmap(resource));
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
+                .error(R.drawable.img_no_image)
+                .into(holder.imageView);
     }
 
     @Override

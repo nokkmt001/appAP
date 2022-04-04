@@ -27,6 +27,7 @@ public class AppPreference {
     public static final String PREF_ALL_PRODUCT = "all_product";
     public static final String PREF_PRODUCT_PROMOTION = "product_promotions";
 
+    public static final String PREF_PRODUCT_FULL = "all_product_full";
 
     private SharedPreferences sharedPreferences;
 
@@ -133,9 +134,17 @@ public class AppPreference {
         }
     }
 
+    public static void saveAllProduct(List<ProductNew> list){
+        if (list == null) {
+            clearAllProduct();
+        } else {
+            Hawk.put(PREF_PRODUCT_FULL, list);
+        }
+    }
+
     public static void saveProductPromotion(List<ProductNew> list){
         if (list == null) {
-            clearProductPromotion();
+            clearProductFull();
         } else {
             Hawk.put(PREF_PRODUCT_PROMOTION, list);
         }
@@ -159,6 +168,9 @@ public class AppPreference {
         return Hawk.get(PREF_PRODUCT_PROMOTION);
     }
 
+    public static List<ProductNew> getProductFull(){
+        return Hawk.get(PREF_PRODUCT_FULL);
+    }
     /**
      * Clear
      **/
@@ -176,6 +188,10 @@ public class AppPreference {
     }
     public static void clearProductPromotion(){
         Hawk.delete(PREF_PRODUCT_PROMOTION);
+    }
+
+    public static void clearProductFull(){
+        Hawk.delete(PREF_PRODUCT_FULL);
     }
 
 }

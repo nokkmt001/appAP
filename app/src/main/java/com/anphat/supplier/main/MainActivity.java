@@ -81,7 +81,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         registerReceiver(testReceiver, intentFilter);
 
         presenter = new MainPresenter(this);
-        if (AppPreference.getAllProduct()==null){
+        if (AppPreference.getProductFull()==null){
             presenter.GetListProductNew("api/products");
         }
         presenter.checkBooking();
@@ -110,7 +110,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
             showProgressDialog(true);
             presenter.CheckDaHang();
         }));
-        binding.layoutHeader.textTitle.setOnClickListener(view -> onCallHotline());
+//        binding.layoutHeader.textTitle.setOnClickListener(view -> onCallHotline());
 
         drawerToggle.syncState();
 
@@ -152,7 +152,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         });
 
         binding.layout.main.setOnClickListener(view14 -> linkWed());
-        binding.layoutHeader.textTitle.setText(R.string.hotline);
+//        binding.layoutHeader.textTitle.setText(R.string.hotline);
 
         /*if (!CommonUtils.checkLocation(this)) {
          alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
@@ -163,6 +163,13 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+        });
+
+        binding.layoutChat.setOnClickListener(v -> {
+            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            String url = "https://zalo.me/0988351352";
+            myIntent.setData(Uri.parse(url));
+            startActivity(myIntent);
         });
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
@@ -263,6 +270,10 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
                 if (CommonFM.fragmentThree != null) {
                     fmManager.beginTransaction().hide(CommonFM.fragmentThree).commit();
                     CommonFM.fragmentThree = null;
+                }
+                if (CommonFM.fragmentFour != null) {
+                    fmManager.beginTransaction().hide(CommonFM.fragmentFour).commit();
+                    CommonFM.fragmentFour = null;
                 }
                 fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(fmActive).commit();
             } else {
@@ -398,6 +409,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
     @Override
     public void onGetListProductNewSuccess(List<ProductNew> list) {
         AppPreference.saveProduct(list);
+        AppPreference.saveAllProduct(list);
         showProgressDialog(false);
     }
 

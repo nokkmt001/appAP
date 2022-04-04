@@ -58,7 +58,7 @@ public class NewsFeedFragment extends BaseFragment {
             list.add("jjjhhh");
         }
         adsAdapter.clear();
-        adsAdapter.addAll(list);
+//        adsAdapter.addAll(list);
         rclImage.startAutoScroll();
         rclImage.setLoopEnabled(true);
 

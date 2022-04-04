@@ -130,7 +130,7 @@
     <style name="AppTheme.TextView" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/title_textsize</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
-        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="fontFamily">@font/myriadpro_regular</item>
         <item name="android:textIsSelectable">false</item>
     </style>
 
