@@ -98,18 +98,30 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         List<CategoryNew> list = listAllCategoryMain;
         if (info.discount == 0) {
             holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price));
+            if (info.price_original == 0 ){
+                holder.textPriceNo.setVisibility(View.INVISIBLE);
+            } else {
+                holder.textPriceNo.setText(AppUtils.formatNumber("NO").format(info.price_original));
+            }
         } else {
             holder.tvPrice.setText("Giá: " + AppUtils.formatNumber("NO").format(info.price * (100 - info.discount) / 100));
-
+            if (info.price_original == 0 ){
+                holder.textPriceNo.setVisibility(View.INVISIBLE);
+            } else {
+                holder.textPriceNo.setText(AppUtils.formatNumber("NO").format(info.price_original));
+            }
         }
         holder.tvTitle.setText(info.title);
         holder.textPriceNo.setPaintFlags(holder.textPriceNo.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-        holder.textPriceNo.setText(info.price_original == 0 ? AppUtils.formatNumber("NO").format(info.price) : AppUtils.formatNumber("NO").format(info.price_original));
+//        holder.textPriceNo.setText(info.price_original == 0 ? AppUtils.formatNumber("NO").format(info.price) : AppUtils.formatNumber("NO").format(info.price_original));
         String url = "https://gasanphat.com/" + info.photo;
 
         Glide.with(mContext)
                 .load(url)
                 .error(R.drawable.img_no_image)
+                .placeholder(R.drawable.img_no_image)
+                .override(300,300)
+                .centerCrop()
                 .into(holder.imageView);
 
         if (select_position == position) {

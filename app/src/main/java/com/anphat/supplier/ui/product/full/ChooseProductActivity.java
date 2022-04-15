@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.ui.base.BaseEventClick;
+import com.anphat.supplier.utils.CommonUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -63,8 +64,6 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
         binding.layoutHeader.textTitle.setText("Chi tiết sản phẩm");
         binding.layoutHeader.imageBack.setOnClickListener(view -> finish());
 
-        adapter.setClickListener((view, position) -> {
-        });
         binding.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(this, ViewImageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -78,8 +77,14 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
             setView(info.title, info.price, 1.0, info.description);
             binding.nestedScrollView.scrollTo(0, 0);
         });
-
     }
+
+    private void showFooter(boolean isShow, boolean footer) {
+        binding.layoutOne.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        binding.textDetail.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        binding.layoutTwo.setVisibility(footer ? View.VISIBLE : View.GONE);
+    }
+
 
     Integer count = 1;
 
@@ -212,15 +217,25 @@ public class ChooseProductActivity extends BaseTestActivity<ActivityChooseProduc
     }
 
     @Override
+    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
+
+    }
+
+    @Override
+    public void onGetListProductPromotionError(String error) {
+
+    }
+
+    @Override
     public void onGetProductSuccess(ProductNew info) {
         this.info = info;
         setView(info.title, info.price, 1.0, info.description);
         if (info.getProducts() != null) {
-            binding.textDetail.setVisibility(View.VISIBLE);
             adapter.clear();
             adapter.addAll(info.getProducts());
+            showFooter(true, true);
         } else {
-            binding.textDetail.setVisibility(View.GONE);
+            showFooter(true, false);
         }
     }
 

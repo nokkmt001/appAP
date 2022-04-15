@@ -10,14 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginStart="@dimen/dp_5"
         android:padding="@dimen/dp_10"
         android:src="@drawable/ic_menu_24" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/textTitle"
-        style="@style/AppTheme.EditText"
+        style="@style/AppTheme.EditText.NoEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -26,8 +26,7 @@
         android:layout_toStartOf="@+id/layoutCart"
         android:layout_toEndOf="@+id/imageDrawer"
         android:hint="Tìm kiếm"
-        android:singleLine="true"
-        android:textColor="@color/White" />
+        android:singleLine="true" />
 
     <include
         android:id="@+id/layoutCart"

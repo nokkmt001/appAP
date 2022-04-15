@@ -15,8 +15,10 @@
         android:padding="1dp">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/dp_200"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="@dimen/dp_150"
+            android:maxWidth="@dimen/dp_200"
             app:cardBackgroundColor="@color/White"
             app:cardCornerRadius="5dp"
             app:cardElevation="@dimen/cardview_elevation"
@@ -38,9 +40,11 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:gravity="center"
+                    style="@style/AppTheme.TextView.Bold"
                     android:singleLine="true"
+                    android:background="@drawable/bg_button_light"
                     android:textColor="@color/Red_red"
-                    android:textSize="@dimen/textSize_12"
+                    android:textSize="@dimen/textSize_14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

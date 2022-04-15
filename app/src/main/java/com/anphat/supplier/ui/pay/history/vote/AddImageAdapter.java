@@ -89,18 +89,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ItemRo
             Glide.with(mContext).asBitmap()
                     .load(AppUtils.formatStringToBitMap(hinhAnhInfo))
                     .apply(new RequestOptions().override(10, 10))
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
-                            holder.imageAdd.setImageBitmap(resource);
-
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                        }
-                    });
+                    .into( holder.imageAdd);
         }
     }
 

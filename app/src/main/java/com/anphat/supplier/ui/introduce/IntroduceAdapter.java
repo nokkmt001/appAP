@@ -11,7 +11,6 @@ import com.anphat.supplier.ui.base.BaseTestAdapter;
 import com.anphat.supplier.utils.LetterTileProvider;
 
 public class IntroduceAdapter extends BaseTestAdapter<IntroducePerInfo, ItemIntroduceBinding> {
-    ItemIntroduceBinding bd;
     private LetterTileProvider mLetterTileProvider;
 
     public IntroduceAdapter(Context context) {
@@ -19,14 +18,14 @@ public class IntroduceAdapter extends BaseTestAdapter<IntroducePerInfo, ItemIntr
     }
 
     @Override
-    public void setupViews(View itemView, IntroducePerInfo item, int position) {
-        bd.textName.setText(item.HoTen);
-        bd.imageUser.setImageBitmap(mLetterTileProvider.getLetterTile(item.HoTen));
+    public void setupViews(ItemIntroduceBinding binding, IntroducePerInfo item, int position) {
+        binding.textName.setText(item.HoTen);
+        binding.imageUser.setImageBitmap(mLetterTileProvider.getLetterTile(item.HoTen));
 
     }
 
     @Override
     public ItemIntroduceBinding getViewBinding(ViewGroup parent, int viewType) {
-        return bd = ItemIntroduceBinding.inflate(LayoutInflater.from(parent.getContext()));
+        return  ItemIntroduceBinding.inflate(LayoutInflater.from(parent.getContext()));
     }
 }

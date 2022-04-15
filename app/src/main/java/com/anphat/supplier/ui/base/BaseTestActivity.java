@@ -60,7 +60,7 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         if (!NetworkUtils.isNetworkConnected(this)) {
             error = getResources().getString(R.string.error_msg_no_internet);
             showMessage(error);
@@ -70,13 +70,16 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
         setContentView(binding.getRoot());
         initView();
         initData();
+        onObserver();
     }
 
     public abstract T getViewBinding();
 
-    protected abstract void initView();
+    protected void initView() {}
 
-    protected abstract void initData();
+    protected void initData() {}
+
+    protected void onObserver(){}
 
     public <N extends View> N bind(int id) {
         return findViewById(id);

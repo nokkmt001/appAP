@@ -41,12 +41,30 @@ public class HomePresenter implements HomeContract.Presenter {
                 } catch (Exception e){
                     view.onGetListProductError(e.getMessage());
                 }
-
             }
-
             @Override
             public void onFailure(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Throwable t) {
                 view.onGetListProductError(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void GetListProductPromotion(String url) {
+        sv.GetListProductNew(url).enqueue(new Callback<ApiResponse<ProductNew>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Response<ApiResponse<ProductNew>> response) {
+                try {
+                    ApiResponse<ProductNew> result = response.body();
+                    assert result != null;
+                    view.onGetListProductPromotionSuccess(result.data);
+                } catch (Exception e){
+                    view.onGetListProductPromotionError(e.getMessage());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Throwable t) {
+                view.onGetListProductPromotionError(t.getMessage());
             }
         });
     }
@@ -78,7 +96,6 @@ public class HomePresenter implements HomeContract.Presenter {
                     view.onGetListBannerError(e.getMessage());
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<ApiResponse<BannerInfo>> call, @NonNull Throwable t) {
                 view.onGetListBannerError(t.getMessage());

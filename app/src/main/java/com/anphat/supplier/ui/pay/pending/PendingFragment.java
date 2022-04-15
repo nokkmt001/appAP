@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
@@ -41,7 +41,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
     View viewFinish, viewTwo, viewPending, viewProgress, viewEnd, viewStart, status_book, viewBooking;
     Button buttonCancel;
     String gg = "";
-    ConstraintLayout layoutMain;
+    RelativeLayout layoutMain;
     AppPreference preference;
     BookingInfo itemMain = null;
     TestReceiver testReceiver;

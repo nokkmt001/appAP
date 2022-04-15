@@ -72,6 +72,9 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryMainAdapte
         CategoryNew info = listAllData.get(position);
         holder.tvTitle.setText(info.title);
         switch (info.slug) {
+            case "gas":
+                holder.imageMain.setImageResource(R.drawable.gas_test);
+                break;
             case "bep":
                 holder.imageMain.setImageResource(R.drawable.ic_kitchen);
                 break;
@@ -90,11 +93,11 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryMainAdapte
             default:
                 break;
         }
-        if (select_position == position) {
-            holder.itemView.setBackgroundResource(R.drawable.table_content_cell_bg_default);
-        } else {
-            holder.itemView.setBackgroundResource(R.color.colorTransparent);
-        }
+//        if (select_position == position) {
+//            holder.itemView.setBackgroundResource(R.drawable.table_content_cell_bg_default);
+//        } else {
+//            holder.itemView.setBackgroundResource(R.color.colorTransparent);
+//        }
     }
 
     @Override

@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/layoutContainer"
-    android:background="@color/White">
+    android:background="@color/White"
+    android:orientation="vertical">
 
-    <include layout="@layout/layout_search"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/layout_search"
+        android:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -29,8 +30,8 @@
                 android:id="@+id/layoutLike"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:visibility="gone">
 
                 <TextView
                     style="@style/AppTheme.TextViewSize16"
@@ -47,10 +48,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:visibility="gone"
                     android:background="@drawable/table_content_cell_radius_2"
                     android:orientation="horizontal"
-                    android:padding="@dimen/dp_3">
+                    android:padding="@dimen/dp_3"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -63,8 +64,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/dp_5"
                         android:layout_marginStart="@dimen/dp_5"
+                        android:layout_marginEnd="@dimen/dp_5"
                         android:text="Tùy chỉnh" />
 
                 </LinearLayout>
@@ -78,28 +79,28 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
                 android:background="@drawable/table_content_cell_radius_5_white_1"
-                android:padding="@dimen/dp_5"
-                tools:listitem="@layout/item_category_main" />
+                android:padding="@dimen/dp_5" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.anphat.supplier.utils.AutoScrollRecyclerView
+                <com.anphat.supplier.utils.adapterimage.AutoScrollViewPager
                     android:id="@+id/rclImage"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_5"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_5"
                     app:layout_constraintDimensionRatio="H,16:9"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <LinearLayout
                 android:id="@+id/layoutBranch"
@@ -133,32 +134,32 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/AppTheme.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/myriadpro_boldit"
-                    style="@style/AppTheme.TextView"
-                    android:textStyle="bold"
-                    android:gravity="left|center"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp_5"
-                    android:text="Những ưu đãi khác từ an phát"/>
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    android:gravity="left|center"
+                    android:text="Những ưu đãi khác từ an phát"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textMore"
+                    style="@style/AppTheme.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/myriadpro_boldit"
-                    style="@style/AppTheme.TextView"
-                    android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/textSize_12"
-                    android:gravity="right|center"
-                    android:textColor="@color/dark_44"
-                    android:drawableEnd="@drawable/ic_arrow_right"
                     android:layout_margin="@dimen/dp_5"
-                    android:text="Xem thêm"/>
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    android:gravity="right|center"
+                    android:text="Xem thêm"
+                    android:textColor="@color/dark_44"
+                    android:textSize="@dimen/textSize_12"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -168,9 +169,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
                 android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="1"
-                tools:listitem="@layout/item_product"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+                tools:listitem="@layout/item_product" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -178,44 +179,41 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/AppTheme.TextViewSize16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/myriadpro_boldit"
-                    style="@style/AppTheme.TextViewSize16"
-                    android:textStyle="bold"
-                    android:gravity="left|center"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dp_5"
-                    android:text="Tất cả sản phẩm"/>
+                    android:layout_weight="1"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    android:gravity="left|center"
+                    android:text="Tất cả sản phẩm"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textMoreAllProduct"
+                    style="@style/AppTheme.TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/myriadpro_boldit"
-                    style="@style/AppTheme.TextView"
-                    android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:textSize="@dimen/textSize_12"
-                    android:gravity="right|center"
-                    android:textColor="@color/dark_44"
-                    android:drawableEnd="@drawable/ic_arrow_right"
                     android:layout_margin="@dimen/dp_5"
-                    android:text="Xem thêm"/>
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_arrow_right"
+                    android:fontFamily="@font/myriadpro_boldit"
+                    android:gravity="right|center"
+                    android:text="Xem thêm"
+                    android:textColor="@color/dark_44"
+                    android:textSize="@dimen/textSize_12"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rclAllProduct"
-                android:layout_marginTop="@dimen/dp_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:spanCount="1"
-                tools:listitem="@layout/item_product"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+                android:layout_marginTop="@dimen/dp_5"
+                tools:listitem="@layout/item_product" />
 
         </LinearLayout>
 

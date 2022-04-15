@@ -51,15 +51,24 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         View root = inflater.inflate(getLayoutID(), null);
         initView(root);
         initData();
+        onObserver();
         return root;
     }
 
     @LayoutRes
     protected abstract int getLayoutID();
 
-    protected abstract void initView(View view);
+    protected void initView(View view) {
 
-    protected abstract void initData();
+    }
+
+    protected void initData() {
+
+    }
+
+    protected void onObserver(){
+
+    }
 
     public void showProgressDialog(boolean isShow) {
         if (isShow) {

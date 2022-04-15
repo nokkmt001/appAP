@@ -2,93 +2,62 @@ package com.anphat.supplier.ui.category;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.entities.BannerInfo;
-import com.anphat.supplier.data.entities.CategoryInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.entities.condition.CartCondition;
-import com.anphat.supplier.ui.base.BaseFragment;
+import com.anphat.supplier.databinding.ActivityDetailCategoryBinding;
+import com.anphat.supplier.ui.base.BaseMainFragment;
+import com.anphat.supplier.ui.cart.CartActivity;
 import com.anphat.supplier.ui.home.CommonFM;
 import com.anphat.supplier.ui.home.DataFilterProduct;
-import com.anphat.supplier.ui.home.HomeContract;
-import com.anphat.supplier.ui.home.HomePresenter;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
-import com.anphat.supplier.ui.product.full.ChooseProductActivity;
-import com.anphat.supplier.utils.AppConstants;
+import com.anphat.supplier.ui.product.full.ChooseProductFragment;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class DetailCategoryFragment extends BaseFragment implements HomeContract.View {
+public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCategoryBinding> {
     DetailAdapter adapter;
-    HomePresenter presenterProduct;
     CategoryNew category;
-    List<CategoryInfo> listAllData;
     List<ProductNew> listProduct;
     DetailCAdapter adapterCategory;
     Boolean isEmpty = false;
-    RecyclerView rclMain, rclCategory;
-    ImageView imageBack;
-    TextView textTitle;
-    EditText inputSearch;
-    ImageView imageDelete;
-    private Timer timer;
 
     public DetailCategoryFragment(CategoryNew category) {
         this.category = category;
     }
 
     @Override
-    protected int getLayoutID() {
-        return R.layout.activity_detail_category;
-    }
-
-    @Override
-    protected void initView(View view) {
-        imageBack = bind(view, R.id.imageBack);
-        rclMain = bind(view, R.id.rclMain);
-        textTitle = bind(view, R.id.textTitle);
-        rclCategory = bind(view, R.id.rclCategory);
-        imageBack = bind(view, R.id.imageBack);
-        imageBack = bind(view, R.id.imageBack);
-        imageBack = bind(view, R.id.imageBack);
-        imageBack = bind(view, R.id.imageBack);
-        inputSearch = bind(view, R.id.inputSearch);
-        imageDelete = bind(view, R.id.imageDelete);
-
+    protected void initView() {
         listProduct = new ArrayList<>();
+        listProduct = AppPreference.getAllProduct();
         showProgressDialog(true);
-        imageBack.setOnClickListener(view1 -> {
+        binding.layoutHeader.imageBack.setOnClickListener(view1 -> {
             Intent intentB = new Intent();
             intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
             intentB.putExtra("eventName", "kk");
             getContext().sendBroadcast(intentB);
-
             StartFragmentHome();
         });
         adapter = new DetailAdapter(getContext(), new ArrayList<>(), "");
         adapter.setAll(true);
-        rclMain.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        rclMain.setAdapter(adapter);
+        binding.rclMain.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        binding.rclMain.setAdapter(adapter);
 
         adapterCategory = new DetailCAdapter();
-        rclCategory.setAdapter(adapterCategory);
+        binding.rclCategory.setAdapter(adapterCategory);
         adapterCategory.clear();
         adapterCategory.setOnClickListener((view1, position) -> {
             CategoryNew item = adapterCategory.getItem(position);
@@ -96,52 +65,63 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         });
 
         adapter.setClickListener((view1, position) -> {
-            Intent intent = new Intent(getContext(), ChooseProductActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            Bundle bundle = new Bundle();
-            bundle.putInt("ITEM", (int) adapter.getItem(position).id);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            StartDetailFragment((int) adapter.getItem(position).id);
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventName", "hh");
+            getContext().sendBroadcast(intentB);
         });
-
+        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view12 -> {
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getContext().startActivity(intent);
+        });
         Search();
+
     }
 
     public void Search() {
-        inputSearch.addTextChangedListener(new TextWatcher() {
+        binding.layoutHeader.textTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (!s.toString().isEmpty()) imageDelete.setVisibility(View.VISIBLE);
-                else imageDelete.setVisibility(View.GONE);
-                if (timer != null) timer.cancel();
             }
 
             @Override
             public void afterTextChanged(final Editable editable) {
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(() -> adapter.getFilter().filter(editable));
-                    }
-                }, AppConstants.DELAY_FIND_DATA_SEARCH);
+                new Handler().postDelayed(() -> adapter.getFilter().filter(editable.toString()), 1000);
             }
         });
+    }
 
-        imageDelete.setOnClickListener(view -> inputSearch.setText(""));
+    @Override
+    public ActivityDetailCategoryBinding getViewBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return ActivityDetailCategoryBinding.inflate(inflater, container, false);
     }
 
     @Override
     protected void initData() {
-        presenterProduct = new HomePresenter(this);
-        listAllData = new ArrayList<>();
         onLoadCategory(category.id);
-        presenterProduct.GetListProduct("api/products");
-        textTitle.setText(category.title);
+        if (PublicVariables.listBooking!=null){
+            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+        } else {
+            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
+        }
+
+        DataFilterProduct.list = listProduct;
+        showProgressDialog(false);
+        adapter.clear();
+        List<ProductNew> listAll;
+        if (isEmpty) {
+            listAll = DataFilterProduct.getList(category.id);
+        } else {
+            listAll = DataFilterProduct.getList(adapterCategory.getItem(0).id);
+        }
+        PublicVariables.listKM = listAll;
+        adapter.addAll(listAll);
     }
 
     private void onLoadCategory(Float category) {
@@ -160,7 +140,6 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
         adapterCategory.clear();
         adapterCategory.addAll(list);
         adapterCategory.setSelect_position(0);
-
     }
 
     private void onFilterProduct(Float category) {
@@ -175,53 +154,21 @@ public class DetailCategoryFragment extends BaseFragment implements HomeContract
 
     }
 
-    @Override
-    public void onGetListProductSuccess(List<ProductNew> list) {
-        DataFilterProduct.list = list;
-        showProgressDialog(false);
-        adapter.clear();
-        List<ProductNew> listAll;
-        if (isEmpty) {
-            listAll = DataFilterProduct.getList(category.id);
-        } else {
-            listAll = DataFilterProduct.getList(adapterCategory.getItem(0).id);
-        }
-        PublicVariables.listKM = listAll;
-        adapter.addAll(listAll);
-
-
-    }
-
-    @Override
-    public void onGetListProductError(String error) {
-        showProgressDialog(false);
-        showMessage(error);
-    }
-
-    @Override
-    public void onInsertCartSuccess(CartCondition info) {
-
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-
-    }
-
-    @Override
-    public void onGetListBannerSuccess(List<BannerInfo> list) {
-
-    }
-
-    @Override
-    public void onGetListBannerError(String error) {
-
-    }
-
     private void StartFragmentHome() {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .hide(this)
                 .show(CommonFM.fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void StartDetailFragment(Integer ID) {
+        ChooseProductFragment nextFrag = new ChooseProductFragment(ID, false);
+        CommonFM.fragmentTwo = nextFrag;
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container, nextFrag, "one")
+//                .hide(CommonFM.fragmentThree)
+                .hide(this)
                 .addToBackStack(null)
                 .commit();
     }

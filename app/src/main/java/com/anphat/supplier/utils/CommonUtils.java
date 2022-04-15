@@ -65,7 +65,7 @@ public class CommonUtils {
             }
         });
 
-        imageBack.setOnClickListener(v -> onClickListener.onClick(v,0));
+//        imageBack.setOnClickListener(v -> onClickListener.onClick(v,0));
 
         imageCart.setOnClickListener(v -> {
             Intent intent = new Intent(context, CartActivity.class);

@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,28 +14,22 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.entities.order.BookingInfo;
-import com.anphat.supplier.data.entities.order.CallInfo;
 import com.anphat.supplier.ui.base.BaseTestActivity;
 import com.anphat.supplier.ui.category.DetailCategoryFragment;
+import com.anphat.supplier.ui.home.ShowFragment;
 import com.anphat.supplier.ui.pay.history.HistoryFragment;
 import com.anphat.supplier.ui.pay.pending.PendingFragment;
-import com.anphat.supplier.utils.AppUtils;
+import com.anphat.supplier.ui.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.entities.CartInfo;
-import com.anphat.supplier.data.entities.CategoryInfo;
-import com.anphat.supplier.data.entities.ProductInfo;
-import com.anphat.supplier.data.entities.condition.CartCondition;
-import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.databinding.ActivityMainBinding;
 import com.anphat.supplier.ui.account.AccountFragment;
 import com.anphat.supplier.ui.cart.CartActivity;
@@ -45,18 +38,14 @@ import com.anphat.supplier.ui.home.HomeFragment;
 import com.anphat.supplier.ui.introduce.IntroduceActivity;
 import com.anphat.supplier.ui.login.checkphone.CheckPhoneActivity;
 import com.anphat.supplier.ui.notification.NotificationActivity;
-import com.anphat.supplier.ui.pay.PayFragment;
-import com.anphat.supplier.ui.sms.SmsFragment;
 import com.anphat.supplier.ui.sms.newsfeed.NewsFeedFragment;
 import com.anphat.supplier.ui.update.UpdateActivity;
-import com.anphat.supplier.utils.CommonUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseTestActivity<ActivityMainBinding> implements MainContract.View {
+public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
     BottomNavigationView bottomNavigationView;
     FragmentManager fmManager;
     Fragment fmMain, fmHistory, fmPay, fmSms, fmAccount, fmActive;
@@ -67,26 +56,31 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
             Manifest.permission.CALL_PHONE
     };
 
-    MainPresenter presenter;
     public static final int FROM_MAIN = 0;
     TestReceiver testReceiver;
     HomeFragment fragmentMain;
+    MainViewModel viewModel;
+
+    @Override
+    public ActivityMainBinding getViewBinding() {
+        return ActivityMainBinding.inflate(getLayoutInflater());
+    }
 
     @Override
     protected void initData() {
         hideKeyboard();
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         testReceiver = new TestReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TestConstants.ACTION_MAIN_ACTIVITY);
         registerReceiver(testReceiver, intentFilter);
 
-        presenter = new MainPresenter(this);
-        if (AppPreference.getProductFull()==null){
-            presenter.GetListProductNew("api/products");
-        }
-        presenter.checkBooking();
-        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
-//        presenter.GetListKho();
+        viewModel.GetListAllCart();
+        viewModel.checkBooking();
+        viewModel.GetListKho();
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) return;
         String gg = bundle.getString("KEYMAIN");
@@ -95,23 +89,69 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         }
     }
 
+
     @Override
-    public ActivityMainBinding getViewBinding() {
-        return ActivityMainBinding.inflate(getLayoutInflater());
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.getItem().observe(this, result -> {
+            showProgressDialog(false);
+            if (result != null) {
+                if (result.Status==0){
+                    PublicVariables.listBooking = result.Data;
+                    if (result.Data != null && result.Data.size() > 0) {
+                        binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
+                        binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(result.Data.size()));
+                    } else binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        viewModel.getmItemCheckBooking().observe(this, result -> {
+            showProgressDialog(false);
+            if (result != null) {
+                if (result.Status == 0) {
+                    PublicVariables.itemBooking = result.Data;
+                } else {
+                    PublicVariables.itemBooking = null;
+                }
+            } else {
+                PublicVariables.itemBooking = null;
+            }
+        });
+
+        viewModel.getmItemDaHang().observe(this, result -> {
+            showProgressDialog(false);
+            if (result != null) {
+                if (result.Data.size() > 0) {
+                    showCart();
+                }  else {
+                    for (CategoryNew item : AppPreference.getCategory()) {
+                        if (item.slug.equals("gas")) {
+                            StartDetailCategory(item);
+                            binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
+                        }
+                    }
+                }
+            } else {
+                for (CategoryNew item : AppPreference.getCategory()) {
+                    if (item.slug.equals("gas")) {
+                        StartDetailCategory(item);
+                        binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     protected void initView() {
-        presenter = new MainPresenter(this);
         checkSelfPermission(permissionsRequired);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawerLayout.addDrawerListener(drawerToggle);
         binding.imageCall.setOnClickListener(v -> alertDialog("ĐẶT GAS", "Bạn có chắc muốn đặt gas?", "OK", null, (dialogInterface, i) -> {
             showProgressDialog(true);
-            presenter.CheckDaHang();
+            viewModel.CheckDaHang();
         }));
-//        binding.layoutHeader.textTitle.setOnClickListener(view -> onCallHotline());
-
         drawerToggle.syncState();
 
         fmManager = getSupportFragmentManager();
@@ -152,13 +192,6 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         });
 
         binding.layout.main.setOnClickListener(view14 -> linkWed());
-//        binding.layoutHeader.textTitle.setText(R.string.hotline);
-
-        /*if (!CommonUtils.checkLocation(this)) {
-         alertDialog("Thông tin", getString(R.string.title_warning_location), "CÓ", null,
-         (dialogInterface, i) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
-         }*/
-
         binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -166,30 +199,27 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         });
 
         binding.layoutChat.setOnClickListener(v -> {
-            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            Intent myIntent = new Intent(Intent.ACTION_VIEW);
             String url = "https://zalo.me/0988351352";
             myIntent.setData(Uri.parse(url));
             startActivity(myIntent);
         });
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
-//        this.serviceIntent = new Intent(this, DownLoadService.class);
-//        startService(this.serviceIntent);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_main);
-
+        binding.layoutHeader.textTitle.setOnClickListener(view -> {
+                    binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
+                    StartFullProduct(AppPreference.getProductFull());
+                }
+        );
     }
 
-    private void onCallHotline() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
-            return;
-        }
-        Intent myIntent = new Intent(Intent.ACTION_CALL);
-        String phNum = "tel:0819000203";
-        myIntent.setData(Uri.parse(phNum));
-        startActivity(myIntent);
+    private void StartFullProduct(List<ProductNew> list) {
+        ShowFragment nextFrag = new ShowFragment(list);
+        CommonFM.fragmentFour = nextFrag;
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_container, nextFrag, "three")
+                .hide(CommonFM.fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void linkWed() {
@@ -291,137 +321,9 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
         fmActive = fmMain;
     }
 
-    @Override
-    public void onGetListAllProductSuccess(List<ProductInfo> list) {
-        PublicVariables.listAllProDuct = list;
-    }
-
-    @Override
-    public void onGetListAllProductError(String error) {
-        CommonUtils.showMessageError(this, error);
-    }
-
-    @Override
-    public void onInSertCartSuccess(CartCondition info) {
-
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-
-    }
-
-    @Override
-    public void onUpdateCartSuccess(CartCondition info) {
-
-    }
-
-    @Override
-    public void onUpdateConditionError(String error) {
-
-    }
-
-    @Override
-    public void onDeleteCartSuccess() {
-
-    }
-
-    @Override
-    public void onDeleteCartError(String error) {
-
-    }
-
-    @Override
-    public void onGetListAllCartSuccess(List<CartInfo> list) {
-        PublicVariables.listBooking = list;
-        if (list != null && list.size() > 0) {
-            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
-            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(list.size()));
-        } else binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onGetListAllCartError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetListKhoSuccess(List<KhoInfo> list) {
-        PublicVariables.listKho = list;
-    }
-
-    @Override
-    public void onGetListKhoError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetCategorySuccess(List<CategoryInfo> list) {
-        PublicVariables.listCategory = list;
-
-    }
-
-    @Override
-    public void onGetCategoryError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onCheckBookingSuccess(BookingInfo info) {
-        PublicVariables.itemBooking = info;
-    }
-
-    @Override
-    public void onCheckBookingError(String error) {
-        PublicVariables.itemBooking = null;
-    }
-
-    @Override
-    public void onCheckDaHangSuccess(List<CartInfo> info) {
-        showCart();
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onCheckDatHangError(String error) {
-        showProgressDialog(false);
-        for (CategoryNew item : AppPreference.getCategory()) {
-            if (item.slug.equals("gas")) {
-                StartDetailCategory(item);
-                binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    @Override
-    public void onSendBookingSuccess(CallInfo item) {
-        showToast("Gửi yêu cầu thành công");
-        AppUtils.createSound(this, "Đặt hàng thành công", "Vui lòng đợi phản hồi từ quản trị viên.");
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onSendBookingError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListProductNewSuccess(List<ProductNew> list) {
-        AppPreference.saveProduct(list);
-        AppPreference.saveAllProduct(list);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListProductNewError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
-    }
-
     public void onLoadCartListener() {
-        presenter = new MainPresenter(this);
-        presenter.GetListAllCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.GetListAllCart();
     }
 
     @Override
@@ -438,7 +340,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> implemen
     protected void onDestroy() {
         super.onDestroy();
         try {
-            presenter = null;
+            viewModel = null;
             if (testReceiver != null)
                 unregisterReceiver(testReceiver);
         } catch (Exception ignored) {

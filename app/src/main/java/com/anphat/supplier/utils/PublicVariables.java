@@ -41,6 +41,7 @@ public class PublicVariables {
     public static List<CategoryNew> listAllCategoryMain = AppPreference.getCategory();
 
     public static String token = "";
+
     public static BookingInfo itemBooking = null;
 
     public static void ClearData() {

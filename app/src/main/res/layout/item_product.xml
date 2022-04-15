@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="210dp"
+    android:layout_width="230dp"
     android:layout_height="fill_parent"
     android:layout_margin="@dimen/dp_4"
     android:id="@+id/layoutColor"
@@ -15,8 +15,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView"
-            android:layout_width="@dimen/dp_200"
-            android:layout_height="@dimen/dp_200"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_2"
             android:layout_marginBottom="@dimen/dp_2"
@@ -41,7 +41,7 @@
                     android:layout_marginEnd="@dimen/dp_5"
                     android:inputType="textCapSentences|textNoSuggestions"
                     android:fontFamily="@font/myriadpro_bold"
-                    android:gravity="center" />
+                    android:gravity="left|center" />
 
                 <TextView
                     android:id="@+id/textPriceNo"
@@ -49,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_5"
-                    android:gravity="center"
+                    android:gravity="left|center"
                     android:textColor="@color/Black" />
 
                 <TextView
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_5"
-                    android:gravity="center"
+                    android:gravity="left|center"
                     android:textColor="@color/Red" />
 
             </LinearLayout>

@@ -14,19 +14,4 @@
         android:layout_marginRight="8dp"
         android:visibility="visible" />
 
-    <TextView
-        android:id="@+id/tvLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/text_wait"
-        android:textColor="@color/Red"
-        android:textSize="@dimen/title_textsize"
-        android:visibility="gone" />
-
 </RelativeLayout>

@@ -1,12 +1,19 @@
 package com.anphat.supplier.data.network.apiretrofit;
 
 import com.anphat.supplier.data.entities.BannerInfo;
+import com.anphat.supplier.data.entities.CartInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
+import com.anphat.supplier.data.entities.kho.KhoInfo;
+import com.anphat.supplier.data.entities.order.BookingInfo;
+import com.anphat.supplier.data.network.api.ApiResponseSbke;
 
+import java.util.List;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface API {
@@ -23,4 +30,33 @@ public interface API {
    @GET()
    Call<ApiResponse<BannerInfo>> GetListBanner(@Url String url);
 
+   /**
+    *rxjava
+    */
+   @GET("api/GioHangMobile/GetListGioHang")
+   Observable<ApiResponseSbke<List<CartInfo>>> GetListAllCart(@Query("nguoiDungMobileID") Integer ID);
+
+   @GET("api/DonHangMobile/GetDonHangGanNhat")
+   Observable<ApiResponseSbke<BookingInfo>> CheckBooking(@Query("nguoiDungMobileID") Integer ID);
+
+   @GET("api/DonHangMobile/KiemTraSanPhamGasDaDatHang")
+   Observable<ApiResponseSbke<List<CartInfo>>> CheckDaDat(@Query("nguoiDungMobileID") Integer ID);
+
+   @GET("api/products")
+   Observable<ApiResponse<ProductNew>> GetListProductNewAP(@Query("start") Integer begin, @Query("limit") Integer end);
+
+   @GET("api/promotions")
+   Observable<ApiResponse<ProductNew>> GetListProductPromotion();
+
+   @GET()
+   Observable<ApiResponse<BannerInfo>> GetListBannerAP(@Url String url);
+
+   @GET("api/categorys")
+   Observable<ApiResponse<CategoryNew>> GetCategoryNewAP() ;
+
+   @GET("api/products/{id}")
+   Observable<ResponseData<ProductNew>> GetProductAP(@Path("id") String id);
+
+   @GET("api/categorys")
+   Observable<List<KhoInfo>> GetListKho(@Query("userName") String userName) ;
 }

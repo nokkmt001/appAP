@@ -11,26 +11,28 @@ import androidx.viewbinding.ViewBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseTestAdapter<T , B extends ViewBinding> extends RecyclerView.Adapter<BindingViewHolder> {
+public abstract class BaseTestAdapter<T , B extends ViewBinding> extends RecyclerView.Adapter<BindingViewHolder<B>> {
     private final int VIEW_TYPE_ITEM = 1;
     private final int VIEW_TYPE_LOAD_MORE = 2;
     protected B binding;
     ArrayList<T> listData = new ArrayList<>();
     private boolean isLoadMoreOrRefresh = false;
 
-    public abstract void setupViews(View itemView, T item, int position);
+    public abstract void setupViews(B binding, T item, int position);
 
     public abstract B getViewBinding( ViewGroup parent, int viewType);
+
     @NonNull
     @Override
-    public BindingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new BindingViewHolder(getViewBinding(parent,viewType));
+    public BindingViewHolder<B> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new BindingViewHolder<B>(getViewBinding(parent,viewType));
     }
 
     @Override
     public void onBindViewHolder(@NonNull BindingViewHolder  holder, int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
-            setupViews(holder.itemView, listData.get(position), position);
+            binding = (B) holder.getBinding();
+            setupViews((B) holder.getBinding()  , listData.get(position), position);
         }
     }
 

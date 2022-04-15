@@ -20,7 +20,7 @@
     <item
         android:id="@+id/navigation_report"
         android:title="@string/history"
-        android:icon="@drawable/ic_sms"/>
+        android:icon="@drawable/ic_download_icon_his"/>
 
     <item
         android:id="@+id/navigation_account"

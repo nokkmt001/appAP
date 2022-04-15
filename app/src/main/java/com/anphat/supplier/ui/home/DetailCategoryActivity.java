@@ -145,4 +145,14 @@ public class DetailCategoryActivity extends BaseTestActivity<ActivityDetailCateg
     public void onGetListBannerError(String error) {
 
     }
+
+    @Override
+    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
+
+    }
+
+    @Override
+    public void onGetListProductPromotionError(String error) {
+
+    }
 }

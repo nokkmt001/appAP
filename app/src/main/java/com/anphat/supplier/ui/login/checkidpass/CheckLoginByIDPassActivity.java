@@ -123,7 +123,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
 
     @SuppressLint("SetTextI18n")
     private void onLoadTitle(NewCustomer info){
-        binding.textUserName.setText(getString(R.string.hello)+info.getHoTen());
+        binding.textUserName.setText(getString(R.string.hello)+"  "+info.getHoTen());
         binding.textPhone.setText(info.getSoDienThoai());
     }
 

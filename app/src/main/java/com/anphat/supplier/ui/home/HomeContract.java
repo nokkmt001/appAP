@@ -20,10 +20,16 @@ public interface HomeContract {
 
         void onGetListBannerError(String error);
 
+        void onGetListProductPromotionSuccess(List<ProductNew> list);
+
+        void onGetListProductPromotionError(String error);
+
     }
 
     interface Presenter {
         void GetListProduct(String url);
+
+        void GetListProductPromotion(String url);
 
         void InsertCart(CartCondition condition);
 

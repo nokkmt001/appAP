@@ -45,36 +45,6 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void GetListAllProduct() {
-        modelProduct.GetListAllProduct(new IProductModel.IGetListAllProductFinishListener() {
-            @Override
-            public void onSuccess(List<ProductInfo> list) {
-                view.onGetListAllProductSuccess(list);
-            }
-
-            @Override
-            public void onError(String error) {
-                view.onGetListAllProductError(error);
-            }
-        });
-    }
-
-    @Override
-    public void InSertCart(CartCondition condition) {
-
-    }
-
-    @Override
-    public void UpdateCart(CartCondition condition) {
-
-    }
-
-    @Override
-    public void DeleteCart(Integer ID) {
-
-    }
-
-    @Override
     public void GetListAllCart(Integer UserID) {
         modelCart.GetListAllCart(UserID, new ICartModel.IGetListAllCartFinishListener() {
             @Override
@@ -85,36 +55,6 @@ public class MainPresenter implements MainContract.Presenter {
             @Override
             public void onError(String error) {
                 view.onGetListAllCartError(error);
-            }
-        });
-    }
-
-    @Override
-    public void GetListKho() {
-        modelUser.GetListKhoByUser(new IUserModel.IGetListKhoByUserFinish() {
-            @Override
-            public void onSuccess(List<KhoInfo> list) {
-                view.onGetListKhoSuccess(list);
-            }
-
-            @Override
-            public void onError(String error) {
-                view.onGetListKhoError(error);
-            }
-        });
-    }
-
-    @Override
-    public void GetCategory() {
-        modelProduct.GetListCategory(new IProductModel.IGetListCategoryFinish() {
-            @Override
-            public void onSuccess(List<CategoryInfo> list) {
-                view.onGetCategorySuccess(list);
-            }
-
-            @Override
-            public void onError(String error) {
-                view.onGetCategoryError(error);
             }
         });
     }
@@ -154,38 +94,4 @@ public class MainPresenter implements MainContract.Presenter {
         });
     }
 
-    @Override
-    public void sendBooking() {
-        model.SendBooking(new IBookingModel.ISendBookingFinish() {
-            @Override
-            public void onSuccess(CallInfo item) {
-                view.onSendBookingSuccess(item);
-            }
-
-            @Override
-            public void onError(String error) {
-                view.onSendBookingError(error);
-            }
-        });
-    }
-
-    @Override
-    public void GetListProductNew(String url) {
-        sv.GetListProductNew(url).enqueue(new Callback<ApiResponse<ProductNew>>() {
-            @Override
-            public void onResponse(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Response<ApiResponse<ProductNew>> response) {
-                try {
-                    ApiResponse<ProductNew> result = response.body();
-                    assert result != null;
-                    view.onGetListProductNewSuccess(result.data);
-                } catch (Exception e){
-                    view.onGetListProductNewError(e.getMessage());
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<ApiResponse<ProductNew>> call, @NonNull Throwable t) {
-                view.onGetListProductNewError(t.getMessage());
-            }
-        });
-    }
 }

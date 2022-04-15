@@ -14,7 +14,6 @@ import java.util.List;
 
 public class FriendFragment extends BaseFragment {
     List<FriendInfo> list = new ArrayList<>();
-    FriendAdapter adapter;
     public FriendFragment() {
     }
 
@@ -27,9 +26,6 @@ public class FriendFragment extends BaseFragment {
     protected void initView(View view) {
         RecyclerView rcl = bind(view,R.id.recyclerViewChat);
         SwipeRefreshLayout refresh_layout = bind(view,R.id.refresh_layout);
-         adapter = new FriendAdapter();
-
-        rcl.setAdapter(adapter);
 
     }
 

@@ -20,6 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_2"
             android:layout_marginBottom="@dimen/dp_2"
+            android:scaleType="centerCrop"
             android:src="@drawable/img_no_image" />
 
         <androidx.core.widget.NestedScrollView
@@ -43,12 +44,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_5"
+                        android:singleLine="true"
                         android:layout_marginTop="@dimen/dp_5"
-                        android:minLines="2"
                         android:inputType="textCapSentences|textNoSuggestions"
                         android:layout_marginEnd="@dimen/dp_5"
                         android:fontFamily="@font/myriadpro_bold"
-                        android:gravity="center" />
+                        android:gravity="left|center" />
 
                 </LinearLayout>
 
@@ -66,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_5"
-                        android:gravity="center"
+                        android:gravity="left|center"
                         android:textColor="@color/Black" />
 
                     <TextView
@@ -75,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/dp_5"
-                        android:gravity="center"
+                        android:gravity="left|center"
                         android:textColor="@color/Red" />
 
                 </LinearLayout>

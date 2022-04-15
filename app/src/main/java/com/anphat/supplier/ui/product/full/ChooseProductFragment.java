@@ -7,27 +7,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.data.entities.BannerInfo;
+import com.anphat.supplier.data.entities.gift.GiftInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
+import com.anphat.supplier.databinding.ActivityChooseProductBinding;
+import com.anphat.supplier.ui.base.BaseMainFragment;
+import com.anphat.supplier.ui.cart.CartActivity;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
-import com.anphat.supplier.utils.CommonUtils;
 import com.bumptech.glide.Glide;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
-import com.anphat.supplier.ui.base.BaseFragment;
 import com.anphat.supplier.ui.booking.BookingActivity;
 import com.anphat.supplier.ui.home.CommonFM;
 import com.anphat.supplier.ui.home.HomeContract;
@@ -37,66 +35,38 @@ import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 import com.anphat.supplier.utils.adapterimage.ViewImageActivity;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ChooseProductFragment extends BaseFragment implements HomeContract.View, DetailPrContract.View {
+public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProductBinding> implements HomeContract.View, DetailPrContract.View {
     HomePresenter presenterProduct;
     Integer ID;
     DetailProductPresenter presenterOne;
     ProductNew info;
-
-    TextView textDetail, textCountBuy, textName, textPrice, textDeception, textContent;
-    ImageView imageBack, imageCart, imageView, imageAdd, imageMinus;
-    Button btnAddCart, btnBuyNow;
     Boolean isBuyNow = false;
     DetailAdapter adapter;
-    RecyclerView rclMain;
-    EditText textTitle;
-    LinearLayout layoutOne, layoutTwo;
-    NestedScrollView nestedScrollView;
+    GiftAdapter adapterGift;
+    public Boolean isHome = false;
+    GiftInfo itemMain = null;
 
-    public ChooseProductFragment(Integer ID) {
+    Boolean isClick = false;
+    public ChooseProductFragment(Integer ID, boolean isFromHome) {
         this.ID = ID;
+        this.isHome = isFromHome;
     }
 
     @Override
-    protected int getLayoutID() {
-        return R.layout.activity_choose_product;
-    }
-
-    @Override
-    protected void initView(View view) {
-        layoutOne = bind(view, R.id.layoutOne);
-        layoutTwo = bind(view, R.id.layoutTwo);
-        imageCart = bind(view, R.id.imageCart);
-        textDetail = bind(view, R.id.textDetail);
-        textTitle = bind(view, R.id.textTitle);
-        imageBack = bind(view, R.id.imageBack);
-        imageView = bind(view, R.id.imageView);
-        rclMain = bind(view, R.id.rclMain);
-        imageAdd = bind(view, R.id.imageAdd);
-        imageMinus = bind(view, R.id.imageMinus);
-        btnAddCart = bind(view, R.id.btnAddCart);
-        btnBuyNow = bind(view, R.id.btnBuyNow);
-        nestedScrollView = bind(view, R.id.nestedScrollView);
-        textCountBuy = bind(view, R.id.textCountBuy);
-        textName = bind(view, R.id.textName);
-        textPrice = bind(view, R.id.textPrice);
-        textDeception = bind(view, R.id.textDeception);
-        textContent = bind(view, R.id.textContent);
-
+    protected void initView() {
+        binding.checkboxNoGift.setChecked(true);
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
-        rclMain.setAdapter(adapter);
-        rclMain.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.rclMain.setAdapter(adapter);
+        binding.rclMain.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        adapterGift = new GiftAdapter(getContext());
+        binding.rclGift.setAdapter(adapterGift);
 
         adapter.setAll(true);
-        imageView.setOnClickListener(v -> {
+        binding.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), ViewImageActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Bundle bundle = new Bundle();
@@ -105,36 +75,57 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
             startActivity(intent);
         });
 
-        imageBack.setOnClickListener(v -> {
-            Intent intentB = new Intent();
-            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-            intentB.putExtra("eventName", "kk");
-            getContext().sendBroadcast(intentB);
-            StartFragmentHome();
+        binding.layoutHeader.imageBack.setOnClickListener(v -> {
+            if (isHome) {
+                Intent intentB = new Intent();
+                intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+                intentB.putExtra("eventName", "kk");
+                getContext().sendBroadcast(intentB);
+            }
+
+            StartFragmentHome(isHome);
         });
 
         adapter.setClickListener((view1, position) -> {
             info = adapter.getItem(position);
+            if (info == null) return;
+            binding.layoutHeader.textTitle.setText(info.title);
             setView(info.title, info.price, info.description);
-            nestedScrollView.scrollTo(0, 0);
+            binding.nestedScrollView.scrollTo(0, 0);
         });
 
-        CommonUtils.ActionbarSearch(getContext(), textTitle, imageCart, imageBack, imageCart, text -> {
-            adapter.getFilter().filter(text);
-            if (text.length() == 0) {
-                initData();
-                showFooter(true, true);
-            } else {
-                showFooter(false, true);
+        binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getContext().startActivity(intent);
+        });
+
+        adapterGift.setOnItemClickListener((giftInfo, view, position) -> {
+            itemMain = giftInfo;
+            isClick = false;
+            binding.checkboxNoGift.setChecked(false);
+        });
+
+        binding.checkboxNoGift.setOnCheckedChangeListener((compoundButton, check) -> {
+            compoundButton.setChecked(check);
+            if (isClick){
+                binding.checkboxNoGift.setChecked(true);
             }
+            isClick = true;
+            adapterGift.undoCheck();
         });
 
     }
 
     private void showFooter(boolean isShow, boolean footer) {
-        layoutOne.setVisibility(isShow ? View.VISIBLE : View.GONE);
-        textDetail.setVisibility(isShow ? View.VISIBLE : View.GONE);
-        layoutTwo.setVisibility(footer ? View.VISIBLE : View.GONE);
+        binding.layoutOne.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        binding.textDetail.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        binding.layoutTwo.setVisibility(footer ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public ActivityChooseProductBinding getViewBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return ActivityChooseProductBinding.inflate(inflater, container,false);
     }
 
     @Override
@@ -143,6 +134,12 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
         presenterProduct = new HomePresenter(this);
         presenterOne.checkBooking();
         presenterOne.GetProduct(ID.toString());
+
+        if (PublicVariables.listBooking!=null){
+            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+        } else {
+            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -194,15 +191,31 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
     }
 
     @Override
+    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
+
+    }
+
+    @Override
+    public void onGetListProductPromotionError(String error) {
+
+    }
+
+    @Override
     public void onGetProductSuccess(ProductNew info) {
         this.info = info;
+        binding.layoutHeader.textTitle.setText(info.title);
         setView(info.title, info.price, info.description);
         if (info.getProducts() != null) {
             adapter.clear();
             adapter.addAll(info.getProducts());
+            PublicVariables.listKM = info.getProducts();
             showFooter(true, true);
         } else {
             showFooter(true, false);
+        }
+        if (info.getGifts()!=null){
+            adapterGift.clear();
+            adapterGift.addAll(info.getGifts());
         }
     }
 
@@ -222,39 +235,44 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
     }
 
     Integer count = 1;
+    String gg = "";
 
     @SuppressLint("NewApi")
     public void setView(String title, Double price, String description) {
-        textCountBuy.setText("1");
-        textName.setText(title);
-        textPrice.setText(AppUtils.formatNumber("NO").format(price));
-        textDeception.setText(Html.fromHtml(description));
-
-        String gg = info.content.replace("<li>\r\n\t<p>", "<li>").replace("</p>\r\n\t</li>", "</li>");
-
-        try {
-            Document doc = Jsoup.parse(gg);
-            Element inner = doc.getElementById("");
-        } catch (Exception e1) {
+        binding.textCountBuy.setText("1");
+        binding.textName.setText(title);
+        binding.textPrice.setText(AppUtils.formatNumber("NO").format(price));
+        if (description != null) {
+            binding.textDeception.setText(Html.fromHtml(description));
+        } else {
+            binding.textDeception.setVisibility(View.GONE);
         }
-        textContent.setText(Html.fromHtml(gg, FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE));
+
+        if (info.content != null) {
+            gg = info.content.replace("<li>\r\n\t<p>", "<li>").replace("</p>\r\n\t</li>", "</li>");
+            binding.textContent.setText(Html.fromHtml(gg, FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE));
+
+        } else {
+            binding.textContent.setVisibility(View.GONE);
+        }
+
         Log.d("CONTENTMAIN", info.content + "\n\n\n\n" + gg);
         count = 1;
         Log.d("CONTENT", gg);
         final Date date = new Date(System.currentTimeMillis());
-        imageAdd.setOnClickListener(view12 -> {
+        binding.imageAdd.setOnClickListener(view12 -> {
             count = count + 1;
-            textCountBuy.setText(count.toString());
+            binding.textCountBuy.setText(count.toString());
         });
-        imageMinus.setOnClickListener(view13 -> {
+        binding.imageMinus.setOnClickListener(view13 -> {
             if (count != 1) {
                 count = count - 1;
             }
-            textCountBuy.setText(count.toString());
+            binding.textCountBuy.setText(count.toString());
         });
-        btnAddCart.setVisibility(View.VISIBLE);
-        btnBuyNow.setVisibility(View.VISIBLE);
-        btnAddCart.setOnClickListener(view1 -> {
+        binding.btnAddCart.setVisibility(View.VISIBLE);
+        binding.btnBuyNow.setVisibility(View.VISIBLE);
+        binding.btnAddCart.setOnClickListener(view1 -> {
             isBuyNow = false;
             CartCondition condition = new CartCondition();
             condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
@@ -265,7 +283,7 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
             condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
             presenterProduct.InsertCart(condition);
         });
-        btnBuyNow.setOnClickListener(v -> {
+        binding.btnBuyNow.setOnClickListener(v -> {
             if (PublicVariables.itemBooking != null) {
                 showMessage(getString(R.string.error_dont_booking));
                 return;
@@ -285,13 +303,13 @@ public class ChooseProductFragment extends BaseFragment implements HomeContract.
         Glide.with(this)
                 .load(url)
                 .error(R.drawable.img_no_image)
-                .into(imageView);
+                .into(binding.imageView);
     }
 
-    private void StartFragmentHome() {
+    private void StartFragmentHome(boolean isHome) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .hide(this)
-                .show(CommonFM.fragment)
+                .show(isHome ? CommonFM.fragment : CommonFM.fragmentThree)
                 .addToBackStack(null)
                 .commit();
     }

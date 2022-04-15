@@ -76,26 +76,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         CartInfo item = listAllData.get(position);
         holder.textName.setText(item.getProductName());
-        holder.textCount.setText("Số lượng: "+item.getSoLuong());
-        holder.textMoney.setText("Tổng tiền: " +(item.getSoLuong() * item.getDonGia()));
+        holder.textCount.setText("Số lượng: " + item.getSoLuong());
+        holder.textMoney.setText("Tổng tiền: " + (item.getSoLuong() * item.getDonGia()));
         model.GetImageFromProductID(item.getProductID(), new IProductModel.IGetImageFromProductIDFinishListener() {
             @Override
             public void onSuccess(String imageBitmap) {
                 if (imageBitmap != null) {
                     Glide.with(mContext).asBitmap()
                             .load(AppUtils.formatStringToBitMap(imageBitmap))
-                            .apply(new RequestOptions().override(10, 10))
-                            .into(new CustomTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable
-                                        Transition<? super Bitmap> transition) {
-                                    holder.imageView.setImageBitmap(resource);
-                                }
-
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {
-                                }
-                            });
+                            .apply(new RequestOptions().override(300, 300))
+                            .into(holder.imageView);
                 } else {
                     holder.imageView.setImageResource(R.drawable.img_no_image);
                 }
