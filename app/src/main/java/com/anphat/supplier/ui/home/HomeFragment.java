@@ -13,27 +13,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.CommonData;
 import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.network.apiretrofit.ProductCondition;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.ui.base.BaseFragment;
-import com.anphat.supplier.ui.booking.BookingActivity;
+import com.anphat.supplier.ui.base.PageScrollListener;
 import com.anphat.supplier.ui.category.DetailCategoryFragment;
-import com.anphat.supplier.ui.home.branch.BranchContract;
 import com.anphat.supplier.ui.home.choose.FullCategoryActivity;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.detail.DetailTwoAdapter;
@@ -41,19 +38,17 @@ import com.anphat.supplier.ui.product.full.ChooseProductFragment;
 import com.anphat.supplier.ui.sms.newsfeed.ViewImageAds;
 import com.anphat.supplier.ui.viewmodel.ProductViewModel;
 import com.anphat.supplier.utils.AppConstants;
-import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 import com.anphat.supplier.utils.adapterimage.AutoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements BranchContract.View, HomeContract.View {
+public class HomeFragment extends BaseFragment {
     List<KhoInfo> listDataBranch = new ArrayList<>();
     CategoryMainAdapter adapterCategory;
     RecyclerView rclCategory, rclMain, rclAllProduct;
     DetailAdapter adapter;
-    HomePresenter presenterProduct;
     EditText inputSearch;
     ImageView imageDelete;
     AppPreference preference;
@@ -65,22 +60,16 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     final int SHOW = 1;
     DetailTwoAdapter adapterAllProduct;
 
-    public boolean isAll = false;
     ReceiverSearch searchMain;
     public BaseEventClick.OnClickListener listener;
     ProductViewModel viewModel;
-    private Integer pageMain = 1;
-
-    private Integer pageMainPromotion = 1;
-
+    private static final int PAGE_START = 0;
+    private static final int PAGE_RECORD = 20;
+    ProductCondition condition = new ProductCondition();
     private boolean isLoading = false;
     private boolean isLastPage = false;
     private int TOTAL_PAGES = 1;
-    private static final int PAGE_START = 0;
-    private static final int PAGE_RECORD = 20;
     private int currentPage = PAGE_START;
-    ProductCondition condition = new ProductCondition();
-
     public void setClick(BaseEventClick.OnClickListener listener) {
         this.listener = listener;
     }
@@ -99,8 +88,13 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         getContext().registerReceiver(searchMain, intentFilter);
 
         preference = new AppPreference(getActivity());
+        /**
+         * layout category
+         */
         rclCategory = bind(view, R.id.rclCategory);
-
+        rclCategory.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        adapterCategory = new CategoryMainAdapter();
+        rclCategory.setAdapter(adapterCategory);
 
         textMoreAllProduct = bind(view, R.id.textMoreAllProduct);
 
@@ -112,9 +106,8 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         rclAllProduct.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rclAllProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                currentPage += 1;
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
                 loadNextPage();
             }
         });
@@ -123,43 +116,29 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         rclAllProduct.setAdapter(adapterAllProduct);
 
         imageDelete = bind(view, R.id.imageDelete);
-        rclImage = bind(view, R.id.rclImage);
+
         layoutConfig = bind(view, R.id.layoutConfig);
         inputSearch = bind(view, R.id.inputSearch);
-        adapterCategory = new CategoryMainAdapter();
-        rclCategory.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        rclCategory.setAdapter(adapterCategory);
-        adapterCategory.setOnClickListener((view1, position) -> {
-            CategoryNew info = adapterCategory.getItem(position);
-            Intent intentB = new Intent();
-            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-            intentB.putExtra("eventName", "hh");
-            getContext().sendBroadcast(intentB);
-            StartDetailCategory(info);
-        });
+        /**
+         * layout ads
+         */
+        rclImage = bind(view, R.id.rclImage);
+        adsAdapter = new ViewImageAds(getContext(), new ArrayList<>());
+        rclImage.setAdapter(adsAdapter);
         /**
          * layout promotion
          */
         rclMain = bind(view, R.id.rclMain);
-
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
         adapter.setAll(false);
         rclMain.setAdapter(adapter);
 
-        Search();
         layoutConfig.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), FullCategoryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SHOW);
         });
 
-        adapter.setClickListener((view12, position) -> {
-            StartDetailFragment((int) adapter.getItem(position).id);
-            Intent intentB = new Intent();
-            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-            intentB.putExtra("eventName", "hh");
-            getContext().sendBroadcast(intentB);
-        });
         textMore.setOnClickListener(v -> {
             if (AppPreference.getProductPromotion() == null) return;
             StartFullProduct(AppPreference.getProductPromotion());
@@ -177,7 +156,13 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
             getContext().sendBroadcast(intentB);
         });
 
-        adapterAllProduct.setClickListener((view13, position) -> {
+        Search();
+
+        setAdapter();
+    }
+
+    public void setAdapter(){
+        adapter.setClickListener((view12, position) -> {
             StartDetailFragment((int) adapter.getItem(position).id);
             Intent intentB = new Intent();
             intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
@@ -185,8 +170,22 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
             getContext().sendBroadcast(intentB);
         });
 
-        adsAdapter = new ViewImageAds(getContext(), new ArrayList<>());
-        rclImage.setAdapter(adsAdapter);
+        adapterCategory.setOnClickListener((view1, position) -> {
+            CategoryNew info = adapterCategory.getItem(position);
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventName", "hh");
+            getContext().sendBroadcast(intentB);
+            StartDetailCategory(info);
+        });
+
+        adapterAllProduct.setClickListener((view13, position) -> {
+            StartDetailFragment((int) adapter.getItem(position).id);
+            Intent intentB = new Intent();
+            intentB.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+            intentB.putExtra("eventName", "hh");
+            getContext().sendBroadcast(intentB);
+        });
     }
 
     public void setSearchMain(String text) {
@@ -226,27 +225,15 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
         viewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         condition.setBegin(PAGE_START);
         condition.setEnd(PAGE_RECORD);
+        viewModel.getListAllCategory();
         viewModel.getListAllProduct(condition.getBegin(), condition.getEnd());
         viewModel.getBanner();
         viewModel.getListProductPromotion();
-        presenterProduct = new HomePresenter(this);
 
-        List<CategoryNew> list = new ArrayList<>();
-        for (CategoryNew item : AppPreference.getCategory()) {
-            if (item.parent_id == 0) {
-                list.add(item);
-            }
-        }
-
-        if (list.size() == 0) {
-            return;
-        }
-
-        adapterCategory.clear();
-        adapterCategory.addAll(list);
     }
 
     public void loadNextPage() {
+        isLastPage = false;
         condition.setBegin(condition.getEnd());
         condition.setEnd(condition.getEnd() + PAGE_RECORD);
         viewModel.getListAllProduct(condition.getBegin(), condition.getEnd());
@@ -255,13 +242,35 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     protected void onObserver() {
         super.onObserver();
+        viewModel.mItemListCategory.observe(this, result -> {
+            if (result!=null){
+                List<CategoryNew> list = new ArrayList<>();
+                for (CategoryNew item : result.data) {
+                    if (item.parent_id == 0) {
+                        list.add(item);
+                    }
+                }
+
+                if (list.size() == 0) {
+                    return;
+                }
+
+                adapterCategory.clear();
+                adapterCategory.addAll(list);
+            }
+        });
         viewModel.getDataProductSuccess().observe(this, productNews -> {
             if (productNews != null) {
                 if (condition.getBegin() == 0) {
                     adapterAllProduct.clear();
                 }
                 adapterAllProduct.addAll(productNews);
+                double phanDu = Double.parseDouble(String.valueOf(1000)) % PAGE_RECORD;
+                int phanNguyen = (Integer.parseInt(String.valueOf(1000)) / PAGE_RECORD);
+                TOTAL_PAGES = (phanDu > 0) ? phanNguyen + 1 : phanNguyen;
+                if (currentPage < TOTAL_PAGES){
 
+                } else isLastPage = true;
             }
             showProgressDialog(false);
         });
@@ -288,83 +297,6 @@ public class HomeFragment extends BaseFragment implements BranchContract.View, H
     @Override
     public void onClick(View v) {
 
-    }
-
-    @Override
-    public void onGetListBranchSuccess(List<KhoInfo> list) {
-        PublicVariables.listKho = list;
-        listDataBranch = list;
-    }
-
-    @Override
-    public void onGetListBranchError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetListProductSuccess(List<ProductNew> list) {
-        PublicVariables.listKM = list;
-        AppPreference.saveProduct(list);
-        AppPreference.saveAllProduct(list);
-        CommonData.data = list;
-        adapterAllProduct.clear();
-        adapterAllProduct.addAll(list);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListProductError(String error) {
-        showMessage(error);
-        AppPreference.clearProductPromotion();
-        showProgressDialog(false);
-
-    }
-
-    @Override
-    public void onInsertCartSuccess(CartCondition info) {
-        Intent intent = new Intent();
-        intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-        intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
-        intent.putExtra("ItemGioHang", info);
-        getActivity().sendBroadcast(intent);
-        if (isBuyNow) {
-            Intent intent1 = new Intent(getContext(), BookingActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ID", info.getID().toString());
-            intent1.putExtras(bundle);
-            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent1);
-        } else {
-            Toast.makeText(getContext(), R.string.add_cart_success, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetListBannerSuccess(List<BannerInfo> list) {
-        addAds(list);
-    }
-
-    @Override
-    public void onGetListBannerError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
-        AppPreference.saveProductPromotion(list);
-        CommonData.dataPromotions = list;
-        adapter.clear();
-        adapter.addAll(list);
-    }
-
-    @Override
-    public void onGetListProductPromotionError(String error) {
-        showMessage(error);
     }
 
     private void StartDetailFragment(Integer ID) {

@@ -48,8 +48,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/Black" />
+                    android:layout_height="1dp"
+                    android:background="@color/colorLine" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="wrap_content"
@@ -68,8 +68,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/Black" />
+                    android:layout_height="1dp"
+                    android:background="@color/colorLine" />
 
             </LinearLayout>
 

@@ -5,7 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 
 import com.anphat.supplier.data.entities.BannerInfo;
+import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
+import com.anphat.supplier.data.entities.condition.CartCondition;
+import com.anphat.supplier.data.network.api.ApiResponseSbke;
 import com.anphat.supplier.data.network.apiretrofit.API;
 import com.anphat.supplier.data.network.apiretrofit.ApiResponse;
 import com.anphat.supplier.data.network.apiretrofit.ResponseData;
@@ -27,11 +30,13 @@ public class ProductViewModel extends BaseViewModel {
         super(application);
     }
 
-    private final SingleLiveDate<List<ProductNew>> mItemProductFull = new SingleLiveDate<>();
-    private final SingleLiveDate<List<ProductNew>> mItemProductPromotion = new SingleLiveDate<>();
-    private final SingleLiveDate<List<BannerInfo>> mItemBanner = new SingleLiveDate<>();
-    private final SingleLiveDate<List<BannerInfo>> mItemSlider = new SingleLiveDate<>();
-    private final SingleLiveDate<ProductNew> mItemGetProduct = new SingleLiveDate<>();
+    public final SingleLiveDate<List<ProductNew>> mItemProductFull = new SingleLiveDate<>();
+    public final SingleLiveDate<List<ProductNew>> mItemProductPromotion = new SingleLiveDate<>();
+    public final SingleLiveDate<List<BannerInfo>> mItemBanner = new SingleLiveDate<>();
+    public final SingleLiveDate<List<BannerInfo>> mItemSlider = new SingleLiveDate<>();
+    public final SingleLiveDate<ProductNew> mItemGetProduct = new SingleLiveDate<>();
+    public final SingleLiveDate<ApiResponseSbke<CartCondition>> mItemInsertCart = new SingleLiveDate<>();
+    public final SingleLiveDate<ApiResponse<CategoryNew>> mItemListCategory = new SingleLiveDate<>();
 
     public SingleLiveDate<ProductNew> getDataGetProduct() {
         return mItemGetProduct;
@@ -173,6 +178,58 @@ public class ProductViewModel extends BaseViewModel {
                     @Override
                     public void onError(Throwable e) {
                         mItemGetProduct.setValue(null);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void insertCart(CartCondition condition) {
+        server.insertCart(condition).subscribeOn(new IoScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ApiResponseSbke<CartCondition>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ApiResponseSbke<CartCondition> value) {
+                        mItemInsertCart.setValue(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mItemInsertCart.setValue(getError(e.getMessage()));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void getListAllCategory(){
+        server.GetCategoryNewAP().subscribeOn(new IoScheduler())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ApiResponse<CategoryNew>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ApiResponse<CategoryNew> value) {
+                        mItemListCategory.setValue(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mItemListCategory.setValue(null);
                     }
 
                     @Override

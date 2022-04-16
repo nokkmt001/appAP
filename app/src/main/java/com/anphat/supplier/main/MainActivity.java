@@ -322,7 +322,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
     }
 
     public void onLoadCartListener() {
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+//        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.GetListAllCart();
     }
 

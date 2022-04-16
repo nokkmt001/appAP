@@ -26,6 +26,7 @@ public class FCM implements IFCM{
         params.put("HeDieuHanh", fcmMobileInfo.getHeDieuHanh());
         params.put("Token", fcmMobileInfo.getToken());
         params.put("SoDienThoai", fcmMobileInfo.getSoDienThoai());
+        params.put("NguoiDung", fcmMobileInfo.getNguoiDung());
         service.DownloadJsonPOST(new VolleyCallback() {
             @Override
             public void onSuccess(String response) {

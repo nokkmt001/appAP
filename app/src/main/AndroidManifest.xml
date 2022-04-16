@@ -131,9 +131,6 @@
             android:name=".ui.product.full.ChooseProductActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.home.DetailCategoryActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.notification.NotificationActivity"
             android:screenOrientation="portrait" />
 

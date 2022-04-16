@@ -7,23 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.HistoryBooking;
-import com.anphat.supplier.data.entities.order.BookingInfo;
-import com.anphat.supplier.data.network.booking.BookingModel;
-import com.anphat.supplier.data.network.booking.IBookingModel;
 import com.anphat.supplier.databinding.FragmentHistoryBinding;
 import com.anphat.supplier.ui.base.BaseMainFragment;
 import com.anphat.supplier.ui.pay.history.vote.VoteEmployeeActivity;
+import com.anphat.supplier.ui.viewmodel.HistoryViewModel;
 import com.anphat.supplier.utils.PublicVariables;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> implements HistoryBookingContract.View {
-    HistoryBookingPresenter presenter;
+public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
     HistoryBookingAdapter adapter;
-    BookingModel model;
+    HistoryViewModel viewModel;
 
     @Override
     public FragmentHistoryBinding getViewBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +30,7 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> im
 
     @Override
     protected void initView() {
+        viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         adapter = new HistoryBookingAdapter(new ArrayList<>(), getContext());
         binding.rcl.setAdapter(adapter);
         clickAdapter();
@@ -39,29 +38,13 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> im
     }
 
     @SuppressLint("NonConstantResourceId")
-    private void clickAdapter(){
+    private void clickAdapter() {
         adapter.setOnClick((view1, position) -> {
             HistoryBooking info = adapter.getItem(position);
             switch (view1.getId()) {
                 case R.id.buttonVote:
                     showProgressDialog(true);
-                    model.GetBooking(info.SoPhieuVietTay, new IBookingModel.IGetBookingFinish() {
-                        @Override
-                        public void onSuccess(BookingInfo info) {
-                            showProgressDialog(false);
-                            if (info.getMaTrangThai().equals("HOANTHANH")) {
-                                PublicVariables.infoBooking = info;
-                                startVote();
-                            }else {
-                                showMessage(getString(R.string.error_booking));
-                            }
-                        }
-                        @Override
-                        public void onError(String error) {
-                            showProgressDialog(false);
-                            showMessage(error);
-                        }
-                    });
+                    viewModel.GetDetailHistory(info.SoPhieuVietTay);
                     break;
                 case R.id.buttonBooking:
 //                    showProgressDialog(true);
@@ -93,30 +76,43 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> im
 
     @Override
     protected void initData() {
-        model = new BookingModel();
-        presenter = new HistoryBookingPresenter(this);
-        presenter.GetListHistoryBooking();
+        viewModel.getHistoryBooking();
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.ItemList.observe(this, result -> {
+            if (result!=null){
+                if (result.size() == 0) {
+                    checkResult(true);
+                } else {
+                    adapter.clear();
+                    adapter.addAll(result);
+                }
+                checkResult(false);
+            } else {
+                checkResult(true);
+            }
+        });
+
+        viewModel.ItemDetail.observe(this, item -> {
+            showProgressDialog(false);
+
+            if (item!=null){
+                if (item.getMaTrangThai().equals("HOANTHANH")) {
+                    PublicVariables.infoBooking = item;
+                    startVote();
+                } else {
+                    showMessage(getString(R.string.error_booking));
+                }
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
-    }
 
-    @Override
-    public void onGetListHistoryBookingSuccess(List<HistoryBooking> list) {
-        if (list.size() == 0) {
-            checkResult(true);
-        } else {
-            adapter.clear();
-            adapter.addAll(list);
-        }
-        checkResult(false);
-    }
-
-    @Override
-    public void onGetListHistoryBookingError(String error) {
-        showMessage(error);
-        checkResult(true);
     }
 
     private void checkResult(Boolean isShow) {

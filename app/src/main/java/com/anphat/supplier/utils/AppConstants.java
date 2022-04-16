@@ -1,7 +1,5 @@
 package com.anphat.supplier.utils;
 
-import retrofit2.http.POST;
-
 public class AppConstants {
     /**
      * API
@@ -58,7 +56,7 @@ public class AppConstants {
     public static final String URL_InsertPresenter = "api/NguoiGioiThieuMobile/InsertNguoiGioiThieuMobile?nguoiDungMobileID={0}&soDienThoaiGioiThieu={1}";
     public static final String URL_GetListPresenter = "api/NguoiGioiThieuMobile/GetListNguoiDaGioiThieu?nguoiDungMobileID={0}";
     //FCM
-    public static String URL_InsertFCMMobile = "api/FCM/InsertFCMMobile";
+    public static String URL_InsertFCMMobile = "api/FCM/InsertFCMMobileAP";
     public static String URL_GetFCMFromTokenDevice = "api/FCM/GetFCMMobileByToken?Token={0}";
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMddHHmmss";

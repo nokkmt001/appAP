@@ -31,7 +31,6 @@ import com.anphat.supplier.utils.aes.AESUtils;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View, CategoryContract.View, FcmContract.View {
-    Thread thread;
     SplashPresenter presenter;
     AppPreference appPreference;
     AlertDialog alertDialog;
@@ -102,14 +101,14 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
                         intent.putExtras(bundle);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        finish();
+                        finishAffinity();
                     }
 
                 } else {
                     Intent intent = new Intent(SplashActivity.this, CheckPhoneActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
-                    finish();
+                    finishAffinity();
                 }
 
             } catch (Exception ignored) {
@@ -235,6 +234,7 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         fcmMobileInfo.HeDieuHanh = "ANDROID";
         fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
         fcmMobileInfo.Token = tokenMain;
+        fcmMobileInfo.NguoiDung = info.getHoTen();
         presenterFCM.insertFCM(fcmMobileInfo);
     }
 }

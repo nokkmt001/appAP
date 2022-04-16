@@ -158,7 +158,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
+        finishAffinity();
     }
 
     @Override
@@ -188,6 +188,7 @@ public class CheckLoginByIDPassActivity extends BaseActivity implements LoginIDP
         fcmMobileInfo.HeDieuHanh = "ANDROID";
         fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
         fcmMobileInfo.Token = PublicVariables.token;
+        fcmMobileInfo.NguoiDung = info.getHoTen();
         presenterFcm.insertFCM(fcmMobileInfo);
     }
 }
