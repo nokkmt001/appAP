@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.network.product.ProductModel;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
@@ -35,7 +34,6 @@ public class DetailTwoAdapter extends RecyclerView.Adapter<DetailTwoAdapter.MyVi
     BaseEventClick.OnClickListener clickListener;
     String category;
     String biMap = null;
-    ProductModel model;
     int select_position = -1;
 
     public boolean isAll = false;
@@ -52,7 +50,6 @@ public class DetailTwoAdapter extends RecyclerView.Adapter<DetailTwoAdapter.MyVi
         this.listAllData = list;
         this.mContext = context;
         this.category = category;
-        this.model = new ProductModel();
     }
 
     public void setClickListener(BaseEventClick.OnClickListener listener) {

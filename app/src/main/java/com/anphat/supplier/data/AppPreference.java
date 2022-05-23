@@ -110,7 +110,7 @@ public class AppPreference {
     /**
      * Save
      **/
-    public void saveCategory(List<CategoryNew> info) {
+    public static void saveCategory(List<CategoryNew> info) {
         if (info == null) {
             clearCategory();
         } else {
@@ -174,22 +174,18 @@ public class AppPreference {
     /**
      * Clear
      **/
-
     public static void clearCategory() {
         Hawk.delete(PREF_CATEGORY_NEW);
     }
-
     public static void clearUser() {
         Hawk.delete(PREF_NEW_USER);
     }
-
     public static void clearAllProduct(){
         Hawk.delete(PREF_ALL_PRODUCT);
     }
     public static void clearProductPromotion(){
         Hawk.delete(PREF_PRODUCT_PROMOTION);
     }
-
     public static void clearProductFull(){
         Hawk.delete(PREF_PRODUCT_FULL);
     }

@@ -75,11 +75,14 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
 
     public abstract T getViewBinding();
 
-    protected void initView() {}
+    protected void initView() {
+    }
 
-    protected void initData() {}
+    protected void initData() {
+    }
 
-    protected void onObserver(){}
+    protected void onObserver() {
+    }
 
     public <N extends View> N bind(int id) {
         return findViewById(id);
@@ -98,6 +101,12 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
         if (btnNeutral != null) db.setNeutralButton(btnNeutral, ocListener);
 //        db.setIcon(android.R.drawable.ic_dialog_alert);
         db.show();
+    }
+
+    protected void startActivityApp(Class activity) {
+        Intent intent = new Intent(this, activity.getClass());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     protected void hideKeyboard() {

@@ -77,7 +77,7 @@ public class ImageUtils {
 //                Log.e(MainActivity.GALLERY_DIRECTORY_NAME, "Oops! Failed create "
 //                        + MainActivity.GALLERY_DIRECTORY_NAME + " directory");
                 //return null;
-                mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "BMTIHAGAS");
+                mediaStorageDir = new File(Environment.getExternalStorageDirectory(), "ANPHAT");
                 if (!mediaStorageDir.exists()) {
                     if (!mediaStorageDir.mkdirs()) {
                         return null;

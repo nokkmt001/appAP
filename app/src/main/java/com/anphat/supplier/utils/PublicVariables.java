@@ -36,6 +36,8 @@ public class PublicVariables {
 
     public static List<ProductNew> listKM = new ArrayList<>();
 
+    public static List<ProductNew> listAllProducts = new ArrayList<>();
+
     public static List<CategoryInfo> listShowCategory = new ArrayList<>();
 
     public static List<CategoryNew> listAllCategoryMain = AppPreference.getCategory();

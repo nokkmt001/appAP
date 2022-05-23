@@ -2,42 +2,32 @@ package com.anphat.supplier.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.entities.BannerInfo;
-import com.anphat.supplier.data.entities.CategoryInfo;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.databinding.ActivityDetailCategoryBinding;
 import com.anphat.supplier.ui.base.BaseMainFragment;
+import com.anphat.supplier.ui.base.SearchMain;
 import com.anphat.supplier.ui.cart.CartActivity;
 import com.anphat.supplier.ui.category.DetailCAdapter;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.full.ChooseProductActivity;
-import com.anphat.supplier.utils.AppConstants;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
-public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding> implements HomeContract.View {
+public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding> {
     DetailAdapter adapter;
-    HomePresenter presenterProduct;
     CategoryNew category;
     List<ProductNew> listProduct;
     DetailCAdapter adapterCategory;
@@ -83,27 +73,13 @@ public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding
     }
 
     public void Search() {
-        binding.layoutHeader.textTitle.addTextChangedListener(new TextWatcher() {
+        binding.layoutHeader.textTitle.addTextChangedListener(new SearchMain() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (timer != null) timer.cancel();
-            }
-
-            @Override
-            public void afterTextChanged(final Editable editable) {
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        getActivity().runOnUiThread(() -> adapter.getFilter().filter(editable));
-                    }
-                }, AppConstants.DELAY_FIND_DATA_SEARCH);
+            protected void onAfterChanged(String text) {
+                new Handler().postDelayed(() -> adapter.getFilter().filter(text),1200);
             }
         });
+
         binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view -> {
             Intent intent = new Intent(getContext(), CartActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -118,7 +94,6 @@ public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding
 
     @Override
     protected void initData() {
-        presenterProduct = new HomePresenter(this);
         PublicVariables.listKM = listData;
 
         adapter.clear();
@@ -162,9 +137,8 @@ public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding
 
     }
 
-    @Override
-    public void onGetListProductSuccess(List<ProductNew> list) {
-        DataFilterProduct.list = list;
+
+      /*  DataFilterProduct.list = list;
         showProgressDialog(false);
         adapter.clear();
         List<ProductNew> listAll;
@@ -174,46 +148,7 @@ public class ShowFragment extends BaseMainFragment<ActivityDetailCategoryBinding
             listAll = DataFilterProduct.getList(adapterCategory.getItem(0).id);
         }
         PublicVariables.listKM = listAll;
-        adapter.addAll(listAll);
-
-
-    }
-
-    @Override
-    public void onGetListProductError(String error) {
-        showProgressDialog(false);
-        showMessage(error);
-    }
-
-    @Override
-    public void onInsertCartSuccess(CartCondition info) {
-
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-
-    }
-
-    @Override
-    public void onGetListBannerSuccess(List<BannerInfo> list) {
-
-    }
-
-    @Override
-    public void onGetListBannerError(String error) {
-
-    }
-
-    @Override
-    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
-
-    }
-
-    @Override
-    public void onGetListProductPromotionError(String error) {
-
-    }
+        adapter.addAll(listAll);*/
 
     private void StartFragmentHome() {
         getActivity().getSupportFragmentManager().beginTransaction()

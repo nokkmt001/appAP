@@ -26,6 +26,8 @@
     <!--text-->
     <dimen name="headline_textsize">20sp</dimen>
     <dimen name="title_textsize">14sp</dimen>
+    <dimen name="title_textsize_notification">14sp</dimen>
+
     <dimen name="subtitle_textsize">12sp</dimen>
     <!--spinner-->
     <dimen name="spinner_height">40dp</dimen>

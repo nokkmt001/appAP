@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -16,7 +17,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitTest {
-    static OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addInterceptor(chain -> {
+    static OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(chain -> {
         Request originalRequest = chain.request();
         Request.Builder builder = originalRequest.newBuilder();
         Request newRequest = builder.build();

@@ -6,35 +6,36 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
+import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.gson.Gson;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
 import com.anphat.supplier.databinding.ActivityCheckPhoneBinding;
-import com.anphat.supplier.ui.base.BaseActivity;
 import com.anphat.supplier.ui.login.inputotp.InputOtpActivity;
 import com.anphat.supplier.ui.login.register.CreateNewCustomerActivity;
 import com.anphat.supplier.utils.AppUtils;
 
 import java.util.Objects;
 
-public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContract.View {
-    ActivityCheckPhoneBinding binding;
-    CheckPhonePresenter presenter;
+public class CheckPhoneActivity extends BaseMVVMActivity<ActivityCheckPhoneBinding, LoginViewModel> {
     NewCustomer info;
     AppPreference preference;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_check_phone;
+    protected Class<LoginViewModel> getClassVM() {
+        return LoginViewModel.class;
+    }
+
+    @Override
+    public ActivityCheckPhoneBinding getViewBinding() {
+        return ActivityCheckPhoneBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         preference = new AppPreference(this);
-        binding = ActivityCheckPhoneBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
         AppUtils.enableButton(false, binding.buttonLogin, this);
         binding.inputNumberPhone.addTextChangedListener(new TextWatcher() {
             @Override
@@ -54,8 +55,7 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
         });
         binding.layoutHeader.imageBack.setVisibility(View.GONE);
         binding.buttonLogin.setOnClickListener(view1 -> {
-            presenter = new CheckPhonePresenter(CheckPhoneActivity.this);
-            presenter.CheckPhoneNumber(Objects.requireNonNull(binding.inputNumberPhone.getText()).toString());
+            viewModel.CheckPhone(Objects.requireNonNull(binding.inputNumberPhone.getText()).toString());
             showProgressDialog(true);
         });
         binding.textCreateNew.setOnClickListener(view12 -> {
@@ -78,28 +78,36 @@ public class CheckPhoneActivity extends BaseActivity implements CheckPhoneContra
     }
 
     @Override
-    public void onCheckPhoneNumberSuccess(NewCustomer info) {
-        Gson gson = new Gson();
-        String json = gson.toJson(info);
-        preference.setUser(json);
-        showProgressDialog(false);
-        Intent intent = new Intent(this, InputOtpActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Object", info);
-        intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        AppUtils.createNotification(this, info.getMaPIN().toString());
+    protected void onObserver() {
+        super.onObserver();
+
+        viewModel.mItemGetPhone.observe(this,info -> {
+            if (info.Status==0){
+                this.info = info.Data;
+                Gson gson = new Gson();
+                String json = gson.toJson(this.info);
+                preference.setUser(json);
+                Intent intent = new Intent(this, InputOtpActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Object", this.info);
+                bundle.putString("FromCreate","checkPhone");
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                showToast(this.info.getMaPIN().toString());
+                AppUtils.createNotification(this, this.info.getMaPIN().toString());
+            } else {
+                Intent intent = new Intent(this, CreateNewCustomerActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("Phone", binding.inputNumberPhone.getText().toString());
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+
+            showProgressDialog(false);
+            finish();
+        });
     }
 
-    @Override
-    public void onCheckPhoneNumberError(String error) {
-        showProgressDialog(false);
-        Intent intent = new Intent(this, CreateNewCustomerActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("Phone", binding.inputNumberPhone.getText().toString());
-        intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
 }

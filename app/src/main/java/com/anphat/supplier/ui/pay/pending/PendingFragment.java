@@ -15,26 +15,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
-import com.anphat.supplier.data.entities.HistoryBooking;
 import com.anphat.supplier.data.entities.condition.CancelOrderCondition;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.ChiTietDonInfo;
 import com.anphat.supplier.ui.base.BaseFragment;
 import com.anphat.supplier.ui.booking.ProductAfterAdapter;
-import com.anphat.supplier.ui.pay.history.HistoryBookingContract;
-import com.anphat.supplier.ui.pay.history.HistoryBookingPresenter;
+import com.anphat.supplier.viewmodel.PendingViewModel;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
-import java.util.List;
-
-public class PendingFragment extends BaseFragment implements HistoryBookingContract.View, CancelBookingContract.View {
-    CancelBookingPresenter presenterCancel;
-    HistoryBookingPresenter presenterHistory;
+public class PendingFragment extends BaseFragment {
     ProductAfterAdapter adapter;
     RecyclerView rcl;
     TextView textAddress, textNameProduct, textEmployee, textNoBooking, textTotalPrice;
@@ -46,6 +41,7 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
     BookingInfo itemMain = null;
     TestReceiver testReceiver;
     LinearLayout layoutTwo;
+    PendingViewModel viewModel;
 
     @Override
     protected int getLayoutID() {
@@ -54,20 +50,19 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
 
     @Override
     protected void initView(View view) {
+        viewModel = new ViewModelProvider(this).get(PendingViewModel.class);
         testReceiver = new TestReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TestConstants.ACTION_MAIN_PENDING);
         getContext().registerReceiver(testReceiver, intentFilter);
 
         showProgressDialog(true);
-        presenterCancel = new CancelBookingPresenter(this);
-        presenterHistory = new HistoryBookingPresenter(this);
         adapter = new ProductAfterAdapter(getActivity());
         rcl = bind(view, R.id.rcl);
         rcl.setAdapter(adapter);
         viewTwo = bind(view, R.id.viewTwo);
         layoutTwo = bind(view, R.id.layoutTwo);
-        textTotalPrice = bind(view,R.id.textTotalPrice);
+        textTotalPrice = bind(view, R.id.textTotalPrice);
         textNoBooking = bind(view, R.id.textNoBooking);
         textEmployee = bind(view, R.id.textEmployee);
         textNameProduct = bind(view, R.id.textNameProduct);
@@ -104,7 +99,8 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
                         condition.setLyDoHuy(gg);
                         condition.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
                         condition.setSoDonHang(itemMain.getSoCt());
-                        presenterCancel.CancelBooking(condition);
+                        showProgressDialog(true);
+                        viewModel.CancelBooking(condition);
                         preference.setBooking(null);
                         dialog.cancel();
                     })
@@ -117,135 +113,101 @@ public class PendingFragment extends BaseFragment implements HistoryBookingContr
     @Override
     protected void initData() {
         preference = new AppPreference(getContext());
-        presenterCancel.checkBooking();
+        viewModel.checkBooking();
         showProgressDialog(false);
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemCheckBooking.observe(this, info -> {
+            adapter.clear();
+            adapter.addAll(info.getListChiTietDonHang());
+            Integer gg = 0;
+            if (info.getListChiTietDonHang() != null) {
+                for (ChiTietDonInfo item : info.getListChiTietDonHang()) {
+                    gg += item.Thanh_Tien;
+                }
+            }
+            textTotalPrice.setText(gg.toString());
+
+            String name = "";
+            itemMain = info;
+            textEmployee.setText(info.TenNguoiGiao == null ? "" : info.TenNguoiGiao);
+            switch (info.getMaTrangThai()) {
+                case "CHUAGIAO":
+                case "CHOXACNHAN":
+                    status_book.setBackgroundResource(R.drawable.shape_status_completed);
+                    viewBooking.setBackgroundResource(R.color.colorLine);
+                    viewStart.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewPending.setBackgroundResource(R.color.colorLine);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewFinish.setBackgroundResource(R.color.colorLine);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
+                    buttonCancel.setVisibility(View.VISIBLE);
+                    break;
+                case "DADAT":
+                    status_book.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewBooking.setBackgroundResource(R.color.Blue);
+                    viewStart.setBackgroundResource(R.drawable.shape_status_completed);
+                    viewPending.setBackgroundResource(R.color.colorLine);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewFinish.setBackgroundResource(R.color.colorLine);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
+                    buttonCancel.setVisibility(View.VISIBLE);
+                    break;
+                case "DANGGIAOHANG":
+                    status_book.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewBooking.setBackgroundResource(R.color.colorLine);
+                    viewPending.setBackgroundResource(R.color.Blue);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_completed);
+                    viewFinish.setBackgroundResource(R.color.colorLine);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
+                    buttonCancel.setVisibility(View.GONE);
+                    break;
+                case "HOANTHANH":
+                    status_book.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewBooking.setBackgroundResource(R.color.colorLine);
+                    viewPending.setBackgroundResource(R.color.colorLine);
+                    viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
+                    viewFinish.setBackgroundResource(R.color.Blue);
+                    viewEnd.setBackgroundResource(R.drawable.shape_status_completed);
+                    buttonCancel.setVisibility(View.GONE);
+                    break;
+                case "HUY":
+                    checkResult(true);
+                    break;
+                default:
+                    break;
+            }
+            textAddress.setText(info.getDiachigiaohang());
+
+            if (info.getListChiTietDonHang().size() > 0) {
+                for (ChiTietDonInfo itemI : info.getListChiTietDonHang()) {
+                    name += " " + itemI.getProduct_Name() + " X " + itemI.getSL() + " ,";
+                }
+            }
+            if (name.length() > 0) {
+                textNameProduct.setText(name.substring(0, name.length() - 1));
+            }
+
+            if (textNameProduct.getText().length() == 0) {
+                viewTwo.setVisibility(View.GONE);
+                layoutTwo.setVisibility(View.GONE);
+            }
+
+            showProgressDialog(false);
+        });
+
+        viewModel.mItemCheckCancel.observe(this, aBoolean -> {
+            showProgressDialog(false);
+            Toast.makeText(getContext(), "Hủy đơn thành công", Toast.LENGTH_SHORT).show();
+            initData();
+        });
     }
 
     @Override
     public void onClick(View v) {
-
-    }
-
-    @Override
-    public void GetBookingSuccess(BookingInfo info) {
-        adapter.clear();
-        adapter.addAll(info.getListChiTietDonHang());
-        Integer gg = 0;
-        if (info.getListChiTietDonHang() != null) {
-            for (ChiTietDonInfo item : info.getListChiTietDonHang()) {
-                gg += item.Thanh_Tien;
-            }
-        }
-        textTotalPrice.setText(gg.toString());
-
-        String name = "";
-        itemMain = info;
-        textEmployee.setText(info.TenNguoiGiao == null ? "" : info.TenNguoiGiao);
-        switch (info.getMaTrangThai()) {
-            case "CHUAGIAO":
-            case "CHOXACNHAN":
-                status_book.setBackgroundResource(R.drawable.shape_status_completed);
-                viewBooking.setBackgroundResource(R.color.colorLine);
-                viewStart.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewPending.setBackgroundResource(R.color.colorLine);
-                viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewFinish.setBackgroundResource(R.color.colorLine);
-                viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
-                buttonCancel.setVisibility(View.VISIBLE);
-                break;
-            case "DADAT":
-                status_book.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewBooking.setBackgroundResource(R.color.Blue);
-                viewStart.setBackgroundResource(R.drawable.shape_status_completed);
-                viewPending.setBackgroundResource(R.color.colorLine);
-                viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewFinish.setBackgroundResource(R.color.colorLine);
-                viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
-                buttonCancel.setVisibility(View.VISIBLE);
-                break;
-            case "DANGGIAOHANG":
-                status_book.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewBooking.setBackgroundResource(R.color.colorLine);
-                viewPending.setBackgroundResource(R.color.Blue);
-                viewProgress.setBackgroundResource(R.drawable.shape_status_completed);
-                viewFinish.setBackgroundResource(R.color.colorLine);
-                viewEnd.setBackgroundResource(R.drawable.shape_status_remaining);
-                buttonCancel.setVisibility(View.GONE);
-                break;
-            case "HOANTHANH":
-                status_book.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewBooking.setBackgroundResource(R.color.colorLine);
-                viewPending.setBackgroundResource(R.color.colorLine);
-                viewProgress.setBackgroundResource(R.drawable.shape_status_remaining);
-                viewFinish.setBackgroundResource(R.color.Blue);
-                viewEnd.setBackgroundResource(R.drawable.shape_status_completed);
-                buttonCancel.setVisibility(View.GONE);
-                break;
-            default:
-                break;
-        }
-        textAddress.setText(info.getDiachigiaohang());
-
-        if (info.getListChiTietDonHang().size() > 0) {
-            for (ChiTietDonInfo itemI : info.getListChiTietDonHang()) {
-                name += " " + itemI.getProduct_Name() + " X " + itemI.getSL() + " ,";
-            }
-        }
-        if (name.length() > 0) {
-            textNameProduct.setText(name.substring(0, name.length() - 1));
-        }
-
-        if (textNameProduct.getText().length() == 0) {
-            viewTwo.setVisibility(View.GONE);
-            layoutTwo.setVisibility(View.GONE);
-        }
-
-        showProgressDialog(false);
-
-    }
-
-    @Override
-    public void GetBookingError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onCheckBookingSuccess(BookingInfo info) {
-        presenterCancel.GetBooking(info.SoPhieuVietTay);
-    }
-
-    @Override
-    public void onCheckBookingError(String error) {
-//        showNoResult();
-        checkResult(true);
-    }
-
-    @Override
-    public void onCancelBookingSuccess() {
-        Toast.makeText(getContext(), "Hủy đơn thành công", Toast.LENGTH_SHORT).show();
-        initData();
-    }
-
-    @Override
-    public void onCancelBookingError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetListHistoryBookingSuccess(List<HistoryBooking> list) {
-        if (list.size() == 0) {
-            checkResult(true);
-            return;
-        }
-        checkResult(false);
-        for (HistoryBooking item : list) {
-            presenterCancel.GetBooking(item.SoPhieuVietTay);
-        }
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListHistoryBookingError(String error) {
 
     }
 

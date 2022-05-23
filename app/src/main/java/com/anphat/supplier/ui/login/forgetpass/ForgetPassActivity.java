@@ -2,87 +2,104 @@ package com.anphat.supplier.ui.login.forgetpass;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.anphat.supplier.data.entities.condition.ForGetPassCondition;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
+import com.anphat.supplier.ui.base.SearchMain;
+import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.gson.Gson;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
 import com.anphat.supplier.databinding.ActivityForgetPassBinding;
 import com.anphat.supplier.main.MainActivity;
-import com.anphat.supplier.ui.base.BaseTestActivity;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.aes.AESUtils;
 
 import java.util.Objects;
 
-public class ForgetPassActivity extends BaseTestActivity<ActivityForgetPassBinding> implements ForgetPassContract.View {
-    ActivityForgetPassBinding bd;
-    ForgetPassPresenter presenter;
+public class ForgetPassActivity extends BaseMVVMActivity<ActivityForgetPassBinding, LoginViewModel> {
     NewCustomer info = null;
     AppPreference preference;
 
     @Override
+    protected Class<LoginViewModel> getClassVM() {
+        return LoginViewModel.class;
+    }
+
+    @Override
     public ActivityForgetPassBinding getViewBinding() {
-        return bd = ActivityForgetPassBinding.inflate(getLayoutInflater());
+        return ActivityForgetPassBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
         preference = new AppPreference(this);
         disableButton();
-        TextWatcher imm = new TextWatcher() {
+        TextWatcher imm = new SearchMain() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
+            protected void onAfterChanged(String text) {
                 checkValidate();
             }
         };
-        bd.inputPassword.addTextChangedListener(imm);
-        bd.inputPasswordAgain.addTextChangedListener(imm);
-        bd.buttonLogin.setOnClickListener(v -> {
-            if (!Objects.requireNonNull(bd.inputPassword.getText()).toString().equals(Objects.requireNonNull(bd.inputPasswordAgain.getText()).toString())) {
+
+        binding.inputPassword.addTextChangedListener(imm);
+        binding.inputPasswordAgain.addTextChangedListener(imm);
+        binding.buttonLogin.setOnClickListener(v -> {
+            if (!Objects.requireNonNull(binding.inputPassword.getText()).toString().equals(Objects.requireNonNull(binding.inputPasswordAgain.getText()).toString())) {
                 showMessage("Bạn phải nhập lại mật khẩu đúng!");
             } else {
                 showProgressDialog(true);
-                info.setPassword(Objects.requireNonNull(bd.inputPassword.getText()).toString());
-                presenter.UpdateCustomer(info);
+                info.setPassword(Objects.requireNonNull(binding.inputPassword.getText()).toString());
+                viewModel.changePassWord(getItem());
             }
         });
     }
 
+    public ForGetPassCondition getItem() {
+        ForGetPassCondition item = new ForGetPassCondition();
+        item.NguoiDungMobielID = info.getNguoiDungMobileID();
+        item.MatKhauMoi = Objects.requireNonNull(binding.inputPassword.getText()).toString();
+        item.Loai = "QuenMatKhau";
+        return item;
+    }
+
     public void checkValidate() {
-        if (!TextUtils.isEmpty(bd.inputPassword.getText()) && !TextUtils.isEmpty(bd.inputPasswordAgain.getText())) {
-            bd.buttonLogin.setEnabled(true);
-            bd.buttonLogin.setTextColor(getResources().getColor(R.color.White));
-            bd.buttonLogin.setBackgroundResource(R.drawable.bg_button_dark_no_radius);
+        if (!TextUtils.isEmpty(binding.inputPassword.getText()) && !TextUtils.isEmpty(binding.inputPasswordAgain.getText())) {
+            binding.buttonLogin.setEnabled(true);
+            binding.buttonLogin.setTextColor(getResources().getColor(R.color.White));
+            binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_dark_no_radius);
         } else {
             disableButton();
         }
     }
 
     private void disableButton() {
-        bd.buttonLogin.setEnabled(false);
-        bd.buttonLogin.setTextColor(getResources().getColor(R.color.text_disable));
-        bd.buttonLogin.setBackgroundResource(R.drawable.bg_button_light);
+        binding.buttonLogin.setEnabled(false);
+        binding.buttonLogin.setTextColor(getResources().getColor(R.color.text_disable));
+        binding.buttonLogin.setBackgroundResource(R.drawable.bg_button_light);
     }
 
     @Override
     protected void initData() {
-        presenter = new ForgetPassPresenter(this);
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         info = (NewCustomer) bundle.getSerializable("Object");
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemChangePass.observe(this, result -> {
+            if (result) {
+                onUpdateCustomerSuccess(info);
+            } else {
+                showMessage(getString(R.string.error_un_known));
+            }
+        });
     }
 
     @Override
@@ -90,7 +107,7 @@ public class ForgetPassActivity extends BaseTestActivity<ActivityForgetPassBindi
 
     }
 
-    @Override
+    //    @Override
     public void onUpdateCustomerSuccess(NewCustomer info) {
         Gson gson = new Gson();
         String json = gson.toJson(info);
@@ -104,7 +121,7 @@ public class ForgetPassActivity extends BaseTestActivity<ActivityForgetPassBindi
         }
         String passWord = "";
         try {
-            passWord = aesUtils.encrypt(Objects.requireNonNull(bd.inputPassword.getText()).toString());
+            passWord = aesUtils.encrypt(Objects.requireNonNull(binding.inputPassword.getText()).toString());
         } catch (Exception ignored) {
         }
         preference.setPassWord(passWord);
@@ -116,9 +133,4 @@ public class ForgetPassActivity extends BaseTestActivity<ActivityForgetPassBindi
         startActivity(intent);
     }
 
-    @Override
-    public void onUpdateCustomerError(String error) {
-        showProgressDialog(false);
-        showMessage(error);
-    }
 }

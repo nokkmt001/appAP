@@ -47,6 +47,18 @@
             android:visibility="visible"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageChat"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_60"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/circle_bg"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:padding="@dimen/dp_10"
+            android:layout_marginBottom="?actionBarSize"
+            android:src="@drawable/ic_sms" />
+
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/buttonBar"
             android:layout_width="wrap_content"
@@ -161,58 +173,6 @@
                         android:layout_marginStart="@dimen/dp_5"
                         android:layout_toEndOf="@+id/imageLogout"
                         android:text="Đăng xuất"
-                        android:textSize="@dimen/textSize_16" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layoutUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_5"
-                    android:padding="@dimen/dp_5">
-
-                    <ImageView
-                        android:id="@+id/imageUpdate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_update_software" />
-
-                    <TextView
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/dp_5"
-                        android:layout_toEndOf="@+id/imageUpdate"
-                        android:text="Cập nhật phần mềm"
-                        android:textSize="@dimen/textSize_16" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/layoutChat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp_5"
-                    android:padding="@dimen/dp_5">
-
-                    <ImageView
-                        android:id="@+id/imageChat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_sms" />
-
-                    <TextView
-                        style="@style/AppTheme.TextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/dp_5"
-                        android:layout_toEndOf="@+id/imageChat"
-                        android:text="Chat ngay"
                         android:textSize="@dimen/textSize_16" />
 
                 </RelativeLayout>

@@ -12,7 +12,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,11 +21,9 @@ import com.bumptech.glide.Glide;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.network.product.ProductModel;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
     BaseEventClick.OnClickListener clickListener;
     String category;
     String biMap = null;
-    ProductModel model;
     int select_position = -1;
 
     public boolean isAll = false;
@@ -54,7 +50,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         this.listAllData = list;
         this.mContext = context;
         this.category = category;
-        this.model = new ProductModel();
     }
 
     public void setClickListener(BaseEventClick.OnClickListener listener) {

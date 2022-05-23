@@ -14,10 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
@@ -29,15 +27,16 @@ import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.network.apiretrofit.ProductCondition;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.ui.base.BaseFragment;
-import com.anphat.supplier.ui.base.PageScrollListener;
 import com.anphat.supplier.ui.category.DetailCategoryFragment;
 import com.anphat.supplier.ui.home.choose.FullCategoryActivity;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.detail.DetailTwoAdapter;
 import com.anphat.supplier.ui.product.full.ChooseProductFragment;
 import com.anphat.supplier.ui.sms.newsfeed.ViewImageAds;
-import com.anphat.supplier.ui.viewmodel.ProductViewModel;
+import com.anphat.supplier.utils.AppController;
+import com.anphat.supplier.viewmodel.ProductViewModel;
 import com.anphat.supplier.utils.AppConstants;
+import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 import com.anphat.supplier.utils.adapterimage.AutoScrollViewPager;
 
@@ -52,7 +51,6 @@ public class HomeFragment extends BaseFragment {
     EditText inputSearch;
     ImageView imageDelete;
     AppPreference preference;
-    Boolean isBuyNow = false;
     ViewImageAds adsAdapter;
     AutoScrollViewPager rclImage;
     LinearLayout layoutConfig;
@@ -104,13 +102,13 @@ public class HomeFragment extends BaseFragment {
          */
         rclAllProduct = bind(view, R.id.rclAllProduct);
         rclAllProduct.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        rclAllProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                loadNextPage();
-            }
-        });
+//        rclAllProduct.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                loadNextPage();
+//            }
+//        });
         adapterAllProduct = new DetailTwoAdapter(getContext(), new ArrayList<>(), "");
         adapterAllProduct.setAll(true);
         rclAllProduct.setAdapter(adapterAllProduct);
@@ -226,17 +224,16 @@ public class HomeFragment extends BaseFragment {
         condition.setBegin(PAGE_START);
         condition.setEnd(PAGE_RECORD);
         viewModel.getListAllCategory();
-        viewModel.getListAllProduct(condition.getBegin(), condition.getEnd());
+        viewModel.getListAllProduct(condition.getBegin(), 1000);
         viewModel.getBanner();
         viewModel.getListProductPromotion();
-
     }
 
     public void loadNextPage() {
         isLastPage = false;
         condition.setBegin(condition.getEnd());
         condition.setEnd(condition.getEnd() + PAGE_RECORD);
-        viewModel.getListAllProduct(condition.getBegin(), condition.getEnd());
+//        viewModel.getListAllProduct(condition.getBegin(), condition.getEnd());
     }
 
     @Override
@@ -244,6 +241,7 @@ public class HomeFragment extends BaseFragment {
         super.onObserver();
         viewModel.mItemListCategory.observe(this, result -> {
             if (result!=null){
+                AppPreference.saveCategory(result.data);
                 List<CategoryNew> list = new ArrayList<>();
                 for (CategoryNew item : result.data) {
                     if (item.parent_id == 0) {
@@ -261,6 +259,10 @@ public class HomeFragment extends BaseFragment {
         });
         viewModel.getDataProductSuccess().observe(this, productNews -> {
             if (productNews != null) {
+                DataFilterProduct.list = productNews;
+                PublicVariables.listAllProducts = productNews;
+                AppPreference.saveProduct(productNews);
+                AppPreference.saveAllProduct(productNews);
                 if (condition.getBegin() == 0) {
                     adapterAllProduct.clear();
                 }
@@ -275,11 +277,11 @@ public class HomeFragment extends BaseFragment {
             showProgressDialog(false);
         });
 
-        viewModel.getmItemBanner().observe(this, list -> {
-            if (list != null) {
-                adsAdapter.AddAll(list);
-            }
-        });
+//        viewModel.getmItemBanner().observe(this, list -> {
+//            if (list != null) {
+//                adsAdapter.AddAll(list);
+//            }
+//        });
 
         viewModel.getmItemSlider().observe(this, list -> {
             if (list != null) {
@@ -288,6 +290,7 @@ public class HomeFragment extends BaseFragment {
         });
         viewModel.getDataProductPromotion().observe(this, productNews -> {
             if (productNews != null) {
+                AppPreference.saveAllProduct(productNews);
                 adapter.clear();
                 adapter.addAll(productNews);
             }

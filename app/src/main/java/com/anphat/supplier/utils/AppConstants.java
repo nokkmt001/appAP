@@ -29,6 +29,8 @@ public class AppConstants {
     public static final String URL_GET_LIST_EVALUATE = "api/DanhGiaNhanVien/GetListLyDoDanhGiaSao?soSao={0}";
     public static final String URL_INSERT_EVALUATE = "api/DanhGiaNhanVien/InsertDanhGiaNhanVien";
 
+    public static String URL_UPDATE_Main = "http://autoupdate.tiha.vn/";
+
     //product
     public static final String URL_GET_LIST_All_PRODUCT = "api/Product/GetListAllProduct";
     public static final String URL_GET_LIST_PRODUCT = "api/Product/GetListProduct";

@@ -11,6 +11,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.orhanobut.hawk.Hawk;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public class AppController extends Application {
 
     private static final String TAG = AppController.class.getSimpleName();
@@ -20,12 +23,32 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
+    public static Application application;
+
+    private static CompositeDisposable mCompositeDisposable;
+
     @Override
     public void onCreate() {
         super.onCreate();
         Hawk.init(this).build();
         mInstance = this;
         createNotificationChannel();
+        application = this;
+    }
+
+    public static void addSubscribe(Disposable disposable) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        mCompositeDisposable.add(disposable);
+    }
+
+    public static void clearSubscribe() {
+        if (mCompositeDisposable == null) {
+            return;
+        }
+        mCompositeDisposable.clear();
+        mCompositeDisposable.dispose();
     }
 
     public static synchronized AppController getInstance() {
@@ -69,7 +92,9 @@ public class AppController extends Application {
     }
 
     public static void clearCache() {
-        mRequestQueue.getCache().clear();
+        if (mRequestQueue != null) {
+            mRequestQueue.getCache().clear();
+        }
     }
 
 }

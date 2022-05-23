@@ -1,14 +1,16 @@
 package com.anphat.supplier.ui.introduce;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.IntroducePerInfo;
-import com.anphat.supplier.data.entities.presenteruser.InsertPresenterInfo;
 import com.anphat.supplier.databinding.FragmentIntroduceBinding;
-import com.anphat.supplier.ui.base.BaseTestActivity;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
+import com.anphat.supplier.ui.base.SearchMain;
+import com.anphat.supplier.viewmodel.IntroduceViewModel;
 import com.anphat.supplier.utils.AppConstants;
 import com.anphat.supplier.utils.AppUtils;
 
@@ -17,12 +19,16 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding> implements IntroduceContract.View {
+public class IntroduceActivity extends BaseMVVMActivity<FragmentIntroduceBinding, IntroduceViewModel> {
     protected FragmentIntroduceBinding bd;
     IntroduceAdapter adapter;
-    IntroducePresenter presenter;
     List<IntroducePerInfo> listAllData = new ArrayList<>();
     private Timer timer;
+
+    @Override
+    protected Class<IntroduceViewModel> getClassVM() {
+        return IntroduceViewModel.class;
+    }
 
     @Override
     public FragmentIntroduceBinding getViewBinding() {
@@ -33,75 +39,59 @@ public class IntroduceActivity extends BaseTestActivity<FragmentIntroduceBinding
     protected void initView() {
         adapter = new IntroduceAdapter(this);
         bd.rcl.setAdapter(adapter);
-        bd.etSearch.addTextChangedListener(new TextWatcher() {
+        bd.etSearch.addTextChangedListener(new SearchMain() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (timer != null)
-                    timer.cancel();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (s.length() != 0) {
-                            if (AppUtils.validateNumberPhone(s.toString())) {
-                                presenter.InsertIntroduce(s.toString());
-                            }
+            protected void onAfterChanged(String s) {
+                new Handler().postDelayed(() -> {
+                    if (s.length() != 0) {
+                        if (AppUtils.validateNumberPhone(s)) {
+                            viewModel.InsertIntroduce(s);
                         }
                     }
                 }, AppConstants.DELAY_FIND_DATA_SEARCH);
-
             }
         });
-        showProgressDialog(true);
 
+        showProgressDialog(true);
         bd.imageBack.setOnClickListener(v -> finish());
 
     }
 
     @Override
     protected void initData() {
-        presenter = new IntroducePresenter(this);
-        presenter.GetListIntroduce();
+        viewModel.GetListIntroduce();
         listAllData = new ArrayList<>();
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.itemList.observe(this, result -> {
+            if (result != null) {
+                adapter.clearData();
+                adapter.addData(result);
+
+            }
+            showProgressDialog(false);
+        });
+
+        viewModel.itemMain.observe(this, result -> {
+            if (result!=null){
+                if (result.Status==0) {
+                    showToast(getString(R.string.title_add_presenter));
+                    initData();
+                    bd.etSearch.setText("");
+                } else {
+                    showMessage(result.Message);
+                }
+            }
+
+            showProgressDialog(false);
+        });
     }
 
     @Override
     public void onClick(View view) {
 
-    }
-
-    @Override
-    public void onGetListIntroduceSuccess(List<IntroducePerInfo> list) {
-        adapter.clearData();
-        adapter.addData(list);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListIntroduceError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onInsertIntroduceSuccess(InsertPresenterInfo info) {
-        showProgressDialog(false);
-        showToast(getString(R.string.title_add_presenter));
-        initData();
-        bd.etSearch.setText("");
-    }
-
-    @Override
-    public void onInsertIntroduceError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
     }
 }

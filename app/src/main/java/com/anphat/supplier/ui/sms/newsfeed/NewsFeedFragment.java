@@ -1,14 +1,10 @@
 package com.anphat.supplier.ui.sms.newsfeed;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.anphat.supplier.R;
 import com.anphat.supplier.ui.base.BaseFragment;
 import com.anphat.supplier.utils.AutoScrollRecyclerView;
@@ -36,19 +32,6 @@ public class NewsFeedFragment extends BaseFragment {
         String url = "https://i.ibb.co/ZTVvwRc/gas-test.png";
         rclImage.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         rclImage.setAdapter(adsAdapter);
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                imageMain.setImageBitmap(bitmap);
-            }
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-            }
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-            }
-        };
-        Picasso.with(getContext()).load(url).into(target);
     }
 
     @Override

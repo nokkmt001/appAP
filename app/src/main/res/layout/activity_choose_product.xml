@@ -163,7 +163,7 @@
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/btnAddCart"
-                                style="@style/AppTheme.Button.Light"
+                                style="@style/AppTheme.Button.Red"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/dp_2"
@@ -171,7 +171,7 @@
                                 android:gravity="center"
                                 android:minHeight="@dimen/dp_35"
                                 android:paddingTop="@dimen/dp_2"
-                                android:text="Thêm" />
+                                android:text="@string/title_add_card" />
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/btnBuyNow"
@@ -183,7 +183,8 @@
                                 android:gravity="center"
                                 android:minHeight="@dimen/dp_35"
                                 android:paddingTop="@dimen/dp_2"
-                                android:text="@string/buy" />
+                                android:text="@string/buy"
+                                android:visibility="gone" />
 
                         </LinearLayout>
 

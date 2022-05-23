@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "1062881897002",
-    "project_id": "gas-an-phat",
-    "storage_bucket": "gas-an-phat.appspot.com"
+    "project_number": "162616093032",
+    "project_id": "gas-an-phat-5b554",
+    "storage_bucket": "gas-an-phat-5b554.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062881897002:android:682b7d0066b7b66714b153",
+        "mobilesdk_app_id": "1:162616093032:android:87a608d86864d3593c0edd",
         "android_client_info": {
           "package_name": "com.anphat.supplier"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1062881897002-ahjd5ojqruk1ic7sfbjmec42g2rtbd1h.apps.googleusercontent.com",
+          "client_id": "162616093032-vla9fqllm0t2o5adj24gq2kdvfjuklic.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.anphat.supplier",
-            "certificate_hash": "c6549239c2ad6f5d504a30fbc7ed146dda62d252"
+            "certificate_hash": "991ff9b20755d0aab29a114cc5066be3e13bff7a"
           }
         },
         {
-          "client_id": "1062881897002-d581unko7ni3kn5e70uq2oocbgkij1v2.apps.googleusercontent.com",
+          "client_id": "162616093032-qhs21nufu3pn51fjrhgm63bl0ceg8pm6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCBKPFiB9FiQePOkQqH0iZdA8fsnFtPnCU"
+          "current_key": "AIzaSyAldyw_lN2hjGZ7RcH4hAoRdJ1841xaEro"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1062881897002-d581unko7ni3kn5e70uq2oocbgkij1v2.apps.googleusercontent.com",
+              "client_id": "162616093032-qhs21nufu3pn51fjrhgm63bl0ceg8pm6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -39,8 +39,7 @@ public class GiftAdapter extends BaseLMAdapter<GiftInfo, GiftAdapter.ItemRowHold
     }
 
     @Override
-    protected void onBindData(RecyclerView.ViewHolder holder, GiftInfo item, int position) {
-        ItemRowHolder row = (ItemRowHolder) holder;
+    protected void onBindData(ItemRowHolder row, GiftInfo item, int position) {
         row.textDetail.setText(item.title);
         String url = "https://gasanphat.com/" + item.photo;
         Glide.with(mContext)

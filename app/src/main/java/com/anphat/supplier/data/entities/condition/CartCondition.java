@@ -9,13 +9,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CartCondition implements Serializable {
-    private Integer ID;
-    private Integer NguoiDungMobileID;
-    private Integer SoLuong;
-    private String ProductID;
-    private String GhiChu;
-    private String CreateDate;
-    private String ModifiedDate;
+    public Integer ID;
+    public Integer NguoiDungMobileID;
+    public Integer SoLuong;
+    public String ProductID;
+    public String GhiChu;
+    public String CreateDate;
+    public String ModifiedDate;
+    public String SanPhamChinhID;
 
     public Integer getNguoiDungMobileID() {
         return NguoiDungMobileID;

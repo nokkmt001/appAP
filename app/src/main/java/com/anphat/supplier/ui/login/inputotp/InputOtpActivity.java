@@ -6,66 +6,50 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
+import com.anphat.supplier.ui.base.SearchMain;
+import com.anphat.supplier.ui.login.forgetpass.ForgetPassActivity;
+import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.gson.Gson;
-import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
 import com.anphat.supplier.databinding.ActivityOtpBinding;
 import com.anphat.supplier.main.MainActivity;
-import com.anphat.supplier.ui.base.BaseActivity;
 import com.anphat.supplier.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.anphat.supplier.ui.login.checkphone.CheckPhoneActivity;
 import com.anphat.supplier.utils.AppUtils;
 
-public class InputOtpActivity extends BaseActivity implements ResendOtpContract.View {
-    ActivityOtpBinding binding;
+public class InputOtpActivity extends BaseMVVMActivity<ActivityOtpBinding, LoginViewModel> {
     NewCustomer info;
-    ResendOtpPresenter presenter;
     String textID = "";
     AppPreference preference;
     String toMain = "";
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.activity_otp;
+    protected Class<LoginViewModel> getClassVM() {
+        return LoginViewModel.class;
+    }
+
+    @Override
+    public ActivityOtpBinding getViewBinding() {
+        return ActivityOtpBinding.inflate(getLayoutInflater());
     }
 
     @Override
     protected void initView() {
-        presenter = new ResendOtpPresenter(this);
         preference = new AppPreference(this);
-        binding = ActivityOtpBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-        AppUtils.enableButton(false,binding.buttonEnd,this);
-        binding.etOtp.addTextChangedListener(new TextWatcher() {
+        AppUtils.enableButton(false, binding.buttonEnd, this);
+        binding.etOtp.addTextChangedListener(new SearchMain() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void afterTextChanged(final Editable editable) {
-                checkEnableButton(editable.toString());
-                onCheckCode(editable.toString());
+            protected void onAfterChanged(String text) {
+                checkEnableButton(text);
+                onCheckCode(text);
             }
         });
 
         binding.buttonEnd.setOnClickListener(view13 -> {
             if (textID.equals(info.getMaPIN().toString())) {
-                if (toMain != null && toMain.length() > 0) {
-                    preference.setLogin(true);
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(this, CheckLoginByIDPassActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Object", info);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
+                showAction();
                 this.finish();
             } else {
                 showMessage("Mã pin sai");
@@ -73,7 +57,7 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         });
         binding.textResendOtp.setOnClickListener(view1 -> {
             if (info != null) {
-                presenter.ResendOtp(info.getNguoiDungMobileID());
+                viewModel.ReSendPINcode(info.getNguoiDungMobileID().toString());
             }
         });
         binding.layoutHeader.imageBack.setOnClickListener(view12 -> {
@@ -91,23 +75,44 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         });
     }
 
-    private void checkEnableButton(String gg){
-        AppUtils.enableButton(gg.length() == 4,binding.buttonEnd,this);
+    private void checkEnableButton(String gg) {
+        AppUtils.enableButton(gg.length() == 4, binding.buttonEnd, this);
     }
 
     private void onCheckCode(String gg) {
         textID = gg;
         if (gg.equals(info.getMaPIN().toString())) {
-            preference.setOtp(true);
-            Gson gson = new Gson();
-            String json = gson.toJson(info);
-            preference.setUser(json);
-            Intent intent = new Intent(this, CheckLoginByIDPassActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Object", info);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            showAction();
             this.finish();
+        }
+    }
+
+    public void showAction(){
+        Intent intent;
+        switch (toMain) {
+            case "checkPhone":
+                preference.setOtp(true);
+                Gson gson = new Gson();
+                String json = gson.toJson(info);
+                preference.setUser(json);
+                intent = new Intent(this, CheckLoginByIDPassActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Object", info);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+            case "newCustomer":
+                preference.setLogin(true);
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case "forgetPass":
+                intent = new Intent(this, ForgetPassActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+
         }
     }
 
@@ -116,21 +121,22 @@ public class InputOtpActivity extends BaseActivity implements ResendOtpContract.
         Bundle bundle = getIntent().getExtras();
         info = (NewCustomer) bundle.getSerializable("Object");
         toMain = bundle.getString("FromCreate");
+    }
 
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemResendPin.observe(this, newCustomer -> {
+            this.info = newCustomer;
+            if (newCustomer != null) {
+                showToast(info.getMaPIN().toString());
+                AppUtils.createNotification(this, info.getMaPIN().toString());
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
     }
 
-    @Override
-    public void onResendOtpSuccess(NewCustomer info) {
-        this.info = info;
-        AppUtils.createNotification(this, info.getMaPIN().toString());
-    }
-
-    @Override
-    public void onResendOtpError(String error) {
-        showMessage(error);
-    }
 }

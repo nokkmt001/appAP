@@ -143,6 +143,8 @@
     <string name="title_all_category">Tất cả danh mục</string>
     <string name="title_text_notification">Thông báo</string>
     <string name="accompanying_products">Sản phẩm kèm theo</string>
+    <string name="title_add_card">Thêm vào giỏ hàng</string>
+    <string name="error_un_known">Lỗi cơ sở dữ liệu xin báo người quản trị.</string>
 
 
     <string-array name="letter_tile_colors">

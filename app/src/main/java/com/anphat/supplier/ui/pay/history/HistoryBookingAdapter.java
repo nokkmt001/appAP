@@ -18,27 +18,29 @@ import com.anphat.supplier.data.entities.HistoryBooking;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.entities.order.ChiTietDonInfo;
-import com.anphat.supplier.data.network.booking.BookingModel;
-import com.anphat.supplier.data.network.booking.IBookingModel;
+import com.anphat.supplier.data.network.api.ApiResponseSbke;
+import com.anphat.supplier.data.network.apiretrofit.API;
+import com.anphat.supplier.data.network.apiretrofit.RetrofitWsbke;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAdapter.ItemHolder> {
     BaseEventClick.OnClickListener  onClick;
-    BookingModel model;
-    List<HistoryBooking> listAllData = new ArrayList<>();
+    List<HistoryBooking> listAllData;
     String url = "";
     Context mContext;
+    API server = RetrofitWsbke.createService(API.class);
 
     public HistoryBookingAdapter(List<HistoryBooking> list, Context context){
-        this.model = new BookingModel();
         this.listAllData = list;
         this.mContext = context;
     }
@@ -73,36 +75,42 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
         holder.textPrice.setText("Tổng tiền:  "+AppUtils.formatNumber("NO").format(item.getThanhTien()));
         holder.buttonBooking.setVisibility(View.GONE);
         List<ProductNew> list = AppPreference.getAllProduct();
-        model.GetBooking(item.SoPhieuVietTay, new IBookingModel.IGetBookingFinish() {
-            @Override
-            public void onSuccess(BookingInfo info) {
-                String gg= "";
-                holder.textTT.setText(info.getTenTrangThai());
-                if (!info.getMaTrangThai().equals("HOANTHANH")){
-                    holder.buttonVote.setVisibility(View.GONE);
-                    holder.buttonBooking.setVisibility(View.GONE);
-                }
 
-                holder.textNV.setText(info.TenNguoiGiao == null?"":"Nhân viên:  "+info.TenNguoiGiao);
-                for (ChiTietDonInfo item:info.getListChiTietDonHang()){
-                    for (ProductNew infoImage: list){
-                        if (infoImage.code.equals(item.getProduct_ID())){
-                            url = "https://gasanphat.com/" + infoImage.photo;
-                            Glide.with(mContext)
-                                    .load(url)
-                                    .error(R.drawable.img_no_image)
-                                    .override(500,500)
-                                    .into(holder.imageMain);
-                        }
+        server.GetDetailHistoryDefault(item.SoPhieuVietTay).enqueue(new Callback<ApiResponseSbke<BookingInfo>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponseSbke<BookingInfo>> call, @NonNull Response<ApiResponseSbke<BookingInfo>> response) {
+                if (response.isSuccessful()){
+                    assert response.body() != null;
+                    BookingInfo info = response.body().Data;
+                    String gg= "";
+                    holder.textTT.setText(info.getTenTrangThai());
+                    if (!info.getMaTrangThai().equals("HOANTHANH")){
+                        holder.buttonVote.setVisibility(View.GONE);
+                        holder.buttonBooking.setVisibility(View.GONE);
                     }
-                    gg+=item.getProduct_Name() +" x "+item.getSL()+", ";
-                }
-                if (gg.length()>0){
-                    holder.textTitle.setText(gg.substring(0,gg.length()-2));
+
+                    holder.textNV.setText(info.TenNguoiGiao == null?"":"Nhân viên:  "+info.TenNguoiGiao);
+                    for (ChiTietDonInfo item:info.getListChiTietDonHang()){
+                        for (ProductNew infoImage: list){
+                            if (infoImage.code.equals(item.getProduct_ID())){
+                                url = "https://gasanphat.com/" + infoImage.photo;
+                                Glide.with(mContext)
+                                        .load(url)
+                                        .error(R.drawable.img_no_image)
+                                        .override(500,500)
+                                        .into(holder.imageMain);
+                            }
+                        }
+                        gg+=item.getProduct_Name() +" x "+item.getSL()+", ";
+                    }
+                    if (gg.length()>0){
+                        holder.textTitle.setText(gg.substring(0,gg.length()-2));
+                    }
                 }
             }
+
             @Override
-            public void onError(String error) {
+            public void onFailure(@NonNull Call<ApiResponseSbke<BookingInfo>> call, @NonNull Throwable t) {
 
             }
         });

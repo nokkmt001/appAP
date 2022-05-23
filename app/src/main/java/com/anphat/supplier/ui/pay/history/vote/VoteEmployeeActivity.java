@@ -11,11 +11,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.anphat.supplier.R;
-import com.anphat.supplier.data.entities.ReasonEvaluate;
 import com.anphat.supplier.data.entities.condition.EvaluateCondition;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.databinding.ActivityVoteBinding;
-import com.anphat.supplier.ui.base.BaseTestActivity;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
+import com.anphat.supplier.viewmodel.VoteViewModel;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.adapterimage.ActivityImage;
@@ -23,14 +23,18 @@ import com.anphat.supplier.utils.adapterimage.ActivityImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> implements VoteContract.View {
+public class VoteEmployeeActivity extends BaseMVVMActivity<ActivityVoteBinding, VoteViewModel> {
     VoteAdapter adapter;
-    VotePresenter presenter;
     Boolean isCheck = true;
     AddImageAdapter addImageAdapter;
     String[] permissionsRequired = {Manifest.permission.CAMERA};
     List<String> listImageString = new ArrayList<>();
     BookingInfo infoItem = null;
+    String sao = "5";
+    @Override
+    protected Class<VoteViewModel> getClassVM() {
+        return VoteViewModel.class;
+    }
 
     @Override
     public ActivityVoteBinding getViewBinding() {
@@ -57,10 +61,11 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
                 String gg = "";
                 showProgressDialog(true);
                 EvaluateCondition condition = new EvaluateCondition();
-                condition.setSoSao(5);
+                condition.setSoSao(Integer.valueOf(sao));
                 condition.setSoCT(infoItem.getSoCt());
                 condition.setEmployeeID(infoItem.getMSNguoigiao());
                 condition.setBinhLuan(binding.inputComment.getText().toString());
+                condition.setNguoiDungMobileID( PublicVariables.UserInfo.getNguoiDungMobileID());
                 condition.setListLyDoDanhGiaSaoo(adapter.getListChoose());
                 for (String string : listImageString) {
                     gg = string;
@@ -68,7 +73,7 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
                 if (gg.length() > 0) {
                     condition.setHinhAnh(gg);
                 }
-                presenter.InsertVote(condition);
+                viewModel.InsertVote(condition);
             }
         });
 //        setRating();
@@ -81,11 +86,31 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
             if (v == 0) {
                 showMessage("Bạn phải chọn số sao");
             } else {
-                presenter.GetListVote(String.valueOf(v));
+                sao = String.valueOf(v);
+                viewModel.GetListVote(String.valueOf(v));
             }
         });
 
         setAdapterClick();
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.itemList.observe(this, result -> {
+            if (result!=null){
+                adapter.clear();
+                adapter.addAll(result);
+            }
+            showProgressDialog(false);
+
+        });
+
+        viewModel.itemMain.observe(this, condition -> {
+            showToast("Thêm đánh giá thành công");
+            showProgressDialog(false);
+            finish();
+        });
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -156,8 +181,7 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
     @Override
     protected void initData() {
         infoItem = PublicVariables.infoBooking;
-        presenter = new VotePresenter(this);
-        presenter.GetListVote("5");
+        viewModel.GetListVote("5");
 
         if (infoItem == null) return;
         binding.textNV.setText(infoItem.TenNguoiGiao);
@@ -166,33 +190,5 @@ public class VoteEmployeeActivity extends BaseTestActivity<ActivityVoteBinding> 
     @Override
     public void onClick(View view) {
 
-    }
-
-    @Override
-    public void onGetListVoteSuccess(List<ReasonEvaluate> list) {
-        if (list.size() == 0) {
-            showNoResult();
-        } else {
-            adapter.clear();
-            adapter.addAll(list);
-        }
-
-    }
-
-    @Override
-    public void onGetListVoteError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onInsertVoteSuccess() {
-        finish();
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onInsertVoteError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
     }
 }

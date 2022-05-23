@@ -1,35 +1,29 @@
 package com.anphat.supplier.ui.product.full;
 
-import static androidx.core.text.HtmlCompat.FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.anphat.supplier.data.entities.BannerInfo;
 import com.anphat.supplier.data.entities.gift.GiftInfo;
-import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.databinding.ActivityChooseProductBinding;
-import com.anphat.supplier.ui.base.BaseMainFragment;
+import com.anphat.supplier.ui.base.BaseMVVMFragment;
 import com.anphat.supplier.ui.cart.CartActivity;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
+import com.anphat.supplier.viewmodel.DetailViewModel;
 import com.bumptech.glide.Glide;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.condition.CartCondition;
 import com.anphat.supplier.ui.booking.BookingActivity;
 import com.anphat.supplier.ui.home.CommonFM;
-import com.anphat.supplier.ui.home.HomeContract;
-import com.anphat.supplier.ui.home.HomePresenter;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
@@ -37,20 +31,17 @@ import com.anphat.supplier.utils.adapterimage.ViewImageActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProductBinding> implements HomeContract.View, DetailPrContract.View {
-    HomePresenter presenterProduct;
+public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProductBinding, DetailViewModel> {
     Integer ID;
-    DetailProductPresenter presenterOne;
     ProductNew info;
     Boolean isBuyNow = false;
     DetailAdapter adapter;
     GiftAdapter adapterGift;
     public Boolean isHome = false;
     GiftInfo itemMain = null;
-
     Boolean isClick = false;
+
     public ChooseProductFragment(Integer ID, boolean isFromHome) {
         this.ID = ID;
         this.isHome = isFromHome;
@@ -91,6 +82,8 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
             if (info == null) return;
             binding.layoutHeader.textTitle.setText(info.title);
             setView(info.title, info.price, info.description);
+            adapterGift.clear();
+            adapterGift.addAll(info.gifts);
             binding.nestedScrollView.scrollTo(0, 0);
         });
 
@@ -108,10 +101,10 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
 
         binding.checkboxNoGift.setOnCheckedChangeListener((compoundButton, check) -> {
             compoundButton.setChecked(check);
-            if (isClick){
-                binding.checkboxNoGift.setChecked(true);
-            }
-            isClick = true;
+//            if (isClick){
+//                binding.checkboxNoGift.setChecked(true);
+//            }
+            isClick = check;
             adapterGift.undoCheck();
         });
 
@@ -124,18 +117,22 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
     }
 
     @Override
+    protected Class<DetailViewModel> getClassVM() {
+        return DetailViewModel.class;
+    }
+
+    @Override
     public ActivityChooseProductBinding getViewBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return ActivityChooseProductBinding.inflate(inflater, container,false);
+        return ActivityChooseProductBinding.inflate(inflater, container, false);
     }
 
     @Override
     protected void initData() {
-        presenterOne = new DetailProductPresenter(this);
-        presenterProduct = new HomePresenter(this);
-        presenterOne.checkBooking();
-        presenterOne.GetProduct(ID.toString());
+        viewModel.checkBooking();
+        viewModel.GetProduct(ID.toString());
 
-        if (PublicVariables.listBooking!=null){
+        if (PublicVariables.listBooking != null&&PublicVariables.listBooking.size()>0) {
+            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
             binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
         } else {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
@@ -143,95 +140,59 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
     }
 
     @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemInsertCart.observe(this, result -> {
+            if (result != null) {
+                viewModel.GetListAllCart();
+                Toast.makeText(getContext(), R.string.add_cart_success, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
+                intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
+                intent.putExtra("ItemGioHang", result.Data);
+                getActivity().sendBroadcast(intent);
+                if (isBuyNow) {
+                    Intent intent1 = new Intent(getContext(), BookingActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ID", result.Data.getID().toString());
+                    intent1.putExtras(bundle);
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent1);
+                }
+            }
+        });
+
+        viewModel.mItemGetProduct.observe(this, productNew -> {
+            if (productNew!=null){
+                this.info = productNew;
+                binding.layoutHeader.textTitle.setText(info.title);
+                setView(info.title, info.price, info.description);
+                if (info.getProducts() != null) {
+                    adapter.clear();
+                    adapter.addAll(info.getProducts());
+                    PublicVariables.listKM = info.getProducts();
+                    showFooter(true, true);
+                } else {
+                    showFooter(true, false);
+                }
+                if (info.getGifts() != null) {
+                    adapterGift.clear();
+                    adapterGift.addAll(info.getGifts());
+                }
+            }
+        });
+        viewModel.mItemCheckBooking.observe(this, result -> {
+            if (result!=null){
+                PublicVariables.itemBooking = result.Data;
+            }
+        });
+        viewModel.itemListCart.observe(this, result ->
+                binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(result.size())));
+    }
+
+    @Override
     public void onClick(View v) {
 
-    }
-
-    @Override
-    public void onGetListProductSuccess(List<ProductNew> list) {
-
-    }
-
-    @Override
-    public void onGetListProductError(String error) {
-
-    }
-
-    @Override
-    public void onInsertCartSuccess(CartCondition info) {
-        Toast.makeText(getContext(), R.string.add_cart_success, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent();
-        intent.setAction(TestConstants.ACTION_MAIN_ACTIVITY);
-        intent.putExtra("eventName", TestConstants.RECEIVE_ThayDoiGioHang);
-        intent.putExtra("ItemGioHang", info);
-        getActivity().sendBroadcast(intent);
-        if (isBuyNow) {
-            Intent intent1 = new Intent(getContext(), BookingActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("ID", info.getID().toString());
-            intent1.putExtras(bundle);
-            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent1);
-        }
-    }
-
-    @Override
-    public void onInsertCartError(String error) {
-
-    }
-
-    @Override
-    public void onGetListBannerSuccess(List<BannerInfo> list) {
-
-    }
-
-    @Override
-    public void onGetListBannerError(String error) {
-
-    }
-
-    @Override
-    public void onGetListProductPromotionSuccess(List<ProductNew> list) {
-
-    }
-
-    @Override
-    public void onGetListProductPromotionError(String error) {
-
-    }
-
-    @Override
-    public void onGetProductSuccess(ProductNew info) {
-        this.info = info;
-        binding.layoutHeader.textTitle.setText(info.title);
-        setView(info.title, info.price, info.description);
-        if (info.getProducts() != null) {
-            adapter.clear();
-            adapter.addAll(info.getProducts());
-            PublicVariables.listKM = info.getProducts();
-            showFooter(true, true);
-        } else {
-            showFooter(true, false);
-        }
-        if (info.getGifts()!=null){
-            adapterGift.clear();
-            adapterGift.addAll(info.getGifts());
-        }
-    }
-
-    @Override
-    public void onGetProductError(String error) {
-
-    }
-
-    @Override
-    public void onCheckBookingSuccess(BookingInfo info) {
-        PublicVariables.itemBooking = info;
-    }
-
-    @Override
-    public void onCheckBookingError(String error) {
-        PublicVariables.itemBooking = null;
     }
 
     Integer count = 1;
@@ -242,16 +203,18 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
         binding.textCountBuy.setText("1");
         binding.textName.setText(title);
         binding.textPrice.setText(AppUtils.formatNumber("NO").format(price));
+//        binding.layoutContent.loadData(info.content, "text/html", "UTF-8");
+        Log.d("DECEPTIONTMAIN", info.description + "\n\n\n\n" + gg);
         if (description != null) {
-            binding.textDeception.setText(Html.fromHtml(description));
+            binding.textDeception.setText(HtmlCompat.fromHtml(description,HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             binding.textDeception.setVisibility(View.GONE);
         }
 
         if (info.content != null) {
             gg = info.content.replace("<li>\r\n\t<p>", "<li>").replace("</p>\r\n\t</li>", "</li>");
-            binding.textContent.setText(Html.fromHtml(gg, FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE));
-
+//            binding.textContent.setText(HtmlCompat.fromHtml(gg, FROM_HTML_SEPARATOR_LINE_BREAK_BLOCKQUOTE));
+            binding.textContent.setText(HtmlCompat.fromHtml(gg, HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             binding.textContent.setVisibility(View.GONE);
         }
@@ -271,7 +234,7 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
             binding.textCountBuy.setText(count.toString());
         });
         binding.btnAddCart.setVisibility(View.VISIBLE);
-        binding.btnBuyNow.setVisibility(View.VISIBLE);
+        binding.btnBuyNow.setVisibility(View.GONE);
         binding.btnAddCart.setOnClickListener(view1 -> {
             isBuyNow = false;
             CartCondition condition = new CartCondition();
@@ -281,7 +244,21 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
             condition.setGhiChu("");
             condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
             condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            presenterProduct.InsertCart(condition);
+            viewModel.insertCart(condition);
+
+//            if (!isClick) {
+//                if (itemMain != null) {
+//                    CartCondition conditionGift = new CartCondition();
+//                    conditionGift.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+//                    conditionGift.setSoLuong(count);
+//                    conditionGift.setProductID(itemMain.code);
+//                    conditionGift.setGhiChu("");
+//                    conditionGift.SanPhamChinhID = info.code;
+//                    conditionGift.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//                    conditionGift.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//                    viewModel.insertCart(conditionGift);
+//                }
+//            }
         });
         binding.btnBuyNow.setOnClickListener(v -> {
             if (PublicVariables.itemBooking != null) {
@@ -296,7 +273,20 @@ public class ChooseProductFragment extends BaseMainFragment<ActivityChooseProduc
             condition.setGhiChu("");
             condition.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
             condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-            presenterProduct.InsertCart(condition);
+            viewModel.insertCart(condition);
+//            if (!isClick) {
+//                if (itemMain != null) {
+//                    CartCondition conditionGift = new CartCondition();
+//                    conditionGift.setNguoiDungMobileID(PublicVariables.UserInfo.getNguoiDungMobileID());
+//                    conditionGift.setSoLuong(count);
+//                    conditionGift.setProductID(itemMain.code);
+//                    conditionGift.setGhiChu("");
+//                    conditionGift.SanPhamChinhID = info.code;
+//                    conditionGift.setCreateDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//                    conditionGift.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
+//                    viewModel.insertCart(conditionGift);
+//                }
+//            }
         });
         String url = "https://gasanphat.com/" + info.photo;
 

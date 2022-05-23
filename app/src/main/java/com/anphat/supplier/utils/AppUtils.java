@@ -79,7 +79,6 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.anphat.supplier.utils.AppController.Chanel_id;
-import static org.webrtc.ContextUtils.getApplicationContext;
 
 public class AppUtils {
 
@@ -104,50 +103,19 @@ public class AppUtils {
         return date.getTime();
     }
 
-    public static List<ContactModel> getContacts(Context ctx) {
-        List<ContactModel> list = new ArrayList<>();
-        ContentResolver contentResolver = ctx.getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        if (cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
-                    Cursor cursorInfo = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-                    InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(),
-                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id)));
-
-                    Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, new Long(id));
-                    Uri pURI = Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-
-                    Bitmap photo = null;
-                    if (inputStream != null) {
-                        photo = BitmapFactory.decodeStream(inputStream);
-                    }
-                    while (cursorInfo.moveToNext()) {
-                        ContactModel info = new ContactModel();
-                        info.id = id;
-                        info.name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        info.mobileNumber = cursorInfo.getString(cursorInfo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        info.photo = photo;
-                        info.photoURI = pURI;
-                        list.add(info);
-                    }
-
-                    cursorInfo.close();
-                }
-            }
-            cursor.close();
-        }
-        return list;
-    }
 
     public static Bitmap getBitMapFromImage(Context ctx) {
         return null;
     }
 
-//    public static void openPlayStoreForApp(Context context) {
-//        final String appPackageName = context.getPackageName();
+    public static void openPlayStoreForApp(Context context) {
+        final String appPackageName = context.getPackageName();
+
+        try {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
 //        try {
 //            context.startActivity(new Intent(Intent.ACTION_VIEW,
 //                    Uri.parse(context
@@ -159,7 +127,7 @@ public class AppUtils {
 //                            .getResources()
 //                            .getString(R.string.app_google_play_store_link) + appPackageName)));
 //        }
-//    }
+    }
 
     @SuppressLint("all")
     public static String getDeviceId(Context context) {

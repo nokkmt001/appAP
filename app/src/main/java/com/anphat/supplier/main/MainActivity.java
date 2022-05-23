@@ -26,7 +26,7 @@ import com.anphat.supplier.ui.category.DetailCategoryFragment;
 import com.anphat.supplier.ui.home.ShowFragment;
 import com.anphat.supplier.ui.pay.history.HistoryFragment;
 import com.anphat.supplier.ui.pay.pending.PendingFragment;
-import com.anphat.supplier.ui.viewmodel.MainViewModel;
+import com.anphat.supplier.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
@@ -39,7 +39,6 @@ import com.anphat.supplier.ui.introduce.IntroduceActivity;
 import com.anphat.supplier.ui.login.checkphone.CheckPhoneActivity;
 import com.anphat.supplier.ui.notification.NotificationActivity;
 import com.anphat.supplier.ui.sms.newsfeed.NewsFeedFragment;
-import com.anphat.supplier.ui.update.UpdateActivity;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 
@@ -60,6 +59,10 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
     TestReceiver testReceiver;
     HomeFragment fragmentMain;
     MainViewModel viewModel;
+    NewsFeedFragment fragmentNews;
+    PendingFragment pendingFragment;
+    HistoryFragment historyFragment;
+    AccountFragment accountFragment;
 
     @Override
     public ActivityMainBinding getViewBinding() {
@@ -89,14 +92,13 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
         }
     }
 
-
     @Override
     protected void onObserver() {
         super.onObserver();
         viewModel.getItem().observe(this, result -> {
             showProgressDialog(false);
             if (result != null) {
-                if (result.Status==0){
+                if (result.Status == 0) {
                     PublicVariables.listBooking = result.Data;
                     if (result.Data != null && result.Data.size() > 0) {
                         binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
@@ -122,9 +124,9 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
         viewModel.getmItemDaHang().observe(this, result -> {
             showProgressDialog(false);
             if (result != null) {
-                if (result.Data.size() > 0) {
+                if (result.Data != null) {
                     showCart();
-                }  else {
+                } else {
                     for (CategoryNew item : AppPreference.getCategory()) {
                         if (item.slug.equals("gas")) {
                             StartDetailCategory(item);
@@ -174,12 +176,6 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
             finish();
         }));
 
-        binding.layoutUpdate.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, UpdateActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
         binding.layoutHeader.layoutCart.layoutClickNo.setOnClickListener(view13 -> showCart());
 
         binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(view12 -> {
@@ -192,13 +188,14 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
         });
 
         binding.layout.main.setOnClickListener(view14 -> linkWed());
+
         binding.layoutHeader.layoutNotifications.layoutClick.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
 
-        binding.layoutChat.setOnClickListener(v -> {
+        binding.imageChat.setOnClickListener(v -> {
             Intent myIntent = new Intent(Intent.ACTION_VIEW);
             String url = "https://zalo.me/0988351352";
             myIntent.setData(Uri.parse(url));
@@ -210,6 +207,12 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                     StartFullProduct(AppPreference.getProductFull());
                 }
         );
+        fragmentMain = new HomeFragment();
+        fragmentNews = new NewsFeedFragment();
+        pendingFragment = new PendingFragment();
+        historyFragment = new HistoryFragment();
+        accountFragment = new AccountFragment();
+
     }
 
     private void StartFullProduct(List<ProductNew> list) {
@@ -246,22 +249,26 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_main:
-                            fragmentMain = new HomeFragment();
                             fragmentMain.setClick((view, position) -> binding.layoutHeader.layoutGGG.setVisibility(View.GONE));
                             setBottomNavigationView(fmMain, fragmentMain, "1");
+                            fmMain = fragmentMain;
                             CommonFM.fragment = fragmentMain;
                             return true;
                         case R.id.navigation_history:
-                            setBottomNavigationView(fmHistory, new NewsFeedFragment(), "2");
+                            setBottomNavigationView(fmHistory, fragmentNews, "2");
+                            fmHistory = fragmentNews;
                             return true;
                         case R.id.navigation_pay:
-                            setBottomNavigationView(fmPay, new PendingFragment(), "3");
+                            setBottomNavigationView(fmPay, pendingFragment, "3");
+                            fmPay = pendingFragment;
                             return true;
                         case R.id.navigation_report:
-                            setBottomNavigationView(fmSms, new HistoryFragment(), "4");
+                            setBottomNavigationView(fmSms, historyFragment, "4");
+                            fmSms = historyFragment;
                             return true;
                         case R.id.navigation_account:
-                            setBottomNavigationView(fmAccount, new AccountFragment(), "5");
+                            setBottomNavigationView(fmAccount, accountFragment, "5");
+                            fmAccount = accountFragment;
                             return true;
                         default:
                             break;
@@ -307,14 +314,22 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                 }
                 fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(fmActive).commit();
             } else {
-                if (CommonFM.fragmentTwo != null) {
-                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).hide(CommonFM.fragmentTwo).commit();
-                    CommonFM.fragmentTwo = null;
-                } else {
-                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).commit();
-                }
+
+                fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).commit();
+//                    CommonFM.fragmentTwo = null;
+//                } else {
+//                    fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).commit();
+//                }
             }
         } else {
+            if (!fmMain.isAdded()) {
+                fmManager.beginTransaction().add(R.id.frame_container, fmMain, tab).commit();
+                if (fmActive != null) {
+                    fmManager.beginTransaction().hide(fmActive).commit();
+                }
+                fmActive = fmMain;
+                return;
+            }
             fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
 
         }
@@ -364,6 +379,10 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                     binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
                     break;
                 case "booking":
+                    CommonFM.fragment = null;
+                    CommonFM.fragmentTwo = null;
+                    CommonFM.fragmentThree = null;
+                    CommonFM.fragmentFour = null;
                     Intent intent1 = new Intent(MainActivity.this, MainActivity.class);
                     intent1.putExtra("KEYMAIN", "reload");
                     startActivity(intent1);

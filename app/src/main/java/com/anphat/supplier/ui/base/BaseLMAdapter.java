@@ -53,12 +53,12 @@ public abstract class BaseLMAdapter<E, VH extends RecyclerView.ViewHolder> exten
 
     protected abstract VH onCreateHolder(View view);
 
-    protected abstract void onBindData(RecyclerView.ViewHolder holder, E e, int position);
+    protected abstract void onBindData(VH holder, E item, int position);
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == VIEW_TYPE_ITEM) {
-            onBindData(holder, mList.get(position), position);
+            onBindData((VH) holder, mList.get(position), position);
         }
     }
 

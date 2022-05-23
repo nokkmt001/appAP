@@ -11,12 +11,10 @@ import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.CartInfo;
 import com.anphat.supplier.data.entities.condition.CartCondition;
-import com.anphat.supplier.data.entities.order.BookingInfo;
-import com.anphat.supplier.data.entities.order.CallInfo;
-import com.anphat.supplier.data.entities.order.OrderInfo;
 import com.anphat.supplier.databinding.ActivityCartBinding;
-import com.anphat.supplier.ui.base.BaseTestActivity;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
 import com.anphat.supplier.ui.booking.BookingActivity;
+import com.anphat.supplier.viewmodel.CartViewModel;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
@@ -25,13 +23,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CartActivity extends BaseTestActivity<ActivityCartBinding> implements CartContract.View {
+public class CartActivity extends BaseMVVMActivity<ActivityCartBinding, CartViewModel> {
     CartAdapter adapter;
-    CartPresenter presenter;
     Double priceTotal = 0.0;
     List<CartInfo> listAllData = new ArrayList<>();
     AppPreference preference;
-    BookingInfo itemMain = null;
+
+    @Override
+    protected Class<CartViewModel> getClassVM() {
+        return CartViewModel.class;
+    }
 
     @Override
     public ActivityCartBinding getViewBinding() {
@@ -81,9 +82,45 @@ public class CartActivity extends BaseTestActivity<ActivityCartBinding> implemen
 
     @Override
     protected void initData() {
-        presenter = new CartPresenter(this);
-        presenter.checkBooking();
-        presenter.GetListCart(PublicVariables.UserInfo.getNguoiDungMobileID());
+        viewModel.GetListAllCart();
+    }
+
+    @Override
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.itemListCart.observe(this, list -> {
+            if (list.size() == 0) {
+                showNoResult(true);
+                showProgressDialog(false);
+                return;
+            }
+
+            try {
+                priceTotal = 0.0;
+                listAllData = list;
+                adapter.clear();
+                adapter.addAll(list);
+                for (CartInfo item : list) {
+                    if (item.getDonGia() != null) {
+                        priceTotal = priceTotal + Double.parseDouble(String.valueOf(item.getDonGia() * item.getSoLuong()));
+                    }
+                }
+            } catch (Exception ignored) {
+
+            }
+            setPrice(priceTotal);
+            showProgressDialog(false);
+        });
+
+        viewModel.mItemDeleteCart.observe(this, aBoolean -> {
+            if (aBoolean){
+                initData();
+
+            }
+        });
+
+        viewModel.mItemUpdateCart.observe(this, condition -> initData());
+
     }
 
     @Override
@@ -91,89 +128,6 @@ public class CartActivity extends BaseTestActivity<ActivityCartBinding> implemen
 
     }
 
-    @Override
-    public void onGetListAllCartSuccess(List<CartInfo> list) {
-        if (list.size() == 0) {
-            showNoResult(true);
-            showProgressDialog(false);
-            return;
-        }
-        priceTotal = 0.0;
-        listAllData = list;
-        adapter.clear();
-        adapter.addAll(list);
-        for (CartInfo item : list) {
-            priceTotal = priceTotal + Double.parseDouble(String.valueOf(item.getDonGia() * item.getSoLuong()));
-        }
-        setPrice(priceTotal);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onGetListAllCartError(String error) {
-        showMessage(error);
-        showProgressDialog(false);
-    }
-
-    @Override
-    public void onUpdateCartSuccess(CartCondition info) {
-        initData();
-    }
-
-    @Override
-    public void onUpdateCartError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onDeleteCartSuccess() {
-        initData();
-    }
-
-    @Override
-    public void onDeleteCartError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetDonGiaProductByUserSuccess(Double price) {
-    }
-
-    @Override
-    public void onGetDonGiaProductByUserError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onGetProductInventorySuccess(Double result) { // ton kho
-    }
-
-    @Override
-    public void onGetProductInventoryError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onInsertOrderSuccess(OrderInfo item, CallInfo info) {
-        preference.setBooking(item.getSoCt());
-    }
-
-    @Override
-    public void onInsertOrderError(String error) {
-        showMessage(error);
-    }
-
-    @Override
-    public void onCheckBookingSuccess(BookingInfo info) {
-        itemMain = info;
-        PublicVariables.itemBooking = info;
-    }
-
-    @Override
-    public void onCheckBookingError(String error) {
-        itemMain = null;
-        PublicVariables.itemBooking = null;
-    }
 
     @SuppressLint("NonConstantResourceId")
     public void onAdapterClick() {
@@ -193,7 +147,7 @@ public class CartActivity extends BaseTestActivity<ActivityCartBinding> implemen
                     info.setSoLuong(count);
                     adapter.remoteItem(position);
                     if (count == 0) {
-                        DeleteCart(info.getID());
+                        DeleteCart(info.getID().toString());
                     } else {
                         adapter.add(info, position);
                         UpdateCart(info);
@@ -210,18 +164,17 @@ public class CartActivity extends BaseTestActivity<ActivityCartBinding> implemen
         CartCondition condition = new CartCondition();
         condition.setID(info.getID());
         condition.setProductID(info.getProductID());
+        condition.SanPhamChinhID = info.SanPhamChinhID;
         condition.setGhiChu(info.getGhiChu());
         condition.setNguoiDungMobileID(info.getNguoiDungMobileID());
         condition.setCreateDate(info.getCreateDate());
         condition.setSoLuong(info.getSoLuong());
         condition.setModifiedDate(AppUtils.formatDateToString(date, "yyyy-MM-dd'T'HH:mm:ss"));
-        presenter = new CartPresenter(this);
-        presenter.UpdateCart(condition);
+        viewModel.UpdateCart(condition);
     }
 
-    public void DeleteCart(Integer ID) {
-        presenter = new CartPresenter(this);
-        presenter.DeleteCart(ID);
+    public void DeleteCart(String ID) {
+        viewModel.DeleteCart(ID);
     }
 
     public void setPrice(Double price) {

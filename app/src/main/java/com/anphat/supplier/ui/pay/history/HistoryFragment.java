@@ -14,7 +14,7 @@ import com.anphat.supplier.data.entities.HistoryBooking;
 import com.anphat.supplier.databinding.FragmentHistoryBinding;
 import com.anphat.supplier.ui.base.BaseMainFragment;
 import com.anphat.supplier.ui.pay.history.vote.VoteEmployeeActivity;
-import com.anphat.supplier.ui.viewmodel.HistoryViewModel;
+import com.anphat.supplier.viewmodel.HistoryViewModel;
 import com.anphat.supplier.utils.PublicVariables;
 
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
 
     @Override
     protected void initView() {
+        showProgressDialog(true);
         viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         adapter = new HistoryBookingAdapter(new ArrayList<>(), getContext());
         binding.rcl.setAdapter(adapter);
@@ -94,6 +95,8 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
             } else {
                 checkResult(true);
             }
+
+            showProgressDialog(false);
         });
 
         viewModel.ItemDetail.observe(this, item -> {

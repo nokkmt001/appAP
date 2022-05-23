@@ -9,15 +9,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CartInfo {
-    private Integer ID;
-    private Integer NguoiDungMobileID;
-    private Integer SoLuong;
-    private String ProductID;
-    private String ProductName;
-    private String GhiChu;
-    private String CreateDate;
-    private String ModifiedDate;
-    private Integer DonGia;
+    public Integer ID;
+    public Integer NguoiDungMobileID;
+    public Integer SoLuong;
+    public String ProductID;
+    public String ProductName;
+    public String GhiChu;
+    public String CreateDate;
+    public String ModifiedDate;
+    public Integer DonGia;
+    public String SanPhamChinhID;
 
     public Integer getNguoiDungMobileID() {
         return NguoiDungMobileID;

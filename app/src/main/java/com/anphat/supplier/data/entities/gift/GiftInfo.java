@@ -4,5 +4,6 @@ public class GiftInfo {
     public Integer id;
     public String title;
     public String photo;
+    public String code;
 
 }

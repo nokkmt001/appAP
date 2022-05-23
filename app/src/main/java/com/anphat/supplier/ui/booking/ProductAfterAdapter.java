@@ -13,18 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.data.network.product.IProductModel;
 import com.bumptech.glide.Glide;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.order.ChiTietDonInfo;
-import com.anphat.supplier.data.network.product.ProductModel;
 import com.anphat.supplier.ui.base.BaseEventClick;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAfterAdapter extends RecyclerView.Adapter<ProductAfterAdapter.MyViewHolder> {
-    ProductModel model;
     BaseEventClick.OnClickListener clickListener;
     List<ChiTietDonInfo> listAllData = new ArrayList<>();
     Context mContext;
@@ -36,7 +33,6 @@ public class ProductAfterAdapter extends RecyclerView.Adapter<ProductAfterAdapte
 
     public ProductAfterAdapter(Context context) {
         this.mContext = context;
-        this.model = new ProductModel();
     }
 
     public void clear() {

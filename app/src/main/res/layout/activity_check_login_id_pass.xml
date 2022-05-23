@@ -95,7 +95,6 @@
                 style="@style/AppTheme.TextView"
                 android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginTop="@dimen/dp_10"
-                android:enabled="false"
                 android:text="@string/forget_pass"
                 android:textColor="@color/colorPrimary" />
 
