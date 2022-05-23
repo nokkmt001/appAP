@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.adapter.rxjava2.HttpException;
 
 public class BaseViewModel extends AndroidViewModel implements Consumer<Disposable> {
     private CompositeDisposable mCompositeDisposable;
@@ -73,6 +74,16 @@ public class BaseViewModel extends AndroidViewModel implements Consumer<Disposab
         }
         builder.setType(MultipartBody.FORM);
         return builder.build();
+    }
+
+    protected String getError(Throwable messages) {
+        try {
+            String man = ((HttpException) messages).response().errorBody().string();
+            ApiResponseSbke result = ApiResponseSbke.getInfo(man);
+            return result.Message;
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     protected void showMessage(String error) {

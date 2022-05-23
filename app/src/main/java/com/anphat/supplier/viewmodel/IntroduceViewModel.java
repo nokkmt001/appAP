@@ -26,8 +26,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IntroduceViewModel extends BaseViewModel{
+public class IntroduceViewModel extends BaseViewModel {
     PresenterUserModel model;
+
     public IntroduceViewModel(@NonNull Application application) {
         super(application);
         model = new PresenterUserModel();
@@ -44,21 +45,25 @@ public class IntroduceViewModel extends BaseViewModel{
                     public void onSubscribe(Disposable d) {
                         addSubscribe(d);
                     }
+
                     @Override
                     public void onNext(ApiResponseSbke<List<IntroducePerInfo>> value) {
-                        if (value.Status!=0){
+                        if (value.Status != 0) {
                             showMessage(value.Message);
                             itemList.setValue(null);
                             return;
                         }
                         itemList.setValue(value.Data);
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         itemList.setValue(null);
                     }
+
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                    }
                 });
     }
 
@@ -73,16 +78,21 @@ public class IntroduceViewModel extends BaseViewModel{
                     public void onSubscribe(Disposable d) {
                         addSubscribe(d);
                     }
+
                     @Override
                     public void onNext(ApiResponseSbke<InsertPresenterInfo> value) {
                         itemMain.setValue(value);
                     }
+
                     @Override
                     public void onError(Throwable e) {
+                        showToast(getError(e));
                         itemMain.setValue(null);
                     }
+
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                    }
                 });
 
 //        EmptyObject object = new EmptyObject();
