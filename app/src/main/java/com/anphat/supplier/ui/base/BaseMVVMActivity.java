@@ -4,7 +4,6 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static com.anphat.supplier.utils.ImageUtils.getOutputMediaFileUri;
 
 import android.Manifest;
-import android.app.Application;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
@@ -51,11 +50,12 @@ import java.util.Objects;
 public abstract class BaseMVVMActivity<T extends ViewBinding, VM extends BaseViewModel> extends AppCompatActivity implements View.OnClickListener {
     Dialog progressDialog;
     String error = "";
-    private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
     String[] permissionsMain = {};
-    private SpeechRecognizer speechRecognizer;
-    int count = 0;
     String imageStoragePath = "";
+
+    int count = 0;
+    private final int REQUEST_MULTIPLE_PERMISSIONS = 100;
+    private SpeechRecognizer speechRecognizer;
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
     protected T binding;
@@ -85,11 +85,13 @@ public abstract class BaseMVVMActivity<T extends ViewBinding, VM extends BaseVie
 
     }
 
-    protected void startInit(Bundle savedInstanceState){}
 
     protected abstract Class<VM> getClassVM();
 
     public abstract T getViewBinding();
+
+    protected void startInit(Bundle savedInstanceState){}
+
 
     protected void initView() {
     }
@@ -424,7 +426,6 @@ public abstract class BaseMVVMActivity<T extends ViewBinding, VM extends BaseVie
         System.out.println("finish-activity--------------------------");
         binding = null;
         viewModel = null;
-        AppController.clearCache();
         AppController.clearSubscribe();
 
     }

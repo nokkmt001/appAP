@@ -33,24 +33,16 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.ResponseInfo;
-import com.anphat.supplier.ui.sms.contact.ContactModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -440,46 +432,6 @@ public class AppUtils {
             soDienThoai += ", " + soDienThoai2;
         }
         return soDienThoai;
-    }
-
-    public static String getMessageVolleyError(VolleyError error) {
-        String message = "";
-        String responseBody = null;
-        if (error instanceof AuthFailureError) {
-            return AppConstants.Error_KetNoiServer + "\nError: AuthFailureError";
-        } else if (error instanceof NoConnectionError) {
-            return AppConstants.Error_KetNoiServer + "\nError: NoConnectionError";
-        } else if (error instanceof TimeoutError) {
-            return AppConstants.Error_KetNoiServer + "\nError: TimeoutError";
-        }
-
-        try {
-            if (error.networkResponse != null) {
-                responseBody = new String(error.networkResponse.data, "utf-8");
-            } else {
-                message = error.getMessage();
-                if (message.contains(AppConstants.URL_SERVER)) {
-                    return AppConstants.Error_KetNoiServer;
-                }
-                return error.getMessage();
-            }
-        } catch (UnsupportedEncodingException e) {
-            return "";
-        }
-
-        try {
-            JSONObject jsonObject = new JSONObject(responseBody);
-            message = jsonObject.getString("Message");
-        } catch (JSONException e) {
-
-            try {
-                Document doc = Jsoup.parse(responseBody);
-                return doc.title();
-            } catch (Exception e1) {
-                return e.getMessage();
-            }
-        }
-        return message;
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {

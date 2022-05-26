@@ -16,7 +16,6 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -123,11 +122,7 @@ public abstract class BaseMainFragment<T extends ViewBinding> extends Fragment i
         builder.setTitle(getActivity().getResources().getString(R.string.title_error_msg))
                 .setMessage(error)
                 .setCancelable(false)
-                .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                    }
-                });
+                .setPositiveButton(getResources().getString(R.string.dialog_btn_ok), (dialog, id) -> dialog.cancel());
         final AlertDialog alert = builder.create();
         alert.show();
     }
@@ -222,8 +217,19 @@ public abstract class BaseMainFragment<T extends ViewBinding> extends Fragment i
         }
     }
 
+    public void startActivityMain(Class<?> clz, Bundle bundle, int flat) {
+        Intent intent = new Intent(getContext(), clz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        if (flat!=0){
+            intent.addFlags(flat);
+        }
+        startActivity(intent);
+    }
+
     private void showMessagePermissions() {
-        new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getContext())
                 .setTitle("QUYỀN ỨNG DỤNG")
                 .setMessage("Ứng dụng cần được cấp nhiều quyền hơn.")
                 .setPositiveButton("CẤP QUYỀN", (dialog, which) -> {

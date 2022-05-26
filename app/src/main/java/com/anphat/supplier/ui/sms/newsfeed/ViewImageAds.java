@@ -12,6 +12,10 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.BannerInfo;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -26,7 +30,7 @@ public class ViewImageAds extends PagerAdapter {
         listAllData = list;
     }
 
-    public void AddAll(List<BannerInfo> list){
+    public void AddAll(List<BannerInfo> list) {
         listAllData.addAll(list);
         notifyDataSetChanged();
     }

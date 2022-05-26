@@ -6,5 +6,6 @@ public class NotificationCondition {
     public Integer NguoiDungMobileID;
     public String LoaiThongBao;
     public String TrangThai;
-    
+    public Integer ThongBaoMobileUserID;
+
 }

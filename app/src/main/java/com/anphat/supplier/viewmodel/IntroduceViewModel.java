@@ -5,15 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 
 import com.anphat.supplier.data.entities.IntroducePerInfo;
-import com.anphat.supplier.data.entities.condition.EmptyObject;
 import com.anphat.supplier.data.entities.condition.InsertIntroduceInfo;
 import com.anphat.supplier.data.entities.presenteruser.InsertPresenterInfo;
 import com.anphat.supplier.data.network.api.ApiResponseSbke;
-import com.anphat.supplier.data.network.apiretrofit.API;
-import com.anphat.supplier.data.network.apiretrofit.RetrofitWsbke;
 import com.anphat.supplier.data.network.apiretrofit.SingleLiveDate;
-import com.anphat.supplier.data.network.presenteruser.IPresenterUserModel;
-import com.anphat.supplier.data.network.presenteruser.PresenterUserModel;
 import com.anphat.supplier.utils.PublicVariables;
 
 import java.util.List;
@@ -22,16 +17,10 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class IntroduceViewModel extends BaseViewModel {
-    PresenterUserModel model;
-
     public IntroduceViewModel(@NonNull Application application) {
         super(application);
-        model = new PresenterUserModel();
     }
 
     public final SingleLiveDate<List<IntroducePerInfo>> itemList = new SingleLiveDate<>();
@@ -95,38 +84,6 @@ public class IntroduceViewModel extends BaseViewModel {
                     }
                 });
 
-//        EmptyObject object = new EmptyObject();
-//        object.nguoiDungMobileID = PublicVariables.UserInfo.getNguoiDungMobileID().toString();
-//        object.soDienThoaiGioiThieu = ID;
-//
-//        server.insertIntroduce(object).enqueue(new Callback<ApiResponseSbke<InsertPresenterInfo>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ApiResponseSbke<InsertPresenterInfo>> call, @NonNull Response<ApiResponseSbke<InsertPresenterInfo>> response) {
-//                if (response.isSuccessful()){
-//                    assert response.body() != null;
-//                    itemMain.postValue(response.body().Data);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ApiResponseSbke<InsertPresenterInfo>> call, @NonNull Throwable t) {
-//                itemMain.postValue(null);
-//                showToast(t.getMessage());
-//            }
-//        });
-
-//        model.InsertPresenter(ID, new IPresenterUserModel.IInsertPresenterFinish() {
-//            @Override
-//            public void onSuccess(InsertPresenterInfo info) {
-//                itemMain.setValue(info);
-//            }
-//
-//            @Override
-//            public void onError(String error) {
-//                itemMain.setValue(null);
-//                showToast(error);
-//            }
-//        });
     }
 
 }

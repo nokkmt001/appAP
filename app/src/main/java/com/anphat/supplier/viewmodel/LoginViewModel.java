@@ -153,7 +153,11 @@ public class LoginViewModel extends BaseViewModel {
 
                     @Override
                     public void onNext(ApiResponseSbke<EmptyObject> value) {
-                        mItemChangePass.setValue(true);
+                        if (value.Status!=0){
+                            mItemChangePass.setValue(false);
+                            showToast(value.Message);
+                        }
+                        mItemChangePass.setValue(false);
                     }
 
                     @Override
@@ -161,6 +165,7 @@ public class LoginViewModel extends BaseViewModel {
                         showToast(e.getMessage());
                         mItemChangePass.setValue(false);
                     }
+
                     @Override
                     public void onComplete() {
                     }

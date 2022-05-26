@@ -175,4 +175,10 @@ public interface API {
     @POST("api/ThongBaoMobile/GetListThongBaoMobileByNguoiDungID")
     Observable<ApiResponseSbke<RvList<NotificationMain>>> getListNotification(@Body NotificationCondition condition);
 
+    @POST("api/ThongBaoMobile/DanhDauDaDoc")
+    Observable<ApiResponseSbke<EmptyObject>> updateViewNotification(@Body NotificationCondition condition);
+
+    @POST("api/ThongBaoMobile/DanhDauDaDocTatCa")
+    Observable<ApiResponseSbke<EmptyObject>> updateViewAllNotification(@Body NotificationCondition condition);
+
 }

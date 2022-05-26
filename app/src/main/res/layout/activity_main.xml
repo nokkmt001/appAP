@@ -5,7 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -147,6 +147,32 @@
                         android:layout_marginStart="@dimen/dp_5"
                         android:layout_toEndOf="@+id/imageIntroduce"
                         android:text="Người giới thiệu"
+                        android:textSize="@dimen/textSize_16" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/layoutChangePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5">
+
+                    <ImageView
+                        android:id="@+id/imageTest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_change_pass_word" />
+
+                    <TextView
+                        style="@style/AppTheme.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_toEndOf="@+id/imageTest"
+                        android:text="@string/title_change_pass"
                         android:textSize="@dimen/textSize_16" />
 
                 </RelativeLayout>

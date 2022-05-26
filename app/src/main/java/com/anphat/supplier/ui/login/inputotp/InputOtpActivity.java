@@ -2,8 +2,6 @@ package com.anphat.supplier.ui.login.inputotp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 
 import com.anphat.supplier.ui.base.BaseMVVMActivity;
@@ -14,7 +12,7 @@ import com.google.gson.Gson;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
 import com.anphat.supplier.databinding.ActivityOtpBinding;
-import com.anphat.supplier.main.MainActivity;
+import com.anphat.supplier.ui.main.MainActivity;
 import com.anphat.supplier.ui.login.checkidpass.CheckLoginByIDPassActivity;
 import com.anphat.supplier.ui.login.checkphone.CheckPhoneActivity;
 import com.anphat.supplier.utils.AppUtils;

@@ -4,7 +4,6 @@ import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.anphat.supplier.main.MainActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.anphat.supplier.R;
 import com.anphat.supplier.ui.base.BaseFragment;

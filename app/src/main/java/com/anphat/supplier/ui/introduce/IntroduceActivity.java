@@ -23,7 +23,6 @@ public class IntroduceActivity extends BaseMVVMActivity<FragmentIntroduceBinding
     protected FragmentIntroduceBinding bd;
     IntroduceAdapter adapter;
     List<IntroducePerInfo> listAllData = new ArrayList<>();
-    private Timer timer;
 
     @Override
     protected Class<IntroduceViewModel> getClassVM() {

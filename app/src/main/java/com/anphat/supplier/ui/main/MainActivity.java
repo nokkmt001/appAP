@@ -1,4 +1,4 @@
-package com.anphat.supplier.main;
+package com.anphat.supplier.ui.main;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,13 +17,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.anphat.supplier.data.entities.CategoryNew;
 import com.anphat.supplier.data.entities.ProductNew;
-import com.anphat.supplier.ui.base.BaseTestActivity;
+import com.anphat.supplier.data.entities.condition.NotificationCondition;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
 import com.anphat.supplier.ui.category.DetailCategoryFragment;
 import com.anphat.supplier.ui.home.ShowFragment;
+import com.anphat.supplier.ui.login.forgetpass.ChangePassActivity;
 import com.anphat.supplier.ui.pay.history.HistoryFragment;
 import com.anphat.supplier.ui.pay.pending.PendingFragment;
 import com.anphat.supplier.viewmodel.MainViewModel;
@@ -44,7 +45,7 @@ import com.anphat.supplier.utils.TestConstants;
 
 import java.util.List;
 
-public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
+public class MainActivity extends BaseMVVMActivity<ActivityMainBinding, MainViewModel> {
     BottomNavigationView bottomNavigationView;
     FragmentManager fmManager;
     Fragment fmMain, fmHistory, fmPay, fmSms, fmAccount, fmActive;
@@ -58,11 +59,15 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
     public static final int FROM_MAIN = 0;
     TestReceiver testReceiver;
     HomeFragment fragmentMain;
-    MainViewModel viewModel;
     NewsFeedFragment fragmentNews;
     PendingFragment pendingFragment;
     HistoryFragment historyFragment;
     AccountFragment accountFragment;
+
+    @Override
+    protected Class<MainViewModel> getClassVM() {
+        return MainViewModel.class;
+    }
 
     @Override
     public ActivityMainBinding getViewBinding() {
@@ -72,7 +77,6 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
     @Override
     protected void initData() {
         hideKeyboard();
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         testReceiver = new TestReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(TestConstants.ACTION_MAIN_ACTIVITY);
@@ -81,6 +85,13 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
         viewModel.GetListAllCart();
         viewModel.checkBooking();
         viewModel.GetListKho();
+        NotificationCondition condition = new NotificationCondition();
+        condition.Begin = 1;
+        condition.End = 100;
+        condition.LoaiThongBao = "TatCa";
+        condition.NguoiDungMobileID = PublicVariables.UserInfo.getNguoiDungMobileID();
+        condition.TrangThai = "ChuaXem";
+        viewModel.getListNotification(condition);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnListener);
         bottomNavigationView.setSelectedItemId(R.id.navigation_main);
 
@@ -141,6 +152,19 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                         binding.layoutHeader.layoutGGG.setVisibility(View.GONE);
                     }
                 }
+            }
+        });
+
+        viewModel.itemListSuccess.observe(this, result -> {
+            if (result != null) {
+                if (result.List.size() > 0) {
+                    binding.layoutHeader.layoutNotifications.textNumberCart.setVisibility(View.VISIBLE);
+                    binding.layoutHeader.layoutNotifications.textNumberCart.setText(String.valueOf(result.List.size()));
+                } else {
+                    binding.layoutHeader.layoutNotifications.textNumberCart.setVisibility(View.GONE);
+                }
+            } else {
+                binding.layoutHeader.layoutNotifications.textNumberCart.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -207,6 +231,15 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                     StartFullProduct(AppPreference.getProductFull());
                 }
         );
+        binding.layoutChangePass.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ChangePassActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("OBJECT", PublicVariables.UserInfo);
+            intent.putExtras(bundle);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
         fragmentMain = new HomeFragment();
         fragmentNews = new NewsFeedFragment();
         pendingFragment = new PendingFragment();
@@ -249,6 +282,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.navigation_main:
+                            fragmentMain = new HomeFragment();
                             fragmentMain.setClick((view, position) -> binding.layoutHeader.layoutGGG.setVisibility(View.GONE));
                             setBottomNavigationView(fmMain, fragmentMain, "1");
                             fmMain = fragmentMain;
@@ -293,7 +327,8 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
 
     public void setBottomNavigationView(Fragment fmMain, Fragment fragment, String tab) {
         binding.layoutHeader.layoutGGG.setVisibility(View.VISIBLE);
-        if (fmMain == null) {
+        CommonFM.fragmentWait = fragment;
+      /*  if (fmMain == null) {
             fmMain = fragment;
             if (fmActive != null) {
                 if (CommonFM.fragment != null) {
@@ -333,11 +368,11 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
             fmManager.beginTransaction().hide(fmActive).show(fmMain).commit();
 
         }
-        fmActive = fmMain;
+        fmActive = fmMain;*/
+        fmManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
 
     public void onLoadCartListener() {
-//        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.GetListAllCart();
     }
 
@@ -397,7 +432,7 @@ public class MainActivity extends BaseTestActivity<ActivityMainBinding> {
         DetailCategoryFragment nextFrag = new DetailCategoryFragment(info);
         CommonFM.fragmentThree = nextFrag;
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container, nextFrag, "three")
+                .replace(R.id.frame_container, nextFrag, "three")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();

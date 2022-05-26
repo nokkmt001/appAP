@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anphat.supplier.R;
@@ -24,6 +25,10 @@ import com.anphat.supplier.data.network.apiretrofit.RetrofitWsbke;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -98,6 +103,11 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
                                         .load(url)
                                         .error(R.drawable.img_no_image)
                                         .override(500,500)
+                                        .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(25))
+                                                .placeholder(R.drawable.ic_loading_anim)
+                                                .error(R.drawable.img_no_image)
+                                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        )
                                         .into(holder.imageMain);
                             }
                         }
@@ -129,6 +139,7 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
         TextView textTitle,textPrice, textTT,textAddress, textNV;
         Button buttonVote, buttonBooking;
         ImageView imageMain;
+        ConstraintLayout layout;
         public ItemHolder(@NonNull View view) {
             super(view);
             textNV = bind(view,R.id.textNV);
@@ -137,6 +148,8 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
             textTitle = bind(view, R.id.textTitle);
             textPrice = bind(view, R.id.textPrice);
             buttonVote = bind(view, R.id.buttonVote);
+            layout = bind(view, R.id.layout);
+
             buttonBooking = bind(view, R.id.buttonBooking);
             imageMain = bind(view,R.id.imageMain);
             buttonVote.setOnClickListener(view1 -> {
@@ -147,6 +160,11 @@ public class HistoryBookingAdapter extends RecyclerView.Adapter<HistoryBookingAd
             buttonBooking.setOnClickListener(view12 -> {
                 if (onClick!=null){
                     onClick.onClick(view12,getAdapterPosition());
+                }
+            });
+            layout.setOnClickListener(view1 -> {
+                if (onClick!=null){
+                    onClick.onClick(view1,getAdapterPosition());
                 }
             });
         }

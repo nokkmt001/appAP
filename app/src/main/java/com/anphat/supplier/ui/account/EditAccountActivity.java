@@ -1,12 +1,9 @@
 package com.anphat.supplier.ui.account;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,13 +11,11 @@ import android.view.View;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
-import com.anphat.supplier.databinding.ActivityChangeAddressBinding;
 import com.anphat.supplier.databinding.ActivityEditAccountBinding;
 import com.anphat.supplier.ui.address.PlaceActivity;
-import com.anphat.supplier.ui.base.BaseTestActivity;
-import com.anphat.supplier.ui.login.forgetpass.ForgetPassContract;
-import com.anphat.supplier.ui.login.forgetpass.ForgetPassPresenter;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
 import com.anphat.supplier.utils.PublicVariables;
+import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,11 +28,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class EditAccountActivity extends BaseTestActivity<ActivityEditAccountBinding> implements OnMapReadyCallback, ForgetPassContract.View {
+public class EditAccountActivity extends BaseMVVMActivity<ActivityEditAccountBinding, LoginViewModel> implements OnMapReadyCallback {
     NewCustomer info;
     private GoogleMap mMap;
-    ForgetPassPresenter presenter;
     private static int REQUESTMAP = 1;
+
+    @Override
+    protected Class<LoginViewModel> getClassVM() {
+        return LoginViewModel.class;
+    }
 
     @Override
     public ActivityEditAccountBinding getViewBinding() {
@@ -46,7 +45,6 @@ public class EditAccountActivity extends BaseTestActivity<ActivityEditAccountBin
 
     @Override
     protected void initView() {
-        presenter = new ForgetPassPresenter(this);
         info = PublicVariables.UserInfo;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
@@ -74,16 +72,16 @@ public class EditAccountActivity extends BaseTestActivity<ActivityEditAccountBin
 
     }
 
-    private void validate(){
-        if (TextUtils.isEmpty(binding.textName.getText())){
+    private void validate() {
+        if (TextUtils.isEmpty(binding.textName.getText())) {
             showMessage("Bạn chưa nhập họ tên!");
             return;
         }
-        if (TextUtils.isEmpty(binding.textNumberPhone.getText())){
+        if (TextUtils.isEmpty(binding.textNumberPhone.getText())) {
             showMessage("Bạn chưa nhập số điện thoại!");
             return;
         }
-        if (TextUtils.isEmpty(binding.textAddress.getText())){
+        if (TextUtils.isEmpty(binding.textAddress.getText())) {
             showMessage("Bạn chưa nhập địa chỉ!");
             return;
         }
@@ -91,12 +89,20 @@ public class EditAccountActivity extends BaseTestActivity<ActivityEditAccountBin
         info.setDiaChi(binding.textAddress.getText().toString());
         info.setHoTen(Objects.requireNonNull(binding.textName.getText()).toString());
         info.setSoDienThoai(Objects.requireNonNull(binding.textNumberPhone.getText()).toString());
-        presenter.UpdateCustomer(info);
+        viewModel.UpdateCustomer(info);
     }
 
     @Override
-    protected void initData() {
-
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemUpdate.observe(this, info -> {
+            if (info != null) {
+                AppPreference.saveUser(info);
+                showToast("Cập nhật thông tin thành công!");
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -171,18 +177,5 @@ public class EditAccountActivity extends BaseTestActivity<ActivityEditAccountBin
             }
         }
 
-    }
-
-    @Override
-    public void onUpdateCustomerSuccess(NewCustomer info) {
-        AppPreference.saveUser(info);
-        showToast("Cập nhật thông tin thành công!");
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
-    public void onUpdateCustomerError(String error) {
-        showMessage(error);
     }
 }

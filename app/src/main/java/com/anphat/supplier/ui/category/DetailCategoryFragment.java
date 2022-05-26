@@ -20,6 +20,7 @@ import com.anphat.supplier.ui.base.BaseMainFragment;
 import com.anphat.supplier.ui.cart.CartActivity;
 import com.anphat.supplier.ui.home.CommonFM;
 import com.anphat.supplier.ui.home.DataFilterProduct;
+import com.anphat.supplier.ui.home.HomeFragment;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.ui.product.full.ChooseProductFragment;
 import com.anphat.supplier.utils.PublicVariables;
@@ -105,7 +106,7 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     @Override
     protected void initData() {
         onLoadCategory(category.id);
-        if (PublicVariables.listBooking!=null){
+        if (PublicVariables.listBooking != null) {
             binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
         } else {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
@@ -157,7 +158,7 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     private void StartFragmentHome() {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .hide(this)
-                .show(CommonFM.fragment)
+                .replace(R.id.frame_container, CommonFM.fragmentWait,"two")
                 .addToBackStack(null)
                 .commit();
     }
@@ -166,7 +167,7 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
         ChooseProductFragment nextFrag = new ChooseProductFragment(ID, false);
         CommonFM.fragmentTwo = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container, nextFrag, "one")
+                .replace(R.id.frame_container, nextFrag, "one")
 //                .hide(CommonFM.fragmentThree)
                 .hide(this)
                 .addToBackStack(null)

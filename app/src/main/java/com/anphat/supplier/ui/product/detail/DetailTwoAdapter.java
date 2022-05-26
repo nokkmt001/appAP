@@ -24,6 +24,10 @@ import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +118,11 @@ public class DetailTwoAdapter extends RecyclerView.Adapter<DetailTwoAdapter.MyVi
         Glide.with(mContext)
                 .load(url)
                 .error(R.drawable.img_no_image)
-                .placeholder(R.drawable.img_no_image)
+                .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(25))
+                        .placeholder(R.drawable.ic_loading_anim)
+                        .error(R.drawable.img_no_image)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .override(300,300)
                 .into(holder.imageView);
 

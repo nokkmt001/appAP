@@ -396,7 +396,7 @@ public abstract class BaseTestActivity<T extends ViewBinding> extends AppCompatA
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        AppController.clearCache();
+        AppController.clearSubscribe();
 
     }
 }

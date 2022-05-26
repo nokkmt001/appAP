@@ -15,7 +15,7 @@ import com.anphat.supplier.ui.login.inputotp.InputOtpActivity;
 import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.gson.Gson;
 import com.anphat.supplier.databinding.ActivityCheckLoginIdPassBinding;
-import com.anphat.supplier.main.MainActivity;
+import com.anphat.supplier.ui.main.MainActivity;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
@@ -126,7 +126,8 @@ public class CheckLoginByIDPassActivity extends BaseMVVMActivity<ActivityCheckLo
         super.onObserver();
         viewModel.mItemCheckIDPass.observe(this, info -> {
             if (info != null) {
-                viewModel.getFCM(PublicVariables.token);
+                this.info = info;
+                insertFCM();
                 Gson gson = new Gson();
                 String json = gson.toJson(info);
                 preference.setUser(json);
@@ -156,23 +157,20 @@ public class CheckLoginByIDPassActivity extends BaseMVVMActivity<ActivityCheckLo
 
         });
 
-        viewModel.mItemGetFCM.observe(this, result -> {
-            if (result.Status == 0) {
-                showToast("get fcm success");
-            } else {
-                FCMMobileInfo fcmMobileInfo = new FCMMobileInfo();
-                fcmMobileInfo.HeDieuHanh = "ANDROID";
-                fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
-                fcmMobileInfo.Token = PublicVariables.token;
-                viewModel.insertFCM(fcmMobileInfo);
-            }
-        });
         viewModel.mItemInsertFCM.observe(this, fcmMobileInfo -> {
-            if (fcmMobileInfo!=null){
+            if (fcmMobileInfo != null) {
                 showToast("insert fcm success");
             }
         });
 
+    }
+
+    public void insertFCM() {
+        FCMMobileInfo fcmMobileInfo = new FCMMobileInfo();
+        fcmMobileInfo.HeDieuHanh = "ANDROID";
+        fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
+        fcmMobileInfo.Token = PublicVariables.token;
+        viewModel.insertFCM(fcmMobileInfo);
     }
 
     @SuppressLint("SetTextI18n")
@@ -182,6 +180,7 @@ public class CheckLoginByIDPassActivity extends BaseMVVMActivity<ActivityCheckLo
     }
 
     @Override
-    public void onClick(View view) {}
+    public void onClick(View view) {
+    }
 
 }

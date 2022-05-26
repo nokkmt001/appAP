@@ -27,8 +27,6 @@ import com.anphat.supplier.ui.splash.SplashActivity;
 import java.util.List;
 
 public class FirebaseService extends FirebaseMessagingService {
-
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Intent intent = new Intent(this, SplashActivity.class);

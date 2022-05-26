@@ -22,7 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-import com.anphat.supplier.main.MainActivity;
+import com.anphat.supplier.ui.main.MainActivity;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
@@ -122,8 +122,9 @@ public class SplashActivity extends BaseMVVMActivity<ActivitySplashBinding, Logi
         super.onObserver();
         viewModel.mItemCheckIDPass.observe(this, info -> {
             if (info != null) {
-                viewModel.getFCM(PublicVariables.token);
+                Log.i("TOKEN--------------", PublicVariables.token);
                 this.info = info;
+                insertFCM();
                 PublicVariables.UserInfo = info;
                 Gson gson = new Gson();
                 String json = gson.toJson(info);
@@ -140,18 +141,6 @@ public class SplashActivity extends BaseMVVMActivity<ActivitySplashBinding, Logi
             finish();
         });
 
-        viewModel.mItemGetFCM.observe(this, result -> {
-            if (result.Status == 0) {
-                showToast("get fcm success");
-            } else {
-                FCMMobileInfo fcmMobileInfo = new FCMMobileInfo();
-                fcmMobileInfo.HeDieuHanh = "ANDROID";
-                fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
-                fcmMobileInfo.Token = PublicVariables.token;
-                fcmMobileInfo.NguoiDung = info.getHoTen();
-                viewModel.insertFCM(fcmMobileInfo);
-            }
-        });
         viewModel.mItemInsertFCM.observe(this, fcmMobileInfo -> {
             showToast("insert fcm success");
         });
@@ -174,6 +163,15 @@ public class SplashActivity extends BaseMVVMActivity<ActivitySplashBinding, Logi
                 checkLogin();
             }
         });
+    }
+
+    public void insertFCM(){
+        FCMMobileInfo fcmMobileInfo = new FCMMobileInfo();
+        fcmMobileInfo.HeDieuHanh = "ANDROID";
+        fcmMobileInfo.SoDienThoai = info.getSoDienThoai();
+        fcmMobileInfo.Token = PublicVariables.token;
+        fcmMobileInfo.NguoiDung = info.getHoTen();
+        viewModel.insertFCM(fcmMobileInfo);
     }
 
     @Override

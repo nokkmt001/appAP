@@ -88,7 +88,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ItemRo
         if (!hinhAnhInfo.equals("")) {
             Glide.with(mContext).asBitmap()
                     .load(AppUtils.formatStringToBitMap(hinhAnhInfo))
-                    .apply(new RequestOptions().override(10, 10))
+                    .apply(new RequestOptions().override(300, 300))
                     .into( holder.imageAdd);
         }
     }

@@ -7,22 +7,17 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.AppPreference;
 import com.anphat.supplier.data.entities.NewCustomer;
 import com.anphat.supplier.databinding.ActivityChangeAddressBinding;
-import com.anphat.supplier.ui.base.BaseTestActivity;
-import com.anphat.supplier.ui.booking.BookingActivity;
-import com.anphat.supplier.ui.login.forgetpass.ForgetPassContract;
-import com.anphat.supplier.ui.login.forgetpass.ForgetPassPresenter;
+import com.anphat.supplier.ui.base.BaseMVVMActivity;
 import com.anphat.supplier.utils.PublicVariables;
+import com.anphat.supplier.viewmodel.LoginViewModel;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,11 +26,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class ChangeAddressActivity extends BaseTestActivity<ActivityChangeAddressBinding> implements OnMapReadyCallback, ForgetPassContract.View {
+public class ChangeAddressActivity extends BaseMVVMActivity<ActivityChangeAddressBinding, LoginViewModel> implements OnMapReadyCallback {
     NewCustomer info;
     private GoogleMap mMap;
-    ForgetPassPresenter presenter;
     private static int REQUESTMAP = 1;
+
+    @Override
+    protected Class<LoginViewModel> getClassVM() {
+        return LoginViewModel.class;
+    }
 
     @Override
     public ActivityChangeAddressBinding getViewBinding() {
@@ -44,13 +43,12 @@ public class ChangeAddressActivity extends BaseTestActivity<ActivityChangeAddres
 
     @Override
     protected void initView() {
-        presenter = new ForgetPassPresenter(this);
         info = PublicVariables.UserInfo;
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
         binding.layoutHeader.imageBack.setOnClickListener(v -> finish());
-        binding.layoutHeader.textTitle.setText("Địa chỉ");
+        binding.layoutHeader.textTitle.setText(R.string.title_address);
         binding.textName.setText(info.getHoTen());
         binding.textNumberPhone.setText(info.getSoDienThoai());
         binding.textAddress.setText(info.getDiaChi());
@@ -68,14 +66,19 @@ public class ChangeAddressActivity extends BaseTestActivity<ActivityChangeAddres
         });
         binding.layoutHeader.textOK.setOnClickListener(v -> {
             info.setDiaChi(binding.textAddress.getText().toString());
-            presenter.UpdateCustomer(info);
+            viewModel.UpdateCustomer(info);
         });
 
     }
 
     @Override
-    protected void initData() {
-
+    protected void onObserver() {
+        super.onObserver();
+        viewModel.mItemUpdate.observe(this, info -> {
+            AppPreference.saveUser(info);
+            showToast("Cập nhật địa chỉ thành công!");
+            finish();
+        });
     }
 
     @Override
@@ -150,17 +153,5 @@ public class ChangeAddressActivity extends BaseTestActivity<ActivityChangeAddres
                 checkLocation(gg);
             }
         }
-    }
-
-    @Override
-    public void onUpdateCustomerSuccess(NewCustomer info) {
-        AppPreference.saveUser(info);
-        showToast("Cập nhật địa chỉ thành công!");
-        finish();
-    }
-
-    @Override
-    public void onUpdateCustomerError(String error) {
-        showMessage(error);
     }
 }

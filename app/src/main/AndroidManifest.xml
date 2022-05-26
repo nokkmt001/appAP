@@ -30,6 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="m">
         <activity
             android:name=".ui.account.EditAccountActivity"
@@ -72,7 +73,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
-            android:name=".main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
         <activity
@@ -102,10 +103,6 @@
             android:exported="false"/>
         <activity
             android:name=".ui.pay.history.vote.VoteEmployeeActivity"
-            android:screenOrientation="portrait"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.update.UpdateActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
         <activity
@@ -140,7 +137,18 @@
             android:name=".ui.notification.NotificationActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
-        <activity android:name=".ui.login.checkphone.CheckPhoneForgetPassActivity" />
+        <activity android:name=".ui.login.checkphone.CheckPhoneForgetPassActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+        <activity android:name=".ui.notification.NotificationDetailActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+        <activity android:name=".ui.pay.history.HistoryDetailActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
+        <activity android:name=".ui.login.forgetpass.ChangePassActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
 
         <service
             android:name=".service.FirebaseService"

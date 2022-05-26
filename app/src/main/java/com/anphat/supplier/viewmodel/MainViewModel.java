@@ -5,11 +5,14 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 
 import com.anphat.supplier.data.entities.CartInfo;
+import com.anphat.supplier.data.entities.condition.NotificationCondition;
+import com.anphat.supplier.data.entities.condition.NotificationMain;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
 import com.anphat.supplier.data.network.api.ApiResponseSbke;
 import com.anphat.supplier.data.network.apiretrofit.API;
 import com.anphat.supplier.data.network.apiretrofit.RetrofitWsbke;
+import com.anphat.supplier.data.network.apiretrofit.RvList;
 import com.anphat.supplier.data.network.apiretrofit.SingleLiveDate;
 import com.anphat.supplier.utils.PublicVariables;
 
@@ -31,6 +34,7 @@ public class MainViewModel extends BaseViewModel {
     private final SingleLiveDate<ApiResponseSbke<BookingInfo>> mItemCheckBooking = new SingleLiveDate<>();
     private final SingleLiveDate<ApiResponseSbke<List<CartInfo>>> mItemDaHang = new SingleLiveDate<>();
     private final SingleLiveDate<List<KhoInfo>> mItemKho = new SingleLiveDate<>();
+    public final SingleLiveDate<RvList<NotificationMain>> itemListSuccess = new SingleLiveDate<>();
 
     public SingleLiveDate<List<KhoInfo>> getmItemKho() {
         return mItemKho;
@@ -141,6 +145,32 @@ public class MainViewModel extends BaseViewModel {
                         mItemKho.setValue(null); }
                     @Override
                     public void onComplete() {}
+                });
+    }
+
+
+    public void getListNotification(NotificationCondition condition) {
+        serverWs.getListNotification(condition).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ApiResponseSbke<RvList<NotificationMain>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addSubscribe(d);
+                    }
+
+                    @Override
+                    public void onNext(ApiResponseSbke<RvList<NotificationMain>> value) {
+                        itemListSuccess.setValue(value.Data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        itemListSuccess.setValue(null);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
                 });
     }
 

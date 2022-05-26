@@ -12,16 +12,20 @@ import androidx.lifecycle.ViewModelProvider;
 import com.anphat.supplier.R;
 import com.anphat.supplier.data.entities.HistoryBooking;
 import com.anphat.supplier.databinding.FragmentHistoryBinding;
-import com.anphat.supplier.ui.base.BaseMainFragment;
+import com.anphat.supplier.ui.base.BaseMVVMFragment;
 import com.anphat.supplier.ui.pay.history.vote.VoteEmployeeActivity;
 import com.anphat.supplier.viewmodel.HistoryViewModel;
 import com.anphat.supplier.utils.PublicVariables;
 
 import java.util.ArrayList;
 
-public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
+public class HistoryFragment extends BaseMVVMFragment<FragmentHistoryBinding,HistoryViewModel > {
     HistoryBookingAdapter adapter;
-    HistoryViewModel viewModel;
+
+    @Override
+    protected Class<HistoryViewModel> getClassVM() {
+        return HistoryViewModel.class;
+    }
 
     @Override
     public FragmentHistoryBinding getViewBinding(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,7 +35,6 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
     @Override
     protected void initView() {
         showProgressDialog(true);
-        viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         adapter = new HistoryBookingAdapter(new ArrayList<>(), getContext());
         binding.rcl.setAdapter(adapter);
         clickAdapter();
@@ -63,6 +66,9 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
 //                        }
 //                    });
                     break;
+                case R.id.layout:
+                    startDetail(info.SoPhieuVietTay);
+                    break;
                 default:
                     break;
             }
@@ -71,6 +77,13 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
 
     private void startVote() {
         Intent intent = new Intent(getActivity(), VoteEmployeeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    private void startDetail(String id) {
+        Intent intent = new Intent(getActivity(), HistoryDetailActivity.class);
+        intent.putExtra("ID",id);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
@@ -84,7 +97,7 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
     protected void onObserver() {
         super.onObserver();
         viewModel.ItemList.observe(this, result -> {
-            if (result!=null){
+            if (result != null) {
                 if (result.size() == 0) {
                     checkResult(true);
                 } else {
@@ -101,8 +114,7 @@ public class HistoryFragment extends BaseMainFragment<FragmentHistoryBinding> {
 
         viewModel.ItemDetail.observe(this, item -> {
             showProgressDialog(false);
-
-            if (item!=null){
+            if (item != null) {
                 if (item.getMaTrangThai().equals("HOANTHANH")) {
                     PublicVariables.infoBooking = item;
                     startVote();

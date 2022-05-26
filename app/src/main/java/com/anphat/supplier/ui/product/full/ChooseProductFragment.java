@@ -28,6 +28,10 @@ import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
 import com.anphat.supplier.utils.TestConstants;
 import com.anphat.supplier.utils.adapterimage.ViewImageActivity;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +53,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
 
     @Override
     protected void initView() {
+        showProgressDialog(true);
         binding.checkboxNoGift.setChecked(true);
         adapter = new DetailAdapter(getActivity(), new ArrayList<>(), "");
         binding.rclMain.setAdapter(adapter);
@@ -180,6 +185,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
                     adapterGift.addAll(info.getGifts());
                 }
             }
+            showProgressDialog(false);
         });
         viewModel.mItemCheckBooking.observe(this, result -> {
             if (result!=null){
@@ -293,13 +299,18 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
         Glide.with(this)
                 .load(url)
                 .error(R.drawable.img_no_image)
+                .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(25))
+                        .placeholder(R.drawable.ic_loading_anim)
+                        .error(R.drawable.img_no_image)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(binding.imageView);
     }
 
     private void StartFragmentHome(boolean isHome) {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .hide(this)
-                .show(isHome ? CommonFM.fragment : CommonFM.fragmentThree)
+                .replace(R.id.frame_container,isHome ? CommonFM.fragment : CommonFM.fragmentThree)
                 .addToBackStack(null)
                 .commit();
     }

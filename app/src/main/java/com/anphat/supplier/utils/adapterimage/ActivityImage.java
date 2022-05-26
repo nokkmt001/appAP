@@ -62,6 +62,9 @@ public class ActivityImage extends BaseActivity {
 
             }
         });
+        viewImage.setOnClickListener((view, position) -> {
+            finish();
+        });
     }
 
     @Override

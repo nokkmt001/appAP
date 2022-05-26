@@ -136,7 +136,8 @@
 
     <style name="AppTheme.TextView.Notification" parent="@android:style/Widget.TextView">
         <item name="android:textSize">@dimen/title_textsize_notification</item>
-        <item name="fontFamily">@font/myriadpro_bold</item>
+        <item name="fontFamily">@font/myriadpro_semibold</item>
+
         <item name="android:textIsSelectable">false</item>
     </style>
 

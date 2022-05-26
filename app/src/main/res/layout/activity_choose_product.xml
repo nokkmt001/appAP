@@ -47,7 +47,6 @@
                             android:id="@+id/imageView"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:src="@drawable/img_no_image"
                             android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintDimensionRatio="H,16:9"

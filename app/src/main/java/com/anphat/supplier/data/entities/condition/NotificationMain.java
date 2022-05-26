@@ -1,12 +1,15 @@
 package com.anphat.supplier.data.entities.condition;
 
-public class NotificationMain {
+import java.io.Serializable;
+import java.util.Date;
+
+public class NotificationMain implements Serializable {
     public Integer ThongBaoMobileID;
     public String TieuDe;
     public String NoiDung;
-    public String NgayGio;
+    public Date NgayGio;
     public String NguoiTao;
-    public String NgayGioSua = null;
+    public Date NgayGioSua = null;
     public String NguoiSua = null;
     public Integer SoLanGui;
     public String LoaiThongBao;

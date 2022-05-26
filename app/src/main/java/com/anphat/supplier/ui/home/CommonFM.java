@@ -26,4 +26,6 @@ public class CommonFM {
       return fragment;
    }
 
+   public static Fragment fragmentWait = null;
+
 }

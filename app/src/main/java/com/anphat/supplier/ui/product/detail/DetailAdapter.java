@@ -24,6 +24,10 @@ import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.ui.base.BaseEventClick;
 import com.anphat.supplier.utils.AppUtils;
 import com.anphat.supplier.utils.PublicVariables;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,9 +118,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.MyViewHold
         Glide.with(mContext)
                 .load(url)
                 .error(R.drawable.img_no_image)
-                .placeholder(R.drawable.img_no_image)
                 .override(300,300)
-                .centerCrop()
+                .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(25))
+                        .placeholder(R.drawable.ic_loading_anim)
+                        .error(R.drawable.img_no_image)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
                 .into(holder.imageView);
 
         if (select_position == position) {

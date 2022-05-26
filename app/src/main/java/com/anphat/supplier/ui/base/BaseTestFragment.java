@@ -250,7 +250,7 @@ public abstract class BaseTestFragment<T extends ViewBinding> extends Fragment i
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AppController.clearCache();
+        AppController.clearSubscribe();
 
     }
 }

@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -47,34 +50,21 @@ public class ViewImage extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
         final TouchImageView imageView = (TouchImageView) itemView.findViewById(R.id.imageView);
         ImageView rlBack = (ImageView) itemView.findViewById(R.id.rlBack);
-        rlBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clickListener != null) {
-                    clickListener.onClick(view, position);
-                }
+        rlBack.setOnClickListener(view -> {
+            if (clickListener != null) {
+                clickListener.onClick(view, position);
             }
-
         });
 
         Glide.with(mContext).asBitmap()
                 .load(AppUtils.formatStringToBitMap(gg))
-                .override(500,500)
-                .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
-                .apply(new RequestOptions()
-                        .placeholder(R.drawable.img_no_image).error(R.drawable.img_no_image))
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull @NotNull Bitmap resource, @Nullable @org.jetbrains.annotations.Nullable Transition<? super Bitmap> transition) {
-                        imageView.setImageBitmap(resource);
-
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
+                .override(500, 500)
+                .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(25))
+                        .placeholder(R.drawable.ic_loading_anim)
+                        .error(R.drawable.img_no_image)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .into(imageView);
 
            /* LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(950, 950);
             imageView.setLayoutParams(layoutParams);*/
