@@ -111,6 +111,7 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding, MainView
             if (result != null) {
                 if (result.Status == 0) {
                     PublicVariables.listBooking = result.Data;
+                    PublicVariables.itemListCart.postValue(result.Data);
                     if (result.Data != null && result.Data.size() > 0) {
                         binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
                         binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(result.Data.size()));

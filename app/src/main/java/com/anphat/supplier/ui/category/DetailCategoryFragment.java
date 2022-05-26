@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.content.IntentFilter;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -49,8 +50,8 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
 
         receiver = new TestReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(TestConstants.ACTION_MAIN_HOME);
-        getContext().registerReceiver(searchMain, intentFilter);
+        intentFilter.addAction(TestConstants.ACTION_HOME_CART);
+        getContext().registerReceiver(receiver, intentFilter);
 
         listProduct = new ArrayList<>();
         listProduct = AppPreference.getAllProduct();
@@ -154,22 +155,35 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Toast.makeText(getContext(), "resume", Toast.LENGTH_LONG).show();
+    protected void onObserver() {
+        super.onObserver();
+        PublicVariables.itemListCart.observe(this, result -> {
+            if (result != null && result.size() > 0) {
+                binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
+                binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+            } else {
+                binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
+            }
+        });
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getContext(), "Pause", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(getContext(), "stop", Toast.LENGTH_LONG).show();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        Toast.makeText(getContext(), "resume", Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Toast.makeText(getContext(), "Pause", Toast.LENGTH_LONG).show();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        Toast.makeText(getContext(), "stop", Toast.LENGTH_LONG).show();
+//    }
 
     private void onFilterProduct(Float category) {
         listProduct = DataFilterProduct.getList(category);
@@ -207,9 +221,10 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
         public void onReceive(Context arg0, Intent intent) {
             Bundle bundle = intent.getExtras();
             if (bundle == null) return;
-            String eventName = bundle.getString("eventName");
+            String eventName = bundle.getString("eventCart");
             switch (eventName) {
-                case TestConstants.RECEIVE_ThayDoiGioHang:
+                case TestConstants.RECEIVE_Change_cart_detail:
+                    initData();
                     break;
                 default:
                     break;

@@ -195,6 +195,15 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
         });
         viewModel.itemListCart.observe(this, result ->
                 binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(result.size())));
+
+        PublicVariables.itemListCart.observe(this, result -> {
+            if (result != null && result.size() > 0) {
+                binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
+                binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+            } else {
+                binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override

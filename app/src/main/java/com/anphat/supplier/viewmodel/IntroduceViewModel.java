@@ -72,7 +72,6 @@ public class IntroduceViewModel extends BaseViewModel {
                     public void onNext(ApiResponseSbke<InsertPresenterInfo> value) {
                         itemMain.setValue(value);
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         showToast(getError(e));

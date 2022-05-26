@@ -11,6 +11,7 @@ import com.anphat.supplier.data.entities.ProductInfo;
 import com.anphat.supplier.data.entities.ProductNew;
 import com.anphat.supplier.data.entities.kho.KhoInfo;
 import com.anphat.supplier.data.entities.order.BookingInfo;
+import com.anphat.supplier.data.network.apiretrofit.SingleLiveDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class PublicVariables {
     public static String token = "";
 
     public static BookingInfo itemBooking = null;
+
+    public static SingleLiveDate<List<CartInfo>> itemListCart = new SingleLiveDate<>();
 
     public static void ClearData() {
         UserInfo = new NewCustomer();
