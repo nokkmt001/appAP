@@ -127,7 +127,6 @@ public class HistoryFragment extends BaseMVVMFragment<FragmentHistoryBinding,His
 
     @Override
     public void onClick(View view) {
-
     }
 
     private void checkResult(Boolean isShow) {

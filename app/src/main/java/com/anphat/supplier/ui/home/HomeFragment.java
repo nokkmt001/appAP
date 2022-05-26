@@ -306,7 +306,7 @@ public class HomeFragment extends BaseFragment {
         ChooseProductFragment nextFrag = new ChooseProductFragment(ID, true);
         CommonFM.fragmentTwo = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container, nextFrag, "one")
+                .replace(R.id.frame_container, nextFrag, "one")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();
@@ -316,7 +316,7 @@ public class HomeFragment extends BaseFragment {
         DetailCategoryFragment nextFrag = new DetailCategoryFragment(info);
         CommonFM.fragmentThree = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container, nextFrag, "three")
+                .replace(R.id.frame_container, nextFrag, "three")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();
@@ -326,7 +326,7 @@ public class HomeFragment extends BaseFragment {
         ShowFragment nextFrag = new ShowFragment(list);
         CommonFM.fragmentFour = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_container, nextFrag, "three")
+                .replace(R.id.frame_container, nextFrag, "three")
                 .hide(CommonFM.fragment)
                 .addToBackStack(null)
                 .commit();

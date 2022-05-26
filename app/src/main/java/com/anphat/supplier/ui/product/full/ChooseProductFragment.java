@@ -16,6 +16,7 @@ import com.anphat.supplier.data.entities.gift.GiftInfo;
 import com.anphat.supplier.databinding.ActivityChooseProductBinding;
 import com.anphat.supplier.ui.base.BaseMVVMFragment;
 import com.anphat.supplier.ui.cart.CartActivity;
+import com.anphat.supplier.ui.home.HomeFragment;
 import com.anphat.supplier.ui.product.detail.DetailAdapter;
 import com.anphat.supplier.viewmodel.DetailViewModel;
 import com.bumptech.glide.Glide;
@@ -136,7 +137,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
         viewModel.checkBooking();
         viewModel.GetProduct(ID.toString());
 
-        if (PublicVariables.listBooking != null&&PublicVariables.listBooking.size()>0) {
+        if (PublicVariables.listBooking != null && PublicVariables.listBooking.size() > 0) {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
             binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
         } else {
@@ -168,7 +169,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
         });
 
         viewModel.mItemGetProduct.observe(this, productNew -> {
-            if (productNew!=null){
+            if (productNew != null) {
                 this.info = productNew;
                 binding.layoutHeader.textTitle.setText(info.title);
                 setView(info.title, info.price, info.description);
@@ -188,7 +189,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
             showProgressDialog(false);
         });
         viewModel.mItemCheckBooking.observe(this, result -> {
-            if (result!=null){
+            if (result != null) {
                 PublicVariables.itemBooking = result.Data;
             }
         });
@@ -212,7 +213,7 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
 //        binding.layoutContent.loadData(info.content, "text/html", "UTF-8");
         Log.d("DECEPTIONTMAIN", info.description + "\n\n\n\n" + gg);
         if (description != null) {
-            binding.textDeception.setText(HtmlCompat.fromHtml(description,HtmlCompat.FROM_HTML_MODE_LEGACY));
+            binding.textDeception.setText(HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             binding.textDeception.setVisibility(View.GONE);
         }
@@ -308,11 +309,19 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
     }
 
     private void StartFragmentHome(boolean isHome) {
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .hide(this)
-                .replace(R.id.frame_container,isHome ? CommonFM.fragment : CommonFM.fragmentThree)
-                .addToBackStack(null)
-                .commit();
-    }
+        if (isHome) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .hide(this)
+                    .add(R.id.frame_container, new HomeFragment())
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .hide(this)
+                    .show(CommonFM.fragmentThree)
+                    .addToBackStack(null)
+                    .commit();
+        }
 
+    }
 }

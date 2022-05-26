@@ -1,5 +1,7 @@
 package com.anphat.supplier.ui.category;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -35,6 +38,7 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     List<ProductNew> listProduct;
     DetailCAdapter adapterCategory;
     Boolean isEmpty = false;
+    TestReceiver receiver;
 
     public DetailCategoryFragment(CategoryNew category) {
         this.category = category;
@@ -42,6 +46,12 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
 
     @Override
     protected void initView() {
+
+        receiver = new TestReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(TestConstants.ACTION_MAIN_HOME);
+        getContext().registerReceiver(searchMain, intentFilter);
+
         listProduct = new ArrayList<>();
         listProduct = AppPreference.getAllProduct();
         showProgressDialog(true);
@@ -106,12 +116,12 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     @Override
     protected void initData() {
         onLoadCategory(category.id);
-        if (PublicVariables.listBooking != null) {
+        if (PublicVariables.listBooking != null && PublicVariables.listBooking.size() > 0) {
+            binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
             binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
         } else {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
         }
-
         DataFilterProduct.list = listProduct;
         showProgressDialog(false);
         adapter.clear();
@@ -143,6 +153,24 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
         adapterCategory.setSelect_position(0);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(getContext(), "resume", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(getContext(), "Pause", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(getContext(), "stop", Toast.LENGTH_LONG).show();
+    }
+
     private void onFilterProduct(Float category) {
         listProduct = DataFilterProduct.getList(category);
         PublicVariables.listKM = listProduct;
@@ -158,7 +186,7 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
     private void StartFragmentHome() {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .hide(this)
-                .replace(R.id.frame_container, CommonFM.fragmentWait,"two")
+                .replace(R.id.frame_container, new HomeFragment(), "two")
                 .addToBackStack(null)
                 .commit();
     }
@@ -167,10 +195,25 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
         ChooseProductFragment nextFrag = new ChooseProductFragment(ID, false);
         CommonFM.fragmentTwo = nextFrag;
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, nextFrag, "one")
+                .add(R.id.frame_container, nextFrag, "one")
 //                .hide(CommonFM.fragmentThree)
                 .hide(this)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private class TestReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle == null) return;
+            String eventName = bundle.getString("eventName");
+            switch (eventName) {
+                case TestConstants.RECEIVE_ThayDoiGioHang:
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
