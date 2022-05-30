@@ -119,7 +119,11 @@ public class DetailCategoryFragment extends BaseMainFragment<ActivityDetailCateg
         onLoadCategory(category.id);
         if (PublicVariables.listBooking != null && PublicVariables.listBooking.size() > 0) {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
-            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+            if (PublicVariables.listBooking.size() > 10) {
+                binding.layoutHeader.layoutCart.textNumberCart.setText("10+");
+            } else {
+                binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+            }
         } else {
             binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
         }

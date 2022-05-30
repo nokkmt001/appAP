@@ -56,7 +56,6 @@ public class PendingFragment extends BaseFragment {
         intentFilter.addAction(TestConstants.ACTION_MAIN_PENDING);
         getContext().registerReceiver(testReceiver, intentFilter);
 
-        showProgressDialog(true);
         adapter = new ProductAfterAdapter(getActivity());
         rcl = bind(view, R.id.rcl);
         rcl.setAdapter(adapter);
@@ -114,7 +113,6 @@ public class PendingFragment extends BaseFragment {
     protected void initData() {
         preference = new AppPreference(getContext());
         viewModel.checkBooking();
-        showProgressDialog(false);
     }
 
     @Override
@@ -204,6 +202,7 @@ public class PendingFragment extends BaseFragment {
             Toast.makeText(getContext(), "Hủy đơn thành công", Toast.LENGTH_SHORT).show();
             initData();
         });
+        showProgressDialog(false);
     }
 
     @Override

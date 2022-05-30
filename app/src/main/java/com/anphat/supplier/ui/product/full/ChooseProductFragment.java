@@ -199,7 +199,11 @@ public class ChooseProductFragment extends BaseMVVMFragment<ActivityChooseProduc
         PublicVariables.itemListCart.observe(this, result -> {
             if (result != null && result.size() > 0) {
                 binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
-                binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+                if (result.size() > 10) {
+                    binding.layoutHeader.layoutCart.textNumberCart.setText("10+");
+                } else {
+                    binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+                }
             } else {
                 binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
             }

@@ -114,7 +114,11 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding, MainView
                     PublicVariables.itemListCart.postValue(result.Data);
                     if (result.Data != null && result.Data.size() > 0) {
                         binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.VISIBLE);
-                        binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(result.Data.size()));
+                        if (result.Data.size() > 10) {
+                            binding.layoutHeader.layoutCart.textNumberCart.setText("10+");
+                        } else {
+                            binding.layoutHeader.layoutCart.textNumberCart.setText(String.valueOf(PublicVariables.listBooking.size()));
+                        }
                     } else binding.layoutHeader.layoutCart.textNumberCart.setVisibility(View.GONE);
                 }
             }
@@ -160,7 +164,11 @@ public class MainActivity extends BaseMVVMActivity<ActivityMainBinding, MainView
             if (result != null) {
                 if (result.List.size() > 0) {
                     binding.layoutHeader.layoutNotifications.textNumberCart.setVisibility(View.VISIBLE);
-                    binding.layoutHeader.layoutNotifications.textNumberCart.setText(String.valueOf(result.List.size()));
+                    if (result.List.size() > 10) {
+                        binding.layoutHeader.layoutNotifications.textNumberCart.setText("10+");
+                    } else {
+                        binding.layoutHeader.layoutNotifications.textNumberCart.setText(String.valueOf(result.List.size()));
+                    }
                 } else {
                     binding.layoutHeader.layoutNotifications.textNumberCart.setVisibility(View.GONE);
                 }
